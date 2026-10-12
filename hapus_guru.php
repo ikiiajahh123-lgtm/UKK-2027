@@ -37,4 +37,4 @@ if (mysqli_query($koneksi, $sql)) {
 // Kembali ke halaman kelola guru
 header('Location: kelola_guru.php');
 exit;
-?>
+?> 
