@@ -96,7 +96,7 @@ $hasil = mysqli_query($koneksi, $sql);
         <a href="tambah_guru.php">Tambah Guru</a>
     </p>
 
-    <table class="table">
+    <table class="table table-striped">
   <thead class="thead-dark">
 
         <tr>

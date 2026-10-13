@@ -105,7 +105,7 @@ $hasil = mysqli_query($koneksi, $sql);
 </p>
 
 
-    <table class="table">
+    <table class="table table-striped">
   <thead class="thead-dark"></thead>
     <tr>
         <th>ID</th>

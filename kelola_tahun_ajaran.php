@@ -95,7 +95,7 @@ $hasil = mysqli_query($koneksi, $sql);
         <a href="tambah_tahun_ajaran.php">Tambah Tahun Ajaran</a>
     </p>
 
-  <table class="table">
+  <table class="table table-striped">
   <thead class="thead-dark"></thead>
 
         <tr>

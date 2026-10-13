@@ -138,7 +138,8 @@ include 'includes/cek_session.php';
 </html>
 <!DOCTYPE html>
 <html>
-    <head>  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <head> 
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <meta charset="UTF-8">
         <title>Dashbord - Sistem Pelanggaran Siswa</title>
     </head>
@@ -151,12 +152,12 @@ include 'includes/cek_session.php';
 
         <ul>
             <?php if ($_SESSION['role'] == 'admin') { ?>
-            <li><a href="kelola_guru.php">Kelola Guru</a></li>
-            <li><a href="kelola_siswa.php">Kelola Siswa</a></li>
-            <li><a href="kelola_kelas.php">Kelola Kelas</a></li>
-            <li><a href="kelola_tahun_ajaran.php">Kelola tahun ajaran</a></li>
-            <li><a href="kelola_penempatan_siswa.php">Kelola penempatan siswa</a></li>
-            <li><a href="kelola_kategori_pelanggaran.php">Kelola Kategori Pelanggaran</a></li>
+            <li><a href="Data_Guru.php">Data Guru</a></li>
+            <li><a href="Data_Siswa.php">Data Siswa</a></li>
+            <li><a href="Kelas.php">Kelas</a></li>
+            <li><a href="Tahun_ajaran.php">Tahun Ajaran</a></li>
+            <li><a href="Penempatan_siswa.php">Penempatan siswa</a></li>
+            <li><a href="Kategori_pelanggaran.php">Kategori Pelanggaran</a></li>
         <?php } ?>
 
         <?php if($_SESSION['role'] == 'guru') { ?>
