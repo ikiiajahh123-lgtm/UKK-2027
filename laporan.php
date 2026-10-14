@@ -35,7 +35,6 @@ $data = mysqli_query($koneksi, "
 <br><br>
 
 <table border="1" cellpadding="8">
-
 <tr>
     <th>No</th>
     <th>NIS</th>
