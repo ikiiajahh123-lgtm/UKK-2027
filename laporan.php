@@ -1,73 +1,227 @@
-<?php
-
-include "config/koneksi.php";
-
-$data = mysqli_query($koneksi, "
-    SELECT 
-        ps.id,
-        s.nis,
-        s.nama,
-        pk.nama AS pelanggaran
-    FROM t_pelanggaran_siswa ps
-    JOIN t_siswa s ON ps.siswa_id = s.id
-    JOIN t_pelanggaran_kategori pk ON ps.pelanggaran_id = pk.id
-    ORDER BY ps.id DESC
-");
-
-?>
-
-<h2>Laporan Pelanggaran Siswa</h2>
-
-<a href="dashboard.php">Kembali ke Dashboard</a>
-
-<br><br>
-
-<a href="cetak_laporan.php" target="_blank">
-    Cetak Laporan
-</a>
-
-&nbsp;
-
-<a href="export_laporan.php">
-    Export Excel
-</a>
-
-<br><br>
-
-<table border="1" cellpadding="8">
-<tr>
-    <th>No</th>
-    <th>NIS</th>
-    <th>Nama Siswa</th>
-    <th>Jenis Pelanggaran</th>
-</tr>
 
 <?php
+include 'includes/cek_session.php';
+include 'config/koneksi.php';
 
-$no = 1;
+// Mengambil data laporan pelanggaran siswa
+$sql = "SELECT
+            ps.id,
+            s.nis,
+            s.nama,
+            pk.nama AS pelanggaran
+        FROM t_pelanggaran_siswa AS ps
+        JOIN t_siswa AS s ON ps.siswa_id = s.id
+        JOIN t_pelanggaran_kategori AS pk
+            ON ps.pelanggaran_id = pk.id
+        ORDER BY ps.id DESC";
 
-while ($row = mysqli_fetch_assoc($data)) {
+$data = mysqli_query($koneksi, $sql);
 
-?>
-
-<tr>
-
-    <td><?php echo $no; ?></td>
-
-    <td><?php echo $row['nis']; ?></td>
-
-    <td><?php echo $row['nama']; ?></td>
-
-    <td><?php echo $row['pelanggaran']; ?></td>
-
-</tr>
-
-<?php
-
-$no++;
-
+// Periksa jika query gagal
+if (!$data) {
+    die("Gagal mengambil data laporan: " .
+        mysqli_error($koneksi));
 }
-
 ?>
 
-</table>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Laporan Pelanggaran Siswa</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #ffffff;
+            font-family: Arial, sans-serif;
+            color: #212529;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .navigation {
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .navigation a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .table thead th {
+            background-color: #f1f1f1;
+            color: #212529;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <?php include 'layout/sidebar.php'; ?>
+
+        <!-- Konten utama -->
+        <main class="col-md-9 col-lg-10 p-4">
+
+            <h1 class="page-title">
+                Laporan Pelanggaran Siswa
+            </h1>
+
+            <div class="navigation">
+                <a href="dashboard.php">Kembali ke Dashboard</a>
+                | Laporan Pelanggaran
+            </div>
+
+            <!-- Tombol aksi -->
+            <div class="action-buttons">
+
+                <a href="cetak_laporan.php"
+                   target="_blank"
+                   class="btn btn-primary">
+                    Cetak Laporan
+                </a>
+
+                <a href="export_laporan.php"
+                   class="btn btn-success">
+                    Export Excel
+                </a>
+
+            </div>
+
+            <!-- Tabel laporan -->
+            <div class="table-responsive">
+
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIS</th>
+                            <th>Nama Siswa</th>
+                            <th>Jenis Pelanggaran</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php
+                        $no = 1;
+
+                        if (mysqli_num_rows($data) > 0) {
+                            while ($row = mysqli_fetch_assoc($data)) {
+                        ?>
+
+                        <tr>
+                            <td>
+                                <?php echo $no++; ?>
+                            </td>
+
+                            <td>
+                                <?php
+                                echo htmlspecialchars(
+                                    $row['nis'] ?? '',
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                );
+                                ?>
+                            </td>
+
+                            <td>
+                                <?php
+                                echo htmlspecialchars(
+                                    $row['nama'] ?? '',
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                );
+                                ?>
+                            </td>
+
+                            <td>
+                                <?php
+                                echo htmlspecialchars(
+                                    $row['pelanggaran'] ?? '',
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                );
+                                ?>
+                            </td>
+                        </tr>
+
+                        <?php
+                            }
+                        } else {
+                        ?>
+
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                Belum ada data pelanggaran siswa.
+                            </td>
+                        </tr>
+
+                        <?php
+                        }
+                        ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </main>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
