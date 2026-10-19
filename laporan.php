@@ -32,8 +32,13 @@ if (!$data) {
 
     <title>Laporan Pelanggaran Siswa</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- DataTables Bootstrap 5 -->
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css"
+          rel="stylesheet">
 
     <style>
         body {
@@ -55,7 +60,7 @@ if (!$data) {
         }
 
         .navigation a {
-            color: #007bff;
+            color: #0d6efd;
             text-decoration: none;
         }
 
@@ -70,25 +75,31 @@ if (!$data) {
             margin-bottom: 20px;
         }
 
-        .table {
+        .table-responsive {
             width: 100%;
-            margin-bottom: 1rem;
         }
 
-        .table thead th {
+        #tabelLaporan {
+            width: 100%;
+        }
+
+        #tabelLaporan thead th {
             background-color: #f1f1f1;
             color: #212529;
-            border-bottom: 1px solid #dee2e6;
             vertical-align: middle;
             white-space: nowrap;
         }
 
-        .table td {
+        #tabelLaporan tbody td {
             vertical-align: middle;
         }
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f1f1f1;
+        #tabelLaporan tbody tr:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+
+        .dataTables_wrapper {
+            margin-top: 10px;
         }
 
         @media (max-width: 768px) {
@@ -137,7 +148,8 @@ if (!$data) {
             <!-- Tabel laporan -->
             <div class="table-responsive">
 
-                <table class="table table-striped">
+                <table id="tabelLaporan"
+                       class="table table-striped table-bordered">
 
                     <thead>
                         <tr>
@@ -149,7 +161,6 @@ if (!$data) {
                     </thead>
 
                     <tbody>
-
                         <?php
                         $no = 1;
 
@@ -158,9 +169,7 @@ if (!$data) {
                         ?>
 
                         <tr>
-                            <td>
-                                <?php echo $no++; ?>
-                            </td>
+                            <td><?php echo $no++; ?></td>
 
                             <td>
                                 <?php
@@ -207,7 +216,6 @@ if (!$data) {
                         <?php
                         }
                         ?>
-
                     </tbody>
 
                 </table>
@@ -219,9 +227,59 @@ if (!$data) {
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap 5 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    const tabel = $('#tabelLaporan');
+
+    // Aktifkan DataTables hanya jika terdapat data laporan
+    if (tabel.find('tbody tr').length > 0 &&
+        tabel.find('tbody tr td[colspan]').length === 0) {
+
+        tabel.DataTable({
+            language: {
+                search: "Cari:",
+                searchPlaceholder: "Cari laporan...",
+                lengthMenu: "Tampilkan _MENU_ data",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Tidak ada data",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                zeroRecords: "Data yang dicari tidak ditemukan",
+                emptyTable: "Belum ada data pelanggaran siswa",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Berikutnya",
+                    previous: "Sebelumnya"
+                }
+            },
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50, 100],
+            ordering: true,
+            searching: true,
+            paging: true,
+            info: true,
+            order: [[0, 'asc']],
+            columnDefs: [
+                {
+                    targets: 0,
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+    }
+});
+</script>
 
 </body>
 </html>

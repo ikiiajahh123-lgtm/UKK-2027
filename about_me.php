@@ -8,7 +8,9 @@ $kelas = "XI RPL";
 $sekolah = "SMK Muhammadiyah Tasikmalaya";
 $jurusan = "Rekayasa Perangkat Lunak";
 $hobi = "Mendengarkan Musik";
-$cita_cita = "PRAMUGARI";
+$cita_cita = "Pramugari";
+
+$foto = "assets/foto-profil.jpg";
 ?>
 
 <!DOCTYPE html>
@@ -26,175 +28,163 @@ $cita_cita = "PRAMUGARI";
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: white;
-            color: #212529;
+            background: #f5f6fa;
+            color: #333;
         }
 
-        /* Sidebar mengikuti dashboard */
         .sidebar {
-            width: 285px;
+            width: 230px;
             height: 100vh;
             background: #343a40;
             position: fixed;
+            padding: 15px;
             top: 0;
             left: 0;
-            padding: 14px;
             overflow-y: auto;
         }
 
         .sidebar h2 {
             color: white;
             font-size: 22px;
-            margin: 3px 0 20px;
+            margin-bottom: 25px;
         }
 
         .sidebar a {
             display: block;
             color: white;
             text-decoration: none;
-            padding: 11px 14px;
+            padding: 11px;
             margin-bottom: 5px;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 14px;
         }
 
-        .sidebar a:hover {
-            background: #495057;
-        }
-
+        .sidebar a:hover,
         .sidebar a.active {
             background: #087df1;
         }
 
         .sidebar .logout {
-            color: #dc3545;
-            margin-top: 35px;
+            color: #ff6b6b;
+            margin-top: 20px;
         }
 
-        /* Konten utama */
         .main {
-            margin-left: 285px;
-            padding: 25px 21px;
+            margin-left: 230px;
+            padding: 25px;
         }
 
         .main h1 {
-            font-size: 36px;
-            font-weight: 500;
             margin: 0 0 8px;
+            font-size: 30px;
         }
 
-        .navigation {
-            margin-bottom: 22px;
+        .breadcrumb {
+            margin-bottom: 25px;
+            color: #777;
             font-size: 14px;
         }
 
-        .navigation a {
-            color: #007bff;
+        .breadcrumb a {
+            color: #087df1;
             text-decoration: none;
         }
 
-        .navigation a:hover {
-            text-decoration: underline;
-        }
-
-        /* Kartu About Me */
-        .about-card {
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 25px;
-            max-width: 1000px;
+        .card {
+            max-width: 850px;
             background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
         }
 
-        .profile-header {
+        .profile {
             display: flex;
             align-items: center;
-            gap: 22px;
-            padding-bottom: 22px;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 22px;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
         }
 
         .avatar {
-            width: 105px;
-            height: 105px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background: #e9ecef;
+            background: #e6efff;
+            color: #087df1;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 48px;
+            font-size: 28px;
+            font-weight: bold;
+            overflow: hidden;
             flex-shrink: 0;
         }
 
-        .profile-header h2 {
-            margin: 0 0 10px;
-            font-size: 27px;
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .profile-header p {
-            color: #6c757d;
+        .profile h2 {
+            margin: 0 0 8px;
+            font-size: 23px;
+        }
+
+        .profile p {
             margin: 0;
+            color: #777;
             line-height: 1.6;
+            font-size: 14px;
         }
 
-        .section-title {
-            font-size: 21px;
-            margin: 0 0 16px;
+        .card h3 {
+            font-size: 18px;
+            margin: 0 0 15px;
         }
 
-        .info-grid {
+        .info {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 15px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
-        .info-item {
-            border: 1px solid #dee2e6;
-            padding: 15px;
-            border-radius: 4px;
-            background: #f8f9fa;
+        .item {
+            padding: 14px;
+            background: #f8f9fc;
+            border-radius: 6px;
         }
 
-        .info-item .label {
+        .item small {
             display: block;
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: 9px;
+            color: #777;
+            margin-bottom: 7px;
         }
 
-        .info-item .value {
-            display: block;
-            font-size: 15px;
-            font-weight: 600;
+        .item strong {
+            font-size: 14px;
             overflow-wrap: anywhere;
         }
 
-        .description {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-left: 4px solid #087df1;
-            line-height: 1.8;
-        }
-
-        .description h3 {
-            margin: 0 0 10px;
-            font-size: 20px;
-        }
-
-        .description p {
-            margin: 0;
+        .deskripsi {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef5ff;
+            border-radius: 6px;
+            line-height: 1.7;
+            font-size: 14px;
         }
 
         .btn {
             display: inline-block;
+            margin-top: 20px;
             padding: 10px 15px;
-            margin-top: 22px;
             background: #087df1;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 14px;
         }
 
@@ -202,30 +192,10 @@ $cita_cita = "PRAMUGARI";
             background: #0069d9;
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 700px) {
             .sidebar {
-                width: 200px;
-            }
-
-            .main {
-                margin-left: 200px;
-                padding: 20px 15px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .profile-header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .sidebar {
-                width: 150px;
-                padding: 8px;
+                width: 160px;
+                padding: 10px;
             }
 
             .sidebar h2 {
@@ -233,27 +203,30 @@ $cita_cita = "PRAMUGARI";
             }
 
             .sidebar a {
-                padding: 10px 7px;
                 font-size: 12px;
+                padding: 9px 6px;
             }
 
             .main {
-                margin-left: 150px;
-                padding: 18px 10px;
+                margin-left: 160px;
+                padding: 15px 10px;
             }
 
             .main h1 {
-                font-size: 27px;
+                font-size: 24px;
             }
 
-            .about-card {
-                padding: 14px;
+            .card {
+                padding: 15px;
             }
 
-            .avatar {
-                width: 75px;
-                height: 75px;
-                font-size: 35px;
+            .profile {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .info {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -261,7 +234,6 @@ $cita_cita = "PRAMUGARI";
 
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <h2>My Website</h2>
 
@@ -269,103 +241,84 @@ $cita_cita = "PRAMUGARI";
     <a href="data_siswa.php">Data Siswa</a>
     <a href="data_guru.php">Data Guru</a>
     <a href="kelas.php">Kelas</a>
-    <a href="tahun_ajaran.php">Tahun ajaran</a>
+    <a href="tahun_ajaran.php">Tahun Ajaran</a>
     <a href="penempatan_siswa.php">Penempatan Siswa</a>
-    <a href="wali_kelas.php">Wali kelas</a>
+    <a href="wali_kelas.php">Wali Kelas</a>
     <a href="laporan.php">Laporan</a>
     <a href="about_me.php" class="active">About Me</a>
-
     <a href="logout.php" class="logout">Logout</a>
 </div>
 
-<!-- Konten -->
 <div class="main">
 
     <h1>About Me</h1>
 
-    <div class="navigation">
-        <a href="dashboard.php">Kembali ke Dashboard</a>
-        | Tentang Saya
+    <div class="breadcrumb">
+        <a href="dashboard.php">Dashboard</a> / About Me
     </div>
 
-    <div class="about-card">
+    <div class="card">
 
-        <div class="profile-header">
-            <div class="avatar">👩🏻</div>
+        <div class="profile">
+
+            <div class="avatar">
+                <?php if (file_exists($foto)) { ?>
+                    <img src="<?php echo htmlspecialchars($foto); ?>"
+                         alt="Foto Profil">
+                <?php } else { ?>
+                    TZ
+                <?php } ?>
+            </div>
 
             <div>
-                <h2>
-                    <?php echo htmlspecialchars($nama); ?>
-                </h2>
-
-                <p>
-                    Pelajar <?php echo htmlspecialchars($kelas); ?>
-                    <br>
-                    <?php echo htmlspecialchars($jurusan); ?>
-                </p>
-            </div>
-        </div>
-
-        <h3 class="section-title">Informasi Pribadi</h3>
-
-        <div class="info-grid">
-
-            <div class="info-item">
-                <span class="label">Nama Lengkap</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($nama); ?>
-                </span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Kelas</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($kelas); ?>
-                </span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Sekolah</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($sekolah); ?>
-                </span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Jurusan</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($jurusan); ?>
-                </span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Hobi</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($hobi); ?>
-                </span>
-            </div>
-
-            <div class="info-item">
-                <span class="label">Cita-cita</span>
-                <span class="value">
-                    <?php echo htmlspecialchars($cita_cita); ?>
-                </span>
+                <h2><?php echo htmlspecialchars($nama); ?></h2>
+                <p><?php echo htmlspecialchars($kelas); ?></p>
+                <p><?php echo htmlspecialchars($jurusan); ?></p>
             </div>
 
         </div>
 
-        <div class="description">
-            <h3>Deskripsi Diri</h3>
+        <h3>Informasi Pribadi</h3>
 
-            <p>
-                Saya adalah seorang pelajar yang sedang belajar
-                Rekayasa Perangkat Lunak di SMK Muhammadiyah
-                Tasikmalaya. Saya senang mendengarkan musik dan
-                mempelajari hal-hal baru. Saya ingin terus
-                mengembangkan kemampuan diri, menambah pengalaman,
-                dan berusaha meraih cita-cita menjadi seorang
-                pramugari.
-            </p>
+        <div class="info">
+
+            <div class="item">
+                <small>Nama Lengkap</small>
+                <strong><?php echo htmlspecialchars($nama); ?></strong>
+            </div>
+
+            <div class="item">
+                <small>Kelas</small>
+                <strong><?php echo htmlspecialchars($kelas); ?></strong>
+            </div>
+
+            <div class="item">
+                <small>Sekolah</small>
+                <strong><?php echo htmlspecialchars($sekolah); ?></strong>
+            </div>
+
+            <div class="item">
+                <small>Jurusan</small>
+                <strong><?php echo htmlspecialchars($jurusan); ?></strong>
+            </div>
+
+            <div class="item">
+                <small>Hobi</small>
+                <strong><?php echo htmlspecialchars($hobi); ?></strong>
+            </div>
+
+            <div class="item">
+                <small>Cita-cita</small>
+                <strong><?php echo htmlspecialchars($cita_cita); ?></strong>
+            </div>
+
+        </div>
+
+        <div class="deskripsi">
+            Saya adalah pelajar SMK Muhammadiyah Tasikmalaya
+            jurusan Rekayasa Perangkat Lunak. Saya senang
+            mendengarkan musik, belajar hal baru, dan ingin
+            meraih cita-cita menjadi seorang pramugari.
         </div>
 
         <a href="dashboard.php" class="btn">
