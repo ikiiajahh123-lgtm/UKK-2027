@@ -1,15 +1,16 @@
+
 <?php
 // tambah_tahun_ajaran.php
+
 include 'includes/cek_session.php';
 ?>
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Tambah Tahun Ajaran</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
-
 <body>
 
     <h1>Tambah Tahun Ajaran</h1>
@@ -24,7 +25,7 @@ include 'includes/cek_session.php';
                 <td>
                     <input type="text" name="nama"
                            placeholder="Contoh: 2026/2027"
-                           required>
+                           maxlength="20" required>
                 </td>
             </tr>
 
@@ -73,3 +74,4 @@ include 'includes/cek_session.php';
 
 </body>
 </html>
+

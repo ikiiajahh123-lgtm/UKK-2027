@@ -1,16 +1,10 @@
-
 <?php
 // kelola_siswa.php
-
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
 $sql = "SELECT * FROM t_siswa ORDER BY nama ASC";
 $hasil = mysqli_query($koneksi, $sql);
-
-if (!$hasil) {
-    die("Query gagal: " . mysqli_error($koneksi));
-}
 ?>
 
 <!DOCTYPE html>
@@ -22,47 +16,14 @@ if (!$hasil) {
 
     <title>Kelola Siswa</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        main {
-            min-height: 100vh;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .judul-halaman {
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        #tabelSiswa th,
-        #tabelSiswa td {
-            vertical-align: middle;
-        }
-
-        .dataTables_wrapper {
-            padding-top: 10px;
-        }
-
-        .btn-aksi {
-            margin: 2px;
-        }
-    </style>
+    <!-- DataTables Bootstrap 5 -->
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css"
+          rel="stylesheet">
+          <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>
@@ -72,46 +33,35 @@ if (!$hasil) {
 
         <?php include 'layout/sidebar.php'; ?>
 
-        <!-- KONTEN UTAMA -->
+        <!-- KONTEN -->
         <main class="col-md-9 col-lg-10 p-4">
 
-            <h3 class="judul-halaman">Kelola Siswa</h3>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Kelola Siswa</h1>
 
-            <div class="card">
+                <a href="tambah_siswa.php" class="btn btn-primary">
+                    + Tambah Siswa
+                </a>
+            </div>
 
-                <div class="card-header bg-white d-flex
-                            justify-content-between align-items-center">
+            <a href="dashboard.php" class="btn btn-secondary mb-3">
+                Kembali ke Dashboard
+            </a>
 
-                    <h5 class="mb-0">Data Siswa</h5>
-
-                    <a href="tambah_siswa.php"
-                       class="btn btn-primary btn-sm">
-                        + Tambah Siswa
-                    </a>
-
-                </div>
-
+            <div class="card shadow-sm">
                 <div class="card-body">
 
-                    <div class="mb-3">
-                        <a href="dashboard.php"
-                           class="btn btn-secondary btn-sm">
-                            Kembali ke Dashboard
-                        </a>
-                    </div>
-
                     <div class="table-responsive">
-
                         <table id="tabelSiswa"
-                               class="table table-striped table-bordered table-hover"
-                               style="width:100%">
+                               class="table table-striped table-bordered table-hover align-middle w-100">
 
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>No.</th>
+                                    <!-- <th>ID</th> -->
                                     <th>NIS</th>
                                     <th>NISN</th>
-                                    <th>Nama</th>
+                                    <th>Nama Siswa</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Tanggal Lahir</th>
                                     <th>Alamat</th>
@@ -121,131 +71,102 @@ if (!$hasil) {
                             </thead>
 
                             <tbody>
-
                                 <?php
-                                $no = 1;
-
-                                while ($siswa = mysqli_fetch_assoc($hasil)) {
-                                    $nis = (string) ($siswa['nis'] ?? '');
-                                ?>
+                                $no = 1; 
+                                while ($row = mysqli_fetch_assoc($hasil)) { ?>
 
                                 <tr>
-                                    <td><?= $no++; ?></td>
+                                    <td><?= $no++ ?></td>
+                                    <!-- <td>
+                                        <?= htmlspecialchars($row['id']) ?>
+                                    </td> -->
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            $nis,
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars($row['nis']) ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($siswa['nisn'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars($row['nisn']) ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($siswa['nama'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($siswa['jenis_kelamin'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($siswa['tanggal_lahir'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($siswa['alamat'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars($row['nama']) ?>
                                     </td>
 
                                     <td>
                                         <?php
-                                        $status = $siswa['status_aktif'] ?? 0;
-
-                                        if ((string) $status === '1') {
-                                        ?>
-                                            <span class="badge badge-success">
-                                                Aktif
-                                            </span>
-                                        <?php
+                                        if ($row['jenis_kelamin'] == 'L') {
+                                            echo 'Laki-laki';
+                                        } elseif ($row['jenis_kelamin'] == 'P') {
+                                            echo 'Perempuan';
                                         } else {
+                                            echo '-';
+                                        }
                                         ?>
-                                            <span class="badge badge-danger">
-                                                Tidak Aktif
-                                            </span>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($row['tanggal_lahir'] ?? '') ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars($row['alamat'] ?? '') ?>
+                                    </td>
+
+                                    <td>
+                                        <?php if ($row['status_aktif'] == 1) { ?>
+                                            <span class="badge bg-success">Aktif</span>
+                                        <?php } else { ?>
+                                            <span class="badge bg-secondary">Tidak Aktif</span>
                                         <?php } ?>
                                     </td>
 
-                                    <td>
-                                        <a
-                                            href="edit_siswa.php?nis=<?= urlencode($nis); ?>"
-                                            class="btn btn-warning btn-sm btn-aksi">
+                                    <td class="text-nowrap">
+                                        <a href="edit_siswa.php?id=<?= urlencode($row['id']) ?>"
+                                           class="btn btn-warning btn-sm">
                                             Edit
                                         </a>
 
-                                        <a
-                                            href="hapus_siswa.php?nis=<?= urlencode($nis); ?>"
-                                            class="btn btn-danger btn-sm btn-aksi"
-                                            onclick="return confirm('Yakin ingin menghapus data siswa ini?');">
+                                        <a href="hapus_siswa.php?id=<?= urlencode($row['id']) ?>"
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Yakin ingin menghapus data siswa ini?');">
                                             Hapus
                                         </a>
                                     </td>
                                 </tr>
 
                                 <?php } ?>
-
                             </tbody>
 
                         </table>
-
                     </div>
+
                 </div>
             </div>
 
         </main>
-
     </div>
 </div>
 
-<!-- jQuery: wajib dimuat sebelum DataTables -->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
-<!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Bootstrap 5 -->
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
-<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Inisialisasi DataTables -->
 <script>
 $(document).ready(function () {
-
     $('#tabelSiswa').DataTable({
-
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50, 100],
+        order: [[3, 'asc']],
+        scrollX: true,
         language: {
             search: "Cari:",
             lengthMenu: "Tampilkan _MENU_ data",
@@ -254,38 +175,14 @@ $(document).ready(function () {
             infoFiltered: "(difilter dari _MAX_ total data)",
             zeroRecords: "Data siswa tidak ditemukan",
             emptyTable: "Belum ada data siswa",
-
             paginate: {
                 first: "Pertama",
                 last: "Terakhir",
                 next: "Berikutnya",
                 previous: "Sebelumnya"
             }
-        },
-
-        pageLength: 10,
-
-        lengthMenu: [5, 10, 25, 50, 100],
-
-        searching: true,
-
-        ordering: true,
-
-        paging: true,
-
-        autoWidth: false,
-
-        columnDefs: [
-            {
-                targets: [0, 8],
-                orderable: false
-            }
-        ],
-
-        order: [[3, 'asc']]
-
+        }
     });
-
 });
 </script>
 

@@ -9,6 +9,7 @@ include 'includes/cek_session.php';
 
 <head>
     <title>Tambah Kategori Pelanggaran</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>

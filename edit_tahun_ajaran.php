@@ -1,22 +1,34 @@
+
 <?php
 // edit_tahun_ajaran.php
+
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-$id = $_GET['id'];
+$id = $_GET['id'] ?? '';
 
-$sql = "SELECT * FROM t_tahun_ajaran WHERE id = '$id'";
-$hasil = mysqli_query($koneksi, $sql);
+$stmt = mysqli_prepare(
+    $koneksi,
+    "SELECT * FROM t_tahun_ajaran WHERE id = ?"
+);
+
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+
+$hasil = mysqli_stmt_get_result($stmt);
 $data = mysqli_fetch_assoc($hasil);
+
+if (!$data) {
+    die("Data tahun ajaran tidak ditemukan.");
+}
 ?>
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Edit Tahun Ajaran</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
-
 <body>
 
     <h1>Edit Tahun Ajaran</h1>
@@ -24,7 +36,7 @@ $data = mysqli_fetch_assoc($hasil);
     <form action="proses_edit_tahun_ajaran.php" method="POST">
 
         <input type="hidden" name="id"
-               value="<?php echo $data['id']; ?>">
+               value="<?php echo htmlspecialchars($data['id']); ?>">
 
         <table>
 
@@ -33,7 +45,8 @@ $data = mysqli_fetch_assoc($hasil);
                 <td>:</td>
                 <td>
                     <input type="text" name="nama"
-                           value="<?php echo $data['nama']; ?>"
+                           value="<?php echo htmlspecialchars($data['nama']); ?>"
+                           placeholder="Contoh: 2026/2027"
                            required>
                 </td>
             </tr>
@@ -43,7 +56,7 @@ $data = mysqli_fetch_assoc($hasil);
                 <td>:</td>
                 <td>
                     <input type="date" name="tanggal_mulai"
-                           value="<?php echo $data['tanggal_mulai']; ?>"
+                           value="<?php echo htmlspecialchars($data['tanggal_mulai']); ?>"
                            required>
                 </td>
             </tr>
@@ -53,7 +66,7 @@ $data = mysqli_fetch_assoc($hasil);
                 <td>:</td>
                 <td>
                     <input type="date" name="tanggal_selesai"
-                           value="<?php echo $data['tanggal_selesai']; ?>"
+                           value="<?php echo htmlspecialchars($data['tanggal_selesai']); ?>"
                            required>
                 </td>
             </tr>
@@ -104,3 +117,4 @@ $data = mysqli_fetch_assoc($hasil);
 
 </body>
 </html>
+

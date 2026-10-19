@@ -14,6 +14,7 @@ $data = mysqli_fetch_assoc($hasil);
 <html>
 <head>
     <title>Edit Guru</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>

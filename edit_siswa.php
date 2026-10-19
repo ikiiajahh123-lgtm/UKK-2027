@@ -1,40 +1,21 @@
-
 <?php
 // edit_siswa.php
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-$nis = $_GET['nis'] ?? '';
+$id = $_GET['id'];
 
-if ($nis === '') {
-    die("NIS siswa tidak ditemukan. Silakan kembali ke halaman Kelola Siswa.");
-}
-
-$stmt = mysqli_prepare(
-    $koneksi,
-    "SELECT * FROM t_siswa WHERE nis = ?"
-);
-
-mysqli_stmt_bind_param($stmt, "s", $nis);
-mysqli_stmt_execute($stmt);
-
-$hasil = mysqli_stmt_get_result($stmt);
+$sql = "SELECT * FROM t_siswa WHERE id = '$id'";
+$hasil = mysqli_query($koneksi, $sql);
 $data = mysqli_fetch_assoc($hasil);
-
-mysqli_stmt_close($stmt);
-
-if (!$data) {
-    die("Data siswa tidak ditemukan. Silakan kembali ke halaman Kelola Siswa.");
-}
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Siswa</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>
@@ -44,7 +25,7 @@ if (!$data) {
     <form action="proses_edit_siswa.php" method="POST">
 
         <input type="hidden" name="id"
-               value="<?php echo htmlspecialchars($data['id'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+               value="<?php echo $data['id']; ?>">
 
         <table>
 
@@ -53,7 +34,7 @@ if (!$data) {
                 <td>:</td>
                 <td>
                     <input type="text" name="nis"
-                           value="<?php echo htmlspecialchars($data['nis'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                           value="<?php echo $data['nis']; ?>"
                            required>
                 </td>
             </tr>
@@ -63,7 +44,7 @@ if (!$data) {
                 <td>:</td>
                 <td>
                     <input type="text" name="nisn"
-                           value="<?php echo htmlspecialchars($data['nisn'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                           value="<?php echo $data['nisn']; ?>"
                            required>
                 </td>
             </tr>
@@ -73,7 +54,7 @@ if (!$data) {
                 <td>:</td>
                 <td>
                     <input type="text" name="nama"
-                           value="<?php echo htmlspecialchars($data['nama'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                           value="<?php echo $data['nama']; ?>"
                            required>
                 </td>
             </tr>
@@ -86,7 +67,7 @@ if (!$data) {
 
                         <option value="L"
                             <?php
-                            if (($data['jenis_kelamin'] ?? '') == 'L')
+                            if ($data['jenis_kelamin'] == 'L')
                                 echo 'selected';
                             ?>>
                             Laki-laki
@@ -94,7 +75,7 @@ if (!$data) {
 
                         <option value="P"
                             <?php
-                            if (($data['jenis_kelamin'] ?? '') == 'P')
+                            if ($data['jenis_kelamin'] == 'P')
                                 echo 'selected';
                             ?>>
                             Perempuan
@@ -109,7 +90,7 @@ if (!$data) {
                 <td>:</td>
                 <td>
                     <input type="date" name="tanggal_lahir"
-                           value="<?php echo htmlspecialchars($data['tanggal_lahir'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                           value="<?php echo $data['tanggal_lahir']; ?>"
                            required>
                 </td>
             </tr>
@@ -121,7 +102,7 @@ if (!$data) {
                     <textarea name="alamat"
                               rows="4"
                               cols="30"
-                              required><?php echo htmlspecialchars($data['alamat'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                              required><?php echo $data['alamat']; ?></textarea>
                 </td>
             </tr>
 
@@ -133,7 +114,7 @@ if (!$data) {
 
                         <option value="1"
                             <?php
-                            if (($data['status_aktif'] ?? '') == 1)
+                            if ($data['status_aktif'] == 1)
                                 echo 'selected';
                             ?>>
                             Aktif
@@ -141,7 +122,7 @@ if (!$data) {
 
                         <option value="0"
                             <?php
-                            if (($data['status_aktif'] ?? '') == 0)
+                            if ($data['status_aktif'] == 0)
                                 echo 'selected';
                             ?>>
                             Tidak Aktif

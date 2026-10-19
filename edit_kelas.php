@@ -15,6 +15,7 @@ $data = mysqli_fetch_assoc($hasil);
 
 <head>
     <title>Edit Kelas</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>

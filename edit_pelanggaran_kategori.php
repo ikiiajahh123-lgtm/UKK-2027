@@ -20,6 +20,7 @@ if (!$data) {
 
 <head>
     <title>Edit Kategori Pelanggaran</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>

@@ -1,7 +1,6 @@
 
 <?php
 // kelola_kelas.php
-
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
@@ -9,7 +8,7 @@ $sql = "SELECT * FROM t_kelas ORDER BY nama ASC";
 $hasil = mysqli_query($koneksi, $sql);
 
 if (!$hasil) {
-    die("Query gagal: " . mysqli_error($koneksi));
+    die("Gagal mengambil data kelas: " . mysqli_error($koneksi));
 }
 ?>
 
@@ -22,47 +21,15 @@ if (!$hasil) {
 
     <title>Kelola Kelas</title>
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
+    <!-- DataTables Bootstrap 5 -->
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css"
+          rel="stylesheet">
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        main {
-            min-height: 100vh;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .judul-halaman {
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        #tabelKelas th,
-        #tabelKelas td {
-            vertical-align: middle;
-        }
-
-        .dataTables_wrapper {
-            padding-top: 10px;
-        }
-
-        .btn-aksi {
-            margin: 2px;
-        }
-    </style>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>
@@ -72,41 +39,32 @@ if (!$hasil) {
 
         <?php include 'layout/sidebar.php'; ?>
 
-        <!-- KONTEN UTAMA -->
+        <!-- KONTEN -->
         <main class="col-md-9 col-lg-10 p-4">
 
-            <h3 class="judul-halaman">Kelola Kelas</h3>
+            <!-- JUDUL DAN TOMBOL TAMBAH -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Kelola Kelas</h1>
 
-            <div class="card">
+                <a href="tambah_kelas.php" class="btn btn-primary">
+                    + Tambah Kelas
+                </a>
+            </div>
 
-                <div class="card-header bg-white d-flex
-                            justify-content-between align-items-center">
+            <!-- KEMBALI KE DASHBOARD -->
+            <a href="dashboard.php" class="btn btn-secondary mb-3">
+                Kembali ke Dashboard
+            </a>
 
-                    <h5 class="mb-0">Data Kelas</h5>
-
-                    <a href="tambah_kelas.php"
-                       class="btn btn-primary btn-sm">
-                        + Tambah Kelas
-                    </a>
-
-                </div>
-
+            <!-- TABEL DATA KELAS -->
+            <div class="card shadow-sm">
                 <div class="card-body">
 
-                    <div class="mb-3">
-                        <a href="dashboard.php"
-                           class="btn btn-secondary btn-sm">
-                            Kembali ke Dashboard
-                        </a>
-                    </div>
-
                     <div class="table-responsive">
-
                         <table id="tabelKelas"
-                               class="table table-striped table-bordered table-hover"
-                               style="width:100%">
+                               class="table table-striped table-bordered table-hover align-middle w-100">
 
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th>No.</th>
                                     <th>ID</th>
@@ -121,7 +79,6 @@ if (!$hasil) {
                             </thead>
 
                             <tbody>
-
                                 <?php
                                 $no = 1;
 
@@ -132,117 +89,83 @@ if (!$hasil) {
                                     <td><?= $no++; ?></td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['id'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)$row['id']); ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['nama'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)$row['nama']); ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['tingkat'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)$row['tingkat']); ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['jurusan'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)$row['jurusan']); ?>
                                     </td>
 
                                     <td>
-                                        <?php if ((int) $row['status_aktif'] === 1) { ?>
-
-                                            <span class="badge badge-success">
-                                                Aktif
-                                            </span>
-
+                                        <?php if ((int)$row['status_aktif'] === 1) { ?>
+                                            <span class="badge bg-success">Aktif</span>
                                         <?php } else { ?>
-
-                                            <span class="badge badge-danger">
-                                                Tidak Aktif
-                                            </span>
-
+                                            <span class="badge bg-secondary">Tidak Aktif</span>
                                         <?php } ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($row['created_at'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)($row['created_at'] ?? '')); ?>
                                     </td>
 
                                     <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($row['updated_at'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
+                                        <?= htmlspecialchars((string)($row['updated_at'] ?? '')); ?>
                                     </td>
 
-                                    <td>
-                                        <a
-                                            href="edit_kelas.php?id=<?= urlencode((string) $row['id']); ?>"
-                                            class="btn btn-warning btn-sm btn-aksi">
+                                    <td class="text-nowrap">
+                                        <a href="edit_kelas.php?id=<?= urlencode((string)$row['id']); ?>"
+                                           class="btn btn-warning btn-sm">
                                             Edit
                                         </a>
 
-                                        <a
-                                            href="hapus_kelas.php?id=<?= urlencode((string) $row['id']); ?>"
-                                            class="btn btn-danger btn-sm btn-aksi"
-                                            onclick="return confirm('Yakin ingin menghapus data kelas ini?');">
+                                        <a href="hapus_kelas.php?id=<?= urlencode((string)$row['id']); ?>"
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('Yakin ingin menghapus data kelas ini?');">
                                             Hapus
                                         </a>
                                     </td>
                                 </tr>
 
                                 <?php } ?>
-
                             </tbody>
 
                         </table>
-
                     </div>
+
                 </div>
             </div>
 
         </main>
-
     </div>
 </div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
-<!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Bootstrap 5 -->
+<script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
-<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Inisialisasi DataTables -->
 <script>
 $(document).ready(function () {
-
     $('#tabelKelas').DataTable({
-
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50, 100],
+        order: [[2, 'asc']],
+        scrollX: true,
         language: {
             search: "Cari:",
             lengthMenu: "Tampilkan _MENU_ data",
@@ -251,38 +174,14 @@ $(document).ready(function () {
             infoFiltered: "(difilter dari _MAX_ total data)",
             zeroRecords: "Data kelas tidak ditemukan",
             emptyTable: "Belum ada data kelas",
-
             paginate: {
                 first: "Pertama",
                 last: "Terakhir",
                 next: "Berikutnya",
                 previous: "Sebelumnya"
             }
-        },
-
-        pageLength: 10,
-
-        lengthMenu: [5, 10, 25, 50, 100],
-
-        searching: true,
-
-        ordering: true,
-
-        paging: true,
-
-        autoWidth: false,
-
-        columnDefs: [
-            {
-                targets: [0, 8],
-                orderable: false
-            }
-        ],
-
-        order: [[2, 'asc']]
-
+        }
     });
-
 });
 </script>
 

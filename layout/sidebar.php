@@ -1,8 +1,10 @@
-  <?php
+    <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 
 if ($_SESSION['role'] === "admin") {
 ?>
+<link rel="stylesheet" href="style.css">
+
     <!-- SIDEBAR ADMIN -->
     <div class="col-md-3 col-lg-2 bg-dark min-vh-100 p-3">
         <h4 class="text-white mb-4">
@@ -47,8 +49,8 @@ if ($_SESSION['role'] === "admin") {
             </li>
 
             <li class="nav-item mb-2">
-                <a href="kelola_wali_kelas.php"
-                   class="nav-link <?= ($current_page == 'kelola_wali_kelas.php') ? 'active' : 'text-white' ?>">
+                <a href="kelola_walikelas.php"
+                   class="nav-link <?= ($current_page == 'kelola_walikelas.php') ? 'active' : 'text-white' ?>">
                     Data Wali Kelas
                 </a>
             </li>

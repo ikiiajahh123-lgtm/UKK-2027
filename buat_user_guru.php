@@ -1,19 +1,19 @@
 <?php
-//buat_user_awal.php
-//jalankan file ini satu kali saja lewat browseruntuk user awal 
+//buat_user_guru.php
+//jalankan file ini satu kali saja lewat browser untuk membuat user awal
 include 'config/koneksi.php';
 
-$name ='guru';
-$email ='guru@gmail.com';
+$name = 'Guru';
+$email= 'guru@gmail.com';
 $password = password_hash('guru123', PASSWORD_DEFAULT);
 $role = 'guru';
 
-$sql = "INSERT INTO t_users(name, email, password, role)";
+$sql = "INSERT INTO t_users(name,email,password,role)";
 $sql .= "VALUES('$name','$email','$password','$role')";
 
 if (mysqli_query($koneksi, $sql)) {
-    echo 'user admin berhasil dibuat. silakan hapus file ini.';
-}else{
-    echo 'gagal membuat user: ' . mysqli_error($koneksi);
+    echo 'User admin berhasil dibuat, silakan hapus file ini';
+} else{
+    echo 'Gagal memuat user: '. mysqli_error($koneksi);
 }
 ?>

@@ -1,5 +1,5 @@
-
 <?php
+
 // kelola_pelanggaran_kategori.php
 
 include 'includes/cek_session.php';
@@ -8,276 +8,94 @@ include 'config/koneksi.php';
 $sql = "SELECT * FROM t_pelanggaran_kategori ORDER BY id DESC";
 $hasil = mysqli_query($koneksi, $sql);
 
-if (!$hasil) {
-    die("Query gagal: " . mysqli_error($koneksi));
-}
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Kelola Pelanggaran Kategori</title>
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
-
-    <!-- DataTables CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css">
-
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        main {
-            min-height: 100vh;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .judul-halaman {
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        #tabelKategori th,
-        #tabelKategori td {
-            vertical-align: middle;
-        }
-
-        .dataTables_wrapper {
-            padding-top: 10px;
-        }
-
-        .btn-aksi {
-            margin: 2px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Kelola Kategori Pelanggaran</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
-
 <body>
-
-<div class="container-fluid">
+       <div class="container-fluid">
     <div class="row">
-
-        <?php include 'layout/sidebar.php'; ?>
-
-        <!-- KONTEN UTAMA -->
+        <?php
+            include 'layout/sidebar.php';
+        ?>
+        <!-- KONTEN -->
         <main class="col-md-9 col-lg-10 p-4">
+           
+            <div class="row"></div>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <h1>Kelola Kategori Pelanggaran</h1>
 
-            <h3 class="judul-halaman">
-                Kelola Pelanggaran Kategori
-            </h3>
+    <p>
+        <a href="dashboard.php">Kembali ke Dashboard</a> |
+        <a href="tambah_pelanggaran_kategori.php">
+            Tambah Kategori Pelanggaran
+        </a>
+    </p>
 
-            <div class="card">
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Nama Kategori</th>
+            <th>Deskripsi</th>
+            <th>Status Aktif</th>
+            <th>Dibuat</th>
+            <th>Diubah</th>
+            <th>Aksi</th>
+        </tr>
 
-                <div class="card-header bg-white d-flex
-                            justify-content-between align-items-center">
+        <?php while ($row = mysqli_fetch_assoc($hasil)) { ?>
+        <tr>
+            <td>
+                <?php echo $row['id']; ?>
+            </td>
 
-                    <h5 class="mb-0">Data Pelanggaran Kategori</h5>
+            <td>
+                <?php echo htmlspecialchars($row['nama']); ?>
+            </td>
 
-                    <a href="tambah_pelanggaran_kategori.php"
-                       class="btn btn-primary btn-sm">
-                        + Tambah Kategori
-                    </a>
+            <td>
+                <?php echo htmlspecialchars($row['deskripsi'] ?? ''); ?>
+            </td>
 
-                </div>
+            <td>
+                <?php
+                if ($row['status_aktif'] == 1) {
+                    echo "Aktif";
+                } else {
+                    echo "Tidak Aktif";
+                }
+                ?>
+            </td>
 
-                <div class="card-body">
+            <td>
+                <?php echo $row['created_at']; ?>
+            </td>
 
-                    <div class="mb-3">
-                        <a href="dashboard.php"
-                           class="btn btn-secondary btn-sm">
-                            Kembali ke Dashboard
-                        </a>
-                    </div>
+            <td>
+                <?php echo $row['updated_at']; ?>
+            </td>
 
-                    <div class="table-responsive">
+            <td>
+                <a href="edit_pelanggaran_kategori.php?id=<?php echo $row['id']; ?>">
+                    <button type="button" class="btn btn-warning">Edit</button>
+                </a>
+                |
+                <a href="hapus_pelanggaran_kategori.php?id=<?php echo $row['id']; ?>"
+                   onclick="return confirm('Yakin ingin menghapus kategori pelanggaran ini?');">
+                    <button type="button" class="btn btn-danger">Hapus</button>
+                </a>
+            </td>
+        </tr>
+        <?php } ?>
 
-                        <table id="tabelKategori"
-                               class="table table-striped table-bordered table-hover"
-                               style="width:100%">
-
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>No.</th>
-                                    <th>ID</th>
-                                    <th>Nama Kategori</th>
-                                    <th>Deskripsi</th>
-                                    <th>Status Aktif</th>
-                                    <th>Dibuat</th>
-                                    <th>Diubah</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                <?php
-                                $no = 1;
-
-                                while ($row = mysqli_fetch_assoc($hasil)) {
-                                ?>
-
-                                <tr>
-                                    <td><?= $no++; ?></td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['id'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) $row['nama'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($row['deskripsi'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?php if ((int) $row['status_aktif'] === 1) { ?>
-
-                                            <span class="badge badge-success">
-                                                Aktif
-                                            </span>
-
-                                        <?php } else { ?>
-
-                                            <span class="badge badge-danger">
-                                                Tidak Aktif
-                                            </span>
-
-                                        <?php } ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($row['created_at'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <?= htmlspecialchars(
-                                            (string) ($row['updated_at'] ?? ''),
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ); ?>
-                                    </td>
-
-                                    <td>
-                                        <a
-                                            href="edit_pelanggaran_kategori.php?id=<?= urlencode((string) $row['id']); ?>"
-                                            class="btn btn-warning btn-sm btn-aksi">
-                                            Edit
-                                        </a>
-
-                                        <a
-                                            href="hapus_pelanggaran_kategori.php?id=<?= urlencode((string) $row['id']); ?>"
-                                            class="btn btn-danger btn-sm btn-aksi"
-                                            onclick="return confirm('Yakin ingin menghapus kategori pelanggaran ini?');">
-                                            Hapus
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <?php } ?>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-    </div>
-</div>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- DataTables JavaScript -->
-<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-
-<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap4.min.js"></script>
-
-<!-- Inisialisasi DataTables -->
-<script>
-$(document).ready(function () {
-
-    $('#tabelKategori').DataTable({
-
-        language: {
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ kategori",
-            infoEmpty: "Tidak ada kategori pelanggaran",
-            infoFiltered: "(difilter dari _MAX_ total data)",
-            zeroRecords: "Kategori pelanggaran tidak ditemukan",
-            emptyTable: "Belum ada data kategori pelanggaran",
-
-            paginate: {
-                first: "Pertama",
-                last: "Terakhir",
-                next: "Berikutnya",
-                previous: "Sebelumnya"
-            }
-        },
-
-        pageLength: 10,
-
-        lengthMenu: [5, 10, 25, 50, 100],
-
-        searching: true,
-
-        ordering: true,
-
-        paging: true,
-
-        autoWidth: false,
-
-        columnDefs: [
-            {
-                targets: [0, 7],
-                orderable: false
-            }
-        ],
-
-        order: [[1, 'desc']]
-
-    });
-
-});
-</script>
+    </table>
 
 </body>
 </html>

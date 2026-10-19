@@ -8,6 +8,7 @@ include 'includes/cek_session.php';
 
 <head>
     <title>Tambah Guru</title>
+    <link rel="stylesheet" href="layout/style.css">
 </head>
 
 <body>
@@ -53,31 +54,8 @@ include 'includes/cek_session.php';
                 </td>
             </tr>
 
+
             <tr>
-    <td>User</td>
-    <td>:</td>
-    <td>
-        <select name="user_id" required>
-            <option value="">-- Pilih User --</option>
-
-            <?php
-            include 'config/koneksi.php';
-
-            $query_user = mysqli_query($koneksi, "SELECT id FROM t_users ORDER BY id ASC");
-
-            while ($user = mysqli_fetch_assoc($query_user)) {
-            ?>
-                <option value="<?php echo $user['id']; ?>">
-                    User ID: <?php echo $user['id']; ?>
-                </option>
-            <?php
-            }
-            ?>
-
-        </select>
-    </td>
-</tr>
-         <tr>
                 <td colspan="3">
                     <input type="submit" value="Simpan">
                 </td>
