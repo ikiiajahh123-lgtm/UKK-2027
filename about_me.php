@@ -50,7 +50,7 @@ $hobi = "Baca Buku";
 
                 <div class="profile-photo-wrapper">
                     <img
-                        src="foto-profil.jpg"
+                        src="iki.jpg"
                         alt="Foto "
                         class="profile-photo"
                         onerror="this.onerror=null;this.src='foto-profil.png';"

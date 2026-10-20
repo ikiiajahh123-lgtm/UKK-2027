@@ -11,95 +11,169 @@ $data = mysqli_fetch_assoc($hasil);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Edit Kelas</title>
-    <link rel="stylesheet" href="layout/style.css">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Edit Kelas</h1>
+<div class="container py-5">
 
-    <form action="proses_edit_kelas.php" method="POST">
+    <div class="row justify-content-center">
 
-        <input type="hidden" name="id"
-               value="<?php echo $data['id']; ?>">
+        <div class="col-md-8 col-lg-7">
 
-        <table>
+            <div class="card shadow">
 
-            <tr>
-                <td>Nama Kelas</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nama"
-                           value="<?php echo $data['nama']; ?>"
-                           required>
-                </td>
-            </tr>
+                <!-- Header -->
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Edit Kelas</h3>
+                </div>
 
-            <tr>
-                <td>Tingkat</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="tingkat"
-                           value="<?php echo $data['tingkat']; ?>"
-                           required>
-                </td>
-            </tr>
+                <!-- Body -->
+                <div class="card-body">
 
-            <tr>
-                <td>Jurusan</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="jurusan"
-                           value="<?php echo $data['jurusan']; ?>"
-                           required>
-                </td>
-            </tr>
+                    <form action="proses_edit_kelas.php" method="POST">
 
-            <tr>
-                <td>Status Aktif</td>
-                <td>:</td>
-                <td>
-                    <select name="status_aktif" required>
+                        <!-- ID -->
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<?php echo htmlspecialchars($data['id']); ?>"
+                        >
 
-                        <option value="1"
-                            <?php
-                            if ($data['status_aktif'] == 1) {
-                                echo 'selected';
-                            }
-                            ?>>
-                            Aktif
-                        </option>
+                        <!-- Nama Kelas -->
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">
+                                Nama Kelas
+                            </label>
 
-                        <option value="0"
-                            <?php
-                            if ($data['status_aktif'] == 0) {
-                                echo 'selected';
-                            }
-                            ?>>
-                            Tidak Aktif
-                        </option>
+                            <input
+                                type="text"
+                                name="nama"
+                                id="nama"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($data['nama']); ?>"
+                                required
+                            >
+                        </div>
 
-                    </select>
-                </td>
-            </tr>
+                        <!-- Tingkat -->
+                        <div class="mb-3">
+                            <label for="tingkat" class="form-label">
+                                Tingkat
+                            </label>
 
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Update">
-                </td>
-            </tr>
+                            <input
+                                type="text"
+                                name="tingkat"
+                                id="tingkat"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($data['tingkat']); ?>"
+                                required
+                            >
+                        </div>
 
-        </table>
+                        <!-- Jurusan -->
+                        <div class="mb-3">
+                            <label for="jurusan" class="form-label">
+                                Jurusan
+                            </label>
 
-    </form>
+                            <input
+                                type="text"
+                                name="jurusan"
+                                id="jurusan"
+                                class="form-control"
+                                value="<?php echo htmlspecialchars($data['jurusan']); ?>"
+                                required
+                            >
+                        </div>
 
-    <p>
-        <a href="kelola_kelas.php">Kembali ke Kelola Kelas</a>
-    </p>
+                        <!-- Status Aktif -->
+                        <div class="mb-3">
+                            <label for="status_aktif" class="form-label">
+                                Status Aktif
+                            </label>
+
+                            <select
+                                name="status_aktif"
+                                id="status_aktif"
+                                class="form-select"
+                                required
+                            >
+
+                                <option
+                                    value="1"
+                                    <?php
+                                    if ($data['status_aktif'] == 1) {
+                                        echo 'selected';
+                                    }
+                                    ?>
+                                >
+                                    Aktif
+                                </option>
+
+                                <option
+                                    value="0"
+                                    <?php
+                                    if ($data['status_aktif'] == 0) {
+                                        echo 'selected';
+                                    }
+                                    ?>
+                                >
+                                    Tidak Aktif
+                                </option>
+
+                            </select>
+                        </div>
+
+                        <!-- Tombol -->
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                            >
+                                Update
+                            </button>
+
+                            <a
+                                href="kelola_kelas.php"
+                                class="btn btn-secondary"
+                            >
+                                Kembali
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 </html>

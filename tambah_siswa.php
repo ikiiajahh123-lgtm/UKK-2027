@@ -4,97 +4,228 @@ include 'includes/cek_session.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Tambah Siswa</title>
-    <link rel="stylesheet" href="layout/style.css">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Tambah Siswa</h1>
+<div class="container py-5">
 
-    <form action="proses_tambah_siswa.php" method="POST">
+    <div class="row justify-content-center">
 
-        <table>
+        <div class="col-md-8 col-lg-7">
 
-            <tr>
-                <td>NIS</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nis" required>
-                </td>
-            </tr>
+            <div class="card shadow">
 
-            <tr>
-                <td>NISN</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nisn" required>
-                </td>
-            </tr>
+                <!-- Header -->
+                <div class="card-header bg-success text-white">
 
-            <tr>
-                <td>Nama Siswa</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nama" required>
-                </td>
-            </tr>
+                    <h3 class="mb-0">
+                        Tambah Siswa
+                    </h3>
 
-            <tr>
-                <td>Jenis Kelamin</td>
-                <td>:</td>
-                <td>
-                    <select name="jenis_kelamin" required>
-                        <option value="">-- Pilih --</option>
-                        <option value="L">Laki-laki</option>
-                        <option value="P">Perempuan</option>
-                    </select>
-                </td>
-            </tr>
+                </div>
 
-            <tr>
-                <td>Tanggal Lahir</td>
-                <td>:</td>
-                <td>
-                    <input type="date" name="tanggal_lahir" required>
-                </td>
-            </tr>
+                <!-- Body -->
+                <div class="card-body">
 
-            <tr>
-                <td>Alamat</td>
-                <td>:</td>
-                <td>
-                    <textarea name="alamat" rows="4" cols="30" required></textarea>
-                </td>
-            </tr>
+                    <form
+                        action="proses_tambah_siswa.php"
+                        method="POST">
 
-            <tr>
-                <td>Status Aktif</td>
-                <td>:</td>
-                <td>
-                    <select name="status_aktif" required>
-                        <option value="1">Aktif</option>
-                        <option value="0">Tidak Aktif</option>
-                    </select>
-                </td>
-            </tr>
 
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Simpan">
-                </td>
-            </tr>
+                        <!-- NIS -->
+                        <div class="mb-3">
 
-        </table>
+                            <label class="form-label">
+                                NIS
+                            </label>
 
-    </form>
+                            <input
+                                type="text"
+                                name="nis"
+                                class="form-control"
+                                placeholder="Masukkan NIS"
+                                required>
 
-    <p>
-        <a href="kelola_siswa.php">Kembali</a>
-    </p>
+                        </div>
+
+
+                        <!-- NISN -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                NISN
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nisn"
+                                class="form-control"
+                                placeholder="Masukkan NISN"
+                                required>
+
+                        </div>
+
+
+                        <!-- Nama Siswa -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Nama Siswa
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nama"
+                                class="form-control"
+                                placeholder="Masukkan nama siswa"
+                                required>
+
+                        </div>
+
+
+                        <!-- Jenis Kelamin -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Jenis Kelamin
+                            </label>
+
+                            <select
+                                name="jenis_kelamin"
+                                class="form-select"
+                                required>
+
+                                <option value="">
+                                    -- Pilih Jenis Kelamin --
+                                </option>
+
+                                <option value="L">
+                                    Laki-laki
+                                </option>
+
+                                <option value="P">
+                                    Perempuan
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Tanggal Lahir -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Tanggal Lahir
+                            </label>
+
+                            <input
+                                type="date"
+                                name="tanggal_lahir"
+                                class="form-control"
+                                required>
+
+                        </div>
+
+
+                        <!-- Alamat -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Alamat
+                            </label>
+
+                            <textarea
+                                name="alamat"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Masukkan alamat siswa"
+                                required></textarea>
+
+                        </div>
+
+
+                        <!-- Status Aktif -->
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Status Aktif
+                            </label>
+
+                            <select
+                                name="status_aktif"
+                                class="form-select"
+                                required>
+
+                                <option value="1">
+                                    Aktif
+                                </option>
+
+                                <option value="0">
+                                    Tidak Aktif
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Tombol -->
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                Simpan
+
+                            </button>
+
+                            <a
+                                href="kelola_siswa.php"
+                                class="btn btn-secondary">
+
+                                Kembali
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
+
 </html>

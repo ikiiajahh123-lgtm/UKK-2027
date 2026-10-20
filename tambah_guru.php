@@ -4,70 +4,165 @@ include 'includes/cek_session.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Tambah Guru</title>
-    <link rel="stylesheet" href="layout/style.css">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Tambah Guru</h1>
+<div class="container py-5">
 
-    <form action="proses_tambah_guru.php" method="POST">
+    <div class="row justify-content-center">
 
-        <table>
+        <div class="col-md-8 col-lg-7">
 
-            <tr>
-                <td>NIP</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nip" required>
-                </td>
-            </tr>
+            <div class="card shadow">
 
-            <tr>
-                <td>Nama Guru</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nama" required>
-                </td>
-            </tr>
+                <!-- Header -->
+                <div class="card-header bg-success text-white">
 
-            <tr>
-                <td>Email</td>
-                <td>:</td>
-                <td>
-                    <input type="email" name="email" required>
-                </td>
-            </tr>
+                    <h3 class="mb-0">
+                        Tambah Guru
+                    </h3>
 
-            <tr>
-                <td>Status Aktif</td>
-                <td>:</td>
-                <td>
-                    <select name="status_aktif" required>
-                        <option value="1">Aktif</option>
-                        <option value="0">Tidak Aktif</option>
-                    </select>
-                </td>
-            </tr>
+                </div>
+
+                <!-- Body -->
+                <div class="card-body">
+
+                    <form
+                        action="proses_tambah_guru.php"
+                        method="POST">
 
 
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Simpan">
-                </td>
-            </tr>
+                        <!-- NIP -->
+                        <div class="mb-3">
 
-        </table>
+                            <label class="form-label">
+                                NIP
+                            </label>
 
-    </form>
+                            <input
+                                type="text"
+                                name="nip"
+                                class="form-control"
+                                placeholder="Masukkan NIP"
+                                required>
 
-    <p>
-        <a href="kelola_guru.php">Kembali</a>
-    </p>
+                        </div>
+
+
+                        <!-- Nama Guru -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Nama Guru
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nama"
+                                class="form-control"
+                                placeholder="Masukkan nama guru"
+                                required>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="Masukkan email"
+                                required>
+
+                        </div>
+
+
+                        <!-- Status Aktif -->
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Status Aktif
+                            </label>
+
+                            <select
+                                name="status_aktif"
+                                class="form-select"
+                                required>
+
+                                <option value="1">
+                                    Aktif
+                                </option>
+
+                                <option value="0">
+                                    Tidak Aktif
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Tombol -->
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                Simpan
+
+                            </button>
+
+                            <a
+                                href="kelola_guru.php"
+                                class="btn btn-secondary">
+
+                                Kembali
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 

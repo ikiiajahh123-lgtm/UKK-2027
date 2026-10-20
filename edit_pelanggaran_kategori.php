@@ -4,7 +4,7 @@
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-$id = $_GET['id'];
+$id = $_GET['id'] ?? '';
 
 $sql = "SELECT * FROM t_pelanggaran_kategori WHERE id = '$id'";
 $hasil = mysqli_query($koneksi, $sql);
@@ -16,87 +16,165 @@ if (!$data) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Edit Kategori Pelanggaran</title>
-    <link rel="stylesheet" href="layout/style.css">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Edit Kategori Pelanggaran</h1>
+<div class="container py-5">
 
-    <form action="proses_edit_pelanggaran_kategori.php" method="POST">
+    <div class="row justify-content-center">
 
-        <input type="hidden" name="id"
-               value="<?php echo $data['id']; ?>">
+        <div class="col-md-8 col-lg-7">
 
-        <table>
+            <div class="card shadow">
 
-            <tr>
-                <td>Nama Kategori</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nama"
-                           value="<?php echo htmlspecialchars($data['nama']); ?>"
-                           required>
-                </td>
-            </tr>
+                <!-- Header -->
+                <div class="card-header bg-success text-white">
 
-            <tr>
-                <td>Deskripsi</td>
-                <td>:</td>
-                <td>
-                    <textarea name="deskripsi" rows="4" cols="30"><?php
-                        echo htmlspecialchars($data['deskripsi'] ?? '');
-                    ?></textarea>
-                </td>
-            </tr>
+                    <h3 class="mb-0">
+                        Edit Kategori Pelanggaran
+                    </h3>
 
-            <tr>
-                <td>Status Aktif</td>
-                <td>:</td>
-                <td>
-                    <select name="status_aktif" required>
+                </div>
 
-                        <option value="1"
-                            <?php
-                            if ($data['status_aktif'] == 1) {
-                                echo 'selected';
-                            }
-                            ?>>
-                            Aktif
-                        </option>
+                <!-- Body -->
+                <div class="card-body">
 
-                        <option value="0"
-                            <?php
-                            if ($data['status_aktif'] == 0) {
-                                echo 'selected';
-                            }
-                            ?>>
-                            Tidak Aktif
-                        </option>
+                    <form
+                        action="proses_edit_pelanggaran_kategori.php"
+                        method="POST">
 
-                    </select>
-                </td>
-            </tr>
+                        <!-- ID -->
+                        <input
+                            type="hidden"
+                            name="id"
+                            value="<?= htmlspecialchars($data['id']); ?>">
 
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Update">
-                </td>
-            </tr>
 
-        </table>
+                        <!-- Nama Kategori -->
+                        <div class="mb-3">
 
-    </form>
+                            <label class="form-label">
+                                Nama Kategori
+                            </label>
 
-    <p>
-        <a href="kelola_pelanggaran_kategori.php">
-            Kembali ke Kelola Kategori Pelanggaran
-        </a>
-    </p>
+                            <input
+                                type="text"
+                                name="nama"
+                                class="form-control"
+                                value="<?= htmlspecialchars($data['nama']); ?>"
+                                required>
+
+                        </div>
+
+
+                        <!-- Deskripsi -->
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Deskripsi
+                            </label>
+
+                            <textarea
+                                name="deskripsi"
+                                class="form-control"
+                                rows="4"><?= htmlspecialchars($data['deskripsi'] ?? ''); ?></textarea>
+
+                        </div>
+
+
+                        <!-- Status Aktif -->
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Status Aktif
+                            </label>
+
+                            <select
+                                name="status_aktif"
+                                class="form-select"
+                                required>
+
+                                <option
+                                    value="1"
+                                    <?= ($data['status_aktif'] == 1)
+                                        ? 'selected'
+                                        : ''; ?>>
+
+                                    Aktif
+
+                                </option>
+
+                                <option
+                                    value="0"
+                                    <?= ($data['status_aktif'] == 0)
+                                        ? 'selected'
+                                        : ''; ?>>
+
+                                    Tidak Aktif
+
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Tombol -->
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success">
+
+                                Update
+
+                            </button>
+
+                            <a
+                                href="kelola_pelanggaran_kategori.php"
+                                class="btn btn-secondary">
+
+                                Kembali
+
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
+
 </html>

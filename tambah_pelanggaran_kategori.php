@@ -5,67 +5,128 @@ include 'includes/cek_session.php';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Tambah Kategori Pelanggaran</title>
-    <link rel="stylesheet" href="layout/style.css">
+
+    <!-- Bootstrap 5.3.3 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Tambah Kategori Pelanggaran</h1>
+<div class="container py-5">
 
-    <form action="proses_tambah_pelanggaran_kategori.php" method="POST">
+    <div class="row justify-content-center">
 
-        <table>
+        <div class="col-md-8 col-lg-7">
 
-            <tr>
-                <td>Nama Kategori</td>
-                <td>:</td>
-                <td>
-                    <input type="text" name="nama"
-                           placeholder="Contoh: Pelanggaran Ringan"
-                           maxlength="100"
-                           required>
-                </td>
-            </tr>
+            <div class="card shadow">
 
-            <tr>
-                <td>Deskripsi</td>
-                <td>:</td>
-                <td>
-                    <textarea name="deskripsi"
-                              rows="4"
-                              cols="30"
-                              placeholder="Masukkan deskripsi kategori pelanggaran"></textarea>
-                </td>
-            </tr>
+                <!-- Header -->
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Tambah Kategori Pelanggaran</h3>
+                </div>
 
-            <tr>
-                <td>Status Aktif</td>
-                <td>:</td>
-                <td>
-                    <select name="status_aktif" required>
-                        <option value="1">Aktif</option>
-                        <option value="0">Tidak Aktif</option>
-                    </select>
-                </td>
-            </tr>
+                <!-- Body -->
+                <div class="card-body">
 
-            <tr>
-                <td colspan="3">
-                    <input type="submit" value="Simpan">
-                </td>
-            </tr>
+                    <form
+                        action="proses_tambah_pelanggaran_kategori.php"
+                        method="POST"
+                    >
 
-        </table>
+                        <!-- Nama Kategori -->
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">
+                                Nama Kategori
+                            </label>
 
-    </form>
+                            <input
+                                type="text"
+                                name="nama"
+                                id="nama"
+                                class="form-control"
+                                placeholder="Contoh: Pelanggaran Ringan"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
 
-    <p>
-        <a href="kelola_pelanggaran_kategori.php">Kembali</a>
-    </p>
+                        <!-- Deskripsi -->
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">
+                                Deskripsi
+                            </label>
+
+                            <textarea
+                                name="deskripsi"
+                                id="deskripsi"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Masukkan deskripsi kategori pelanggaran"
+                            ></textarea>
+                        </div>
+
+                        <!-- Status Aktif -->
+                        <div class="mb-3">
+                            <label for="status_aktif" class="form-label">
+                                Status Aktif
+                            </label>
+
+                            <select
+                                name="status_aktif"
+                                id="status_aktif"
+                                class="form-select"
+                                required
+                            >
+                                <option value="1">Aktif</option>
+                                <option value="0">Tidak Aktif</option>
+                            </select>
+                        </div>
+
+                        <!-- Tombol -->
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success"
+                            >
+                                Simpan
+                            </button>
+
+                            <a
+                                href="kelola_pelanggaran_kategori.php"
+                                class="btn btn-secondary"
+                            >
+                                Kembali
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
 </html>

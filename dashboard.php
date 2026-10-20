@@ -1,8 +1,16 @@
+
 <?php
-//dasboard.php
-include "includes/cek_session.php";
-include "config/koneksi.php";
+session_start();
+
+if (
+    !isset($_SESSION["login"]) ||
+    $_SESSION["login"] !== true
+) {
+    header("Location: login.php");
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +44,7 @@ include "config/koneksi.php";
                                 Data Siswa
                             </h5>
                             <h2>
-                                120
+                                50
                             </h2>
                         </div>
                     </div>

@@ -1,63 +1,76 @@
 <?php
 // hapus_walikelas.php
-include 'includes/cek_session.php';
-include 'config/koneksi.php';
 
-$id = (int) ($_GET['id'] ?? 0);
+include "includes/cek_session.php";
+include "config/koneksi.php";
 
-// Ambil data sebelum dihapus
-$sql = "SELECT
-            w.id,
-            w.kelas_id,
-            k.nama AS nama_kelas
-        FROM t_walikelas w
-        LEFT JOIN t_kelas k ON w.kelas_id = k.id
-        WHERE w.id = ?";
+/* Ambil ID dari URL */
+$id = $_GET['id'] ?? '';
 
-$stmt = mysqli_prepare($koneksi, $sql);
+/* Cek ID */
+if ($id === '' || !ctype_digit((string)$id)) {
+    header("Location: kelola_walikelas.php");
+    exit;
+}
+
+$id = (int)$id;
+
+/* Cek apakah data wali kelas ada */
+$stmt = mysqli_prepare(
+    $koneksi,
+    "SELECT id FROM t_wali_kelas WHERE id = ?"
+);
+
+if (!$stmt) {
+    die("Query gagal: " . mysqli_error($koneksi));
+}
+
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
 
-$data = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$result = mysqli_stmt_get_result($stmt);
+$data = mysqli_fetch_assoc($result);
 
+mysqli_stmt_close($stmt);
+
+/* Jika tidak ada */
 if (!$data) {
-    exit('Data wali kelas tidak ditemukan.');
+    echo "<script>
+            alert('Data wali kelas tidak ditemukan.');
+            window.location='kelola_walikelas.php';
+          </script>";
+    exit;
 }
 
-// Hapus data
-$hapus = mysqli_prepare(
+/* Hapus data */
+$stmt = mysqli_prepare(
     $koneksi,
-    "DELETE FROM t_walikelas WHERE id = ?"
+    "DELETE FROM t_wali_kelas WHERE id = ?"
 );
-mysqli_stmt_bind_param($hapus, "i", $id);
 
-if (mysqli_stmt_execute($hapus)) {
-    $id_user = $_SESSION['id_user'] ?? null;
-    $waktu = date('Y-m-d H:i:s');
-    $nama_kelas = $data['nama_kelas'] ?? 'Tidak diketahui';
-    $aktivitas = "hapus wali kelas untuk kelas: " . $nama_kelas;
+if (!$stmt) {
+    die("Query hapus gagal: " . mysqli_error($koneksi));
+}
 
-    if ($id_user !== null) {
-        $log = mysqli_prepare(
-            $koneksi,
-            "INSERT INTO tbl_log (id_user, aktivitas, waktu)
-             VALUES (?, ?, ?)"
-        );
+mysqli_stmt_bind_param($stmt, "i", $id);
 
-        mysqli_stmt_bind_param(
-            $log,
-            "iss",
-            $id_user,
-            $aktivitas,
-            $waktu
-        );
+if (mysqli_stmt_execute($stmt)) {
 
-        mysqli_stmt_execute($log);
-    }
+    mysqli_stmt_close($stmt);
 
-    header('Location: kelola_walikelas.php');
+    echo "<script>
+            alert('Data wali kelas berhasil dihapus.');
+            window.location='kelola_walikelas.php';
+          </script>";
+
     exit;
+
 } else {
-    echo "Gagal menghapus wali kelas: " . mysqli_error($koneksi);
+
+    $error = mysqli_stmt_error($stmt);
+
+    mysqli_stmt_close($stmt);
+
+    die("Data wali kelas gagal dihapus: " . htmlspecialchars($error));
 }
 ?>
