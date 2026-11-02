@@ -1,91 +1,45 @@
-
 <?php
 session_start();
-require_once __DIR__ . "/config/koneksi.php";
+include "config/koneksi.php";
 
-// Pastikan form login menggunakan method POST
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: login.php");
-    exit;
-}
+$email = mysqli_real_escape_string($koneksi, $_POST['username']);
+$password = $_POST['password'];
 
-$username = trim($_POST["username"] ?? "");
-$password = $_POST["password"] ?? "";
+$query = mysqli_query($koneksi, "SELECT * FROM t_users WHERE email='$email'");
+$cek = mysqli_num_rows($query);
 
-if ($username === "" || $password === "") {
-    header("Location: login.php?pesan=gagal");
-    exit;
-}
+if ($cek > 0) {
+    $data = mysqli_fetch_assoc($query);
 
-// Cari pengguna berdasarkan nama atau email
-$sql = "SELECT name, email, password, role
-        FROM t_users
-        WHERE name = ? OR email = ?
-        LIMIT 1";
+    // Mendukung password hash atau teks biasa
+    if (password_verify($password, $data['password']) || $password === $data['password']) {
+        
+        $_SESSION['login'] = true;
+        $_SESSION['name'] = $data['name'];
+        $_SESSION['email'] = $data['email'];
+        
+        // Membersihkan spasi dan mengubah role menjadi huruf kecil semua
+        $role = strtolower(trim($data['role']));
+        $_SESSION['role'] = $role;
 
-$stmt = mysqli_prepare($koneksi, $sql);
+        // PENGONDISIAN REDIRECTION BERDASARKAN ROLE
+        if ($role === 'admin') {
+            header("Location: dashboard.php");
+            exit;
+        } elseif ($role === 'guru') {
+            header("Location: dashboard_guru.php");
+            exit;
+        } else {
+            header("Location: login.php?pesan=role_salah");
+            exit;
+        }
 
-if (!$stmt) {
-    die("Query gagal: " . mysqli_error($koneksi));
-}
-
-mysqli_stmt_bind_param($stmt, "ss", $username, $username);
-mysqli_stmt_execute($stmt);
-
-$result = mysqli_stmt_get_result($stmt);
-$user = mysqli_fetch_assoc($result);
-
-if (!$user) {
-    mysqli_stmt_close($stmt);
-    header("Location: login.php?pesan=gagal");
-    exit;
-}
-
-$passwordDB = (string) $user["password"];
-
-// Mendukung password hash dan password lama berbentuk teks biasa
-$valid = password_verify($password, $passwordDB);
-
-if (!$valid && hash_equals($passwordDB, $password)) {
-    $valid = true;
-
-    // Ubah password teks biasa menjadi hash setelah login berhasil
-    $hashBaru = password_hash($password, PASSWORD_DEFAULT);
-
-    $update = mysqli_prepare(
-        $koneksi,
-        "UPDATE t_users SET password = ? WHERE email = ?"
-    );
-
-    if ($update) {
-        mysqli_stmt_bind_param(
-            $update,
-            "ss",
-            $hashBaru,
-            $user["email"]
-        );
-        mysqli_stmt_execute($update);
-        mysqli_stmt_close($update);
+    } else {
+        header("Location: login.php?pesan=gagal");
+        exit;
     }
-}
-
-mysqli_stmt_close($stmt);
-
-if (!$valid) {
+} else {
     header("Location: login.php?pesan=gagal");
     exit;
 }
-
-// Login berhasil
-session_regenerate_id(true);
-
-$_SESSION["login"] = true;
-$_SESSION["username"] = $user["name"];
-$_SESSION["nama_user"] = $user["name"];
-$_SESSION["email"] = $user["email"];
-$_SESSION["role"] = $user["role"];
-
-// Masuk ke dashboard
-header("Location: dashboard.php");
-exit;
 ?>
