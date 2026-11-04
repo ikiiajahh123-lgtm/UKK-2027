@@ -19,16 +19,15 @@ if ($col_query) {
     }
 }
 
-// --- PROSES SIMPAN / TAMBAH PELANGGARAN (OTOMATIS MENYESUAIKAN KOLOM) ---
+// --- PROSES SIMPAN / TAMBAH PELANGGARAN ---
 if (isset($_POST['simpan_pelanggaran'])) {
-    $input_nama        = $_POST['nama_siswa'] ?? '';
+    $input_nama         = $_POST['nama_siswa'] ?? '';
     $input_pelanggaran = $_POST['pelanggaran'] ?? '';
     $input_tanggal     = $_POST['tanggal'] ?? date('Y-m-d');
     $input_poin        = $_POST['poin'] ?? 0;
     $input_tindakan    = $_POST['tindakan'] ?? '';
     $input_guru        = $_SESSION['name'] ?? 'Guru';
 
-    // Petakan data ke berbagai kemungkinan nama kolom di database
     $data_kandidat = [
         'nama_siswa'        => $input_nama,
         'nama'              => $input_nama,
@@ -44,7 +43,6 @@ if (isset($_POST['simpan_pelanggaran'])) {
     $fields = [];
     $values = [];
 
-    // Hanya masukkan kolom yang benar-benar ada di database Anda
     foreach ($data_kandidat as $col_name => $val) {
         if (in_array($col_name, $table_columns)) {
             $fields[] = $col_name;
@@ -82,40 +80,37 @@ if (isset($_GET['id_hapus'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Guru - Sistem Informasi Pelanggaran Siswa</title>
     
-    <!-- Bootstrap 5 CSS -->
+    <!-- Bootstrap 5 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <style>
-        body { min-height: 100vh; background-color: #f8f9fa; font-family: Arial, sans-serif; margin: 0; }
-        .sidebar { width: 250px; min-height: 100vh; background: #212529; color: white; position: fixed; top: 0; left: 0; display: flex; flex-direction: column; padding: 20px 15px; z-index: 100; }
-        .sidebar h4 { color: #ffffff; font-size: 18px; font-weight: bold; margin-bottom: 30px; padding-left: 10px; }
-        .sidebar a { color: #adb5bd; text-decoration: none; padding: 10px 15px; display: block; border-radius: 6px; margin-bottom: 5px; font-size: 14px; }
-        .sidebar a:hover, .sidebar a.active { color: #ffffff; background: #0d6efd; }
-        .sidebar .logout-btn { color: #dc3545; margin-top: auto; padding-left: 15px; text-decoration: none; font-weight: 500; }
-        .sidebar .logout-btn:hover { color: #ff4d4d; }
-        .main-content { margin-left: 250px; padding: 40px; }
-        .card-custom { background: white; border: 1px solid #dee2e6; border-radius: 6px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); margin-bottom: 20px; }
-        .stat-card h5 { font-size: 16px; color: #212529; margin-bottom: 15px; font-weight: normal; }
-        .stat-card h3 { font-size: 32px; color: #212529; font-weight: normal; margin-bottom: 0; }
-    </style>
 </head>
-<body>
+<body class="bg-light">
 
-    <!-- Sidebar Navigasi -->
-    <div class="sidebar">
-        <h4>Pelanggaran Siswa</h4>
-        <div class="nav flex-column">
-            <a href="dashboard_guru.php?page=dashboard" class="<?= ($page == 'dashboard') ? 'active' : ''; ?>">Dashboard</a>
-            <a href="dashboard_guru.php?page=catat" class="<?= ($page == 'catat') ? 'active' : ''; ?>">Catat Pelanggaran</a>
-            <a href="dashboard_guru.php?page=riwayat" class="<?= ($page == 'riwayat') ? 'active' : ''; ?>">Riwayat Pelanggaran</a>
-            <a href="dashboard_guru.php?page=tindakan" class="<?= ($page == 'tindakan') ? 'active' : ''; ?>">Referensi Tindakan</a>
-            <a href="dashboard_guru.php?page=rekap" class="<?= ($page == 'rekap') ? 'active' : ''; ?>">Rekap Poin Siswa</a>
-        </div>
-        <a href="logout.php" class="logout-btn">Logout</a>
+    <!-- Sidebar Navigasi Menggunakan Flexbox & Utility Bootstrap -->
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark text-white position-fixed top-0 bottom-0 start-0" style="width: 250px; z-index: 100;">
+        <h4 class="fs-5 fw-bold mb-4 ps-2">Pelanggaran Siswa</h4>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-1">
+                <a href="dashboard_guru.php?page=dashboard" class="nav-link text-white <?= ($page == 'dashboard') ? 'active' : ''; ?>">Dashboard</a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="dashboard_guru.php?page=catat" class="nav-link text-white <?= ($page == 'catat') ? 'active' : ''; ?>">Catat Pelanggaran</a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="dashboard_guru.php?page=riwayat" class="nav-link text-white <?= ($page == 'riwayat') ? 'active' : ''; ?>">Riwayat Pelanggaran</a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="dashboard_guru.php?page=tindakan" class="nav-link text-white <?= ($page == 'tindakan') ? 'active' : ''; ?>">Referensi Tindakan</a>
+            </li>
+            <li class="nav-item mb-1">
+                <a href="dashboard_guru.php?page=rekap" class="nav-link text-white <?= ($page == 'rekap') ? 'active' : ''; ?>">Rekap Poin Siswa</a>
+            </li>
+        </ul>
+        <hr>
+        <a href="logout.php" class="nav-link text-danger fw-semibold ps-2">Logout</a>
     </div>
 
-    <!-- Konten Utama -->
-    <div class="main-content">
+    <!-- Konten Utama (Diberi margin-left agar tidak tertutup sidebar) -->
+    <div style="margin-left: 250px;" class="p-4 p-md-5">
         <?php if (!empty($db_error)): ?>
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Gagal Menyimpan!</strong> <?= htmlspecialchars($db_error); ?>
@@ -125,36 +120,37 @@ if (isset($_GET['id_hapus'])) {
 
         <?php if ($page == 'dashboard'): ?>
             <!-- DASHBOARD -->
-            <h2>Dashboard Guru</h2>
-            <p>Selamat datang, <?= htmlspecialchars($_SESSION['name'] ?? ''); ?>. Berikut ringkasan sistem pelanggaran siswa.</p>
+            <h2 class="fw-bold mb-2">Dashboard Guru</h2>
+            <p class="text-secondary mb-4">Selamat datang, <?= htmlspecialchars($_SESSION['name'] ?? ''); ?>. Berikut ringkasan sistem pelanggaran siswa.</p>
 
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card-custom stat-card">
-                        <h5>Total Siswa Terdaftar</h5>
-                        <h3 class="text-primary">50</h3>
+                    <div class="card border shadow-sm p-3">
+                        <h5 class="text-secondary fs-6 mb-3">Total Siswa Terdaftar</h5>
+                        <h3 class="text-primary fw-normal mb-0">50</h3>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card-custom stat-card">
-                        <h5>Total Guru</h5>
-                        <h3>25</h3>
+                    <div class="card border shadow-sm p-3">
+                        <h5 class="text-secondary fs-6 mb-3">Total Guru</h5>
+                        <h3 class="fw-normal mb-0">25</h3>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card-custom stat-card">
-                        <h5>Jumlah Kelas</h5>
-                        <h3>12</h3>
+                    <div class="card border shadow-sm p-3">
+                        <h5 class="text-secondary fs-6 mb-3">Jumlah Kelas</h5>
+                        <h3 class="fw-normal mb-0">12</h3>
                     </div>
                 </div>
             </div>
 
         <?php elseif ($page == 'catat'): ?>
             <!-- FORM CATAT PELANGGARAN -->
-            <h2>Form Catat Pelanggaran Siswa</h2>
-            <p class="text-muted">Masukkan data pelanggaran siswa dengan benar.</p>
+            <a href="dashboard_guru.php?page=dashboard" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+            <h2 class="fw-bold mb-1">Form Catat Pelanggaran Siswa</h2>
+            <p class="text-secondary mb-4">Masukkan data pelanggaran siswa dengan benar.</p>
             
-            <div class="card-custom">
+            <div class="card border shadow-sm p-4">
                 <form action="" method="POST">
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -186,60 +182,136 @@ if (isset($_GET['id_hapus'])) {
 
         <?php elseif ($page == 'riwayat'): ?>
             <!-- RIWAYAT PELANGGARAN -->
-            <h2>Riwayat Pelanggaran Siswa</h2>
-            <p class="text-muted">Daftar seluruh catatan pelanggaran yang dilaporkan.</p>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="fw-bold mb-0">Riwayat Pelanggaran Siswa</h2>
+                <a href="dashboard_guru.php?page=catat" class="btn btn-primary">+ Tambah Pelanggaran Baru</a>
+            </div>
             
-            <div class="card-custom">
-                <a href="dashboard_guru.php?page=catat" class="btn btn-success mb-3">+ Tambah Pelanggaran Baru</a>
-                
-                <table class="table table-bordered table-striped table-hover">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>No</th>
-                            <th>Nama Siswa</th>
-                            <th>Pelanggaran</th>
-                            <th>Tanggal</th>
-                            <th>Poin</th>
-                            <th>Tindakan</th>
-                            <th>Pelapor</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $no = 1;
-                        $sql = mysqli_query($koneksi, "SELECT * FROM t_pelanggaran_siswa ORDER BY id DESC");
-                        if($sql && mysqli_num_rows($sql) > 0) {
-                            while($d = mysqli_fetch_assoc($sql)){
-                                $id_data     = $d['id'] ?? '';
-                                $nama_siswa  = $d['nama_siswa'] ?? ($d['nama'] ?? '-');
-                                $pelanggaran = $d['pelanggaran'] ?? ($d['jenis_pelanggaran'] ?? ($d['keterangan'] ?? '-'));
-                                $tanggal     = $d['tanggal'] ?? '-';
-                                $poin        = $d['poin'] ?? '0';
-                                $tindakan    = $d['tindakan'] ?? '-';
-                                $guru        = $d['guru'] ?? '-';
+            <a href="dashboard_guru.php?page=dashboard" class="btn btn-secondary mb-4">Kembali ke Dashboard</a>
+            
+            <div class="card border shadow-sm p-4">
+                <?php
+                $batas = isset($_GET['batas']) ? (int)$_GET['batas'] : 10;
+                $halaman = isset($_GET['halaman']) ? (int)$_GET['halaman'] : 1;
+                $halaman_awal = ($halaman > 1) ? ($halaman * $batas) - $batas : 0;
 
-                                echo "<tr>
-                                    <td>{$no}</td>
-                                    <td>{$nama_siswa}</td>
-                                    <td>{$pelanggaran}</td>
-                                    <td>{$tanggal}</td>
-                                    <td><span class='badge bg-danger'>{$poin}</span></td>
-                                    <td>{$tindakan}</td>
-                                    <td>{$guru}</td>
-                                    <td>
-                                        <a href='dashboard_guru.php?page=edit&id={$id_data}' class='btn btn-warning btn-sm'>Edit</a>
-                                        <a href='dashboard_guru.php?id_hapus={$id_data}' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
-                                    </td>
-                                </tr>";
-                                $no++;
+                $cari = isset($_GET['cari']) ? mysqli_real_escape_string($koneksi, $_GET['cari']) : '';
+                
+                $where_sql = "";
+                if (!empty($cari)) {
+                    $where_sql = "WHERE nama_siswa LIKE '%$cari%' OR nama LIKE '%$cari%' OR pelanggaran LIKE '%$cari%' OR jenis_pelanggaran LIKE '%$cari%' OR keterangan LIKE '%$cari%' OR tindakan LIKE '%$cari%' OR guru LIKE '%$cari%'";
+                }
+
+                $query_jumlah = mysqli_query($koneksi, "SELECT * FROM t_pelanggaran_siswa $where_sql");
+                $jumlah_data = mysqli_num_rows($query_jumlah);
+                $total_halaman = ceil($jumlah_data / $batas);
+
+                $data_sql = mysqli_query($koneksi, "SELECT * FROM t_pelanggaran_siswa $where_sql ORDER BY id DESC LIMIT $halaman_awal, $batas");
+                $nomor = $halaman_awal + 1;
+                ?>
+
+                <!-- Filter & Search Bar -->
+                <form method="GET" action="dashboard_guru.php" class="row mb-3 align-items-center">
+                    <input type="hidden" name="page" value="riwayat">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <span class="me-2">Tampilkan</span>
+                        <select name="batas" class="form-select form-select-sm w-auto d-inline-block" onchange="this.form.submit()">
+                            <option value="10" <?= ($batas == 10) ? 'selected' : ''; ?>>10</option>
+                            <option value="25" <?= ($batas == 25) ? 'selected' : ''; ?>>25</option>
+                            <option value="50" <?= ($batas == 50) ? 'selected' : ''; ?>>50</option>
+                            <option value="100" <?= ($batas == 100) ? 'selected' : ''; ?>>100</option>
+                        </select>
+                        <span class="ms-2">data</span>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-end align-items-center">
+                        <label class="me-2 mb-0">Cari:</label>
+                        <input type="text" name="cari" class="form-control form-control-sm w-50" value="<?= htmlspecialchars($cari); ?>" onchange="this.form.submit()">
+                    </div>
+                </form>
+
+                <!-- Tabel Data -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Siswa</th>
+                                <th>Pelanggaran</th>
+                                <th>Tanggal</th>
+                                <th>Poin</th>
+                                <th>Tindakan</th>
+                                <th>Pelapor</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if($data_sql && mysqli_num_rows($data_sql) > 0) {
+                                while($d = mysqli_fetch_assoc($data_sql)){
+                                    $id_data     = $d['id'] ?? '';
+                                    $nama_siswa  = $d['nama_siswa'] ?? ($d['nama'] ?? '-');
+                                    $pelanggaran = $d['pelanggaran'] ?? ($d['jenis_pelanggaran'] ?? ($d['keterangan'] ?? '-'));
+                                    $tanggal     = $d['tanggal'] ?? '-';
+                                    $poin        = $d['poin'] ?? '0';
+                                    $tindakan    = $d['tindakan'] ?? '-';
+                                    $guru        = $d['guru'] ?? '-';
+
+                                    echo "<tr>
+                                        <td>{$nomor}</td>
+                                        <td>{$nama_siswa}</td>
+                                        <td>{$pelanggaran}</td>
+                                        <td>{$tanggal}</td>
+                                        <td><span class='badge bg-danger'>{$poin}</span></td>
+                                        <td>{$tindakan}</td>
+                                        <td>{$guru}</td>
+                                        <td>
+                                            <a href='dashboard_guru.php?page=edit&id={$id_data}' class='btn btn-warning btn-sm'>Edit</a>
+                                            <a href='dashboard_guru.php?id_hapus={$id_data}' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                                        </td>
+                                    </tr>";
+                                    $nomor++;
+                                }
+                            } else {
+                                echo "<tr><td colspan='8' class='text-center text-muted'>Belum ada data pelanggaran.</td></tr>";
                             }
-                        } else {
-                            echo "<tr><td colspan='8' class='text-center text-muted'>Belum ada data pelanggaran.</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Info & Navigasi Halaman (Pagination) -->
+                <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap">
+                    <div class="text-secondary small mb-2 mb-md-0">
+                        Menampilkan <?= ($jumlah_data > 0) ? $halaman_awal + 1 : 0; ?> sampai <?= min($halaman_awal + $batas, $jumlah_data); ?> dari <?= $jumlah_data; ?> data
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item <?= ($halaman <= 1) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="dashboard_guru.php?page=riwayat&halaman=1&batas=<?= $batas; ?>&cari=<?= urlencode($cari); ?>">Pertama</a>
+                            </li>
+                            <li class="page-item <?= ($halaman <= 1) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="dashboard_guru.php?page=riwayat&halaman=<?= max(1, $halaman - 1); ?>&batas=<?= $batas; ?>&cari=<?= urlencode($cari); ?>">Sebelumnya</a>
+                            </li>
+
+                            <?php 
+                            $start_p = max(1, $halaman - 2);
+                            $end_p = min($total_halaman, $halaman + 2);
+                            for($i = $start_p; $i <= $end_p; $i++): 
+                            ?>
+                                <li class="page-item <?= ($halaman == $i) ? 'active' : ''; ?>">
+                                    <a class="page-link" href="dashboard_guru.php?page=riwayat&halaman=<?= $i; ?>&batas=<?= $batas; ?>&cari=<?= urlencode($cari); ?>"><?= $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <li class="page-item <?= ($halaman >= $total_halaman || $total_halaman == 0) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="dashboard_guru.php?page=riwayat&halaman=<?= min($total_halaman, $halaman + 1); ?>&batas=<?= $batas; ?>&cari=<?= urlencode($cari); ?>">Berikutnya</a>
+                            </li>
+                            <li class="page-item <?= ($halaman >= $total_halaman || $total_halaman == 0) ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="dashboard_guru.php?page=riwayat&halaman=<?= max(1, $total_halaman); ?>&batas=<?= $batas; ?>&cari=<?= urlencode($cari); ?>">Terakhir</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
 
         <?php elseif ($page == 'edit'): ?>
@@ -256,7 +328,6 @@ if (isset($_GET['id_hapus'])) {
                 $pn  = mysqli_real_escape_string($koneksi, $_POST['poin']);
                 $tnd = mysqli_real_escape_string($koneksi, $_POST['tindakan']);
 
-                // Update secara dinamis berdasarkan kolom yang ada
                 $update_cols = [];
                 if(in_array('nama_siswa', $table_columns)) $update_cols[] = "nama_siswa='$ns'";
                 elseif(in_array('nama', $table_columns)) $update_cols[] = "nama='$ns'";
@@ -277,8 +348,9 @@ if (isset($_GET['id_hapus'])) {
                 exit;
             }
             ?>
-            <h2>Edit Data Pelanggaran Siswa</h2>
-            <div class="card-custom">
+            <a href="dashboard_guru.php?page=riwayat" class="btn btn-secondary mb-3">Kembali ke Riwayat</a>
+            <h2 class="fw-bold mb-3">Edit Data Pelanggaran Siswa</h2>
+            <div class="card border shadow-sm p-4">
                 <form action="" method="POST">
                     <div class="mb-3">
                         <label class="form-label">Nama Siswa</label>
@@ -307,8 +379,9 @@ if (isset($_GET['id_hapus'])) {
 
         <?php elseif ($page == 'tindakan'): ?>
             <!-- REFERENSI TINDAKAN -->
-            <h2>Referensi Tindakan Berdasarkan Poin</h2>
-            <div class="card-custom">
+            <a href="dashboard_guru.php?page=dashboard" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+            <h2 class="fw-bold mb-3">Referensi Tindakan Berdasarkan Poin</h2>
+            <div class="card border shadow-sm p-4">
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
@@ -328,8 +401,9 @@ if (isset($_GET['id_hapus'])) {
 
         <?php elseif ($page == 'rekap'): ?>
             <!-- REKAP POIN -->
-            <h2>Rekap Akumulasi Poin Siswa</h2>
-            <div class="card-custom">
+            <a href="dashboard_guru.php?page=dashboard" class="btn btn-secondary mb-3">Kembali ke Dashboard</a>
+            <h2 class="fw-bold mb-3">Rekap Akumulasi Poin Siswa</h2>
+            <div class="card border shadow-sm p-4">
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">
                         <tr>
@@ -348,5 +422,7 @@ if (isset($_GET['id_hapus'])) {
         <?php endif; ?>
     </div>
 
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
