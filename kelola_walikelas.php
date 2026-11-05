@@ -23,6 +23,7 @@ if (!$hasil) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,27 +31,90 @@ if (!$hasil) {
     <title>Kelola Wali Kelas</title>
 
     <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
     <!-- DataTables -->
-    <link
-        href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css"
+          rel="stylesheet">
 
     <link rel="stylesheet" href="layout/style.css">
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background: #f4f6fb;
             font-family: Arial, sans-serif;
             font-size: 13px;
+            margin: 0;
         }
 
+        /* SIDEBAR */
+        .container-fluid > .row {
+            flex-wrap: nowrap;
+        }
+
+        .row > .col-md-3.col-lg-2.bg-dark {
+            flex: 0 0 211px;
+            width: 211px;
+            max-width: 211px;
+            min-height: 100vh;
+            padding: 10px 16px 10px 0 !important;
+            background: #212529 !important;
+        }
+
+        .bg-dark h4 {
+            color: white;
+            font-size: 23px;
+            font-weight: normal;
+            line-height: 1.2;
+            margin: 0 0 25px;
+            padding: 0;
+        }
+
+        .bg-dark .nav {
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .bg-dark .nav-pills .nav-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 11px 15px;
+            margin-bottom: 5px;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .bg-dark .nav-pills .nav-link:hover {
+            background: #343a40;
+            color: white;
+        }
+
+        .bg-dark .nav-pills .nav-link.active {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .bg-dark hr {
+            border-color: #495057;
+            margin: 20px 0;
+        }
+
+        .bg-dark .nav-link.text-danger {
+            color: #dc3545 !important;
+        }
+
+        /* KONTEN UTAMA */
         main.content-area {
+            flex: 1 1 0;
+            width: calc(100% - 211px);
+            max-width: calc(100% - 211px);
             min-width: 0;
             padding: 20px 18px !important;
         }
@@ -70,6 +134,7 @@ if (!$hasil) {
             color: #182338;
         }
 
+        /* TOMBOL TAMBAH */
         .btn-add {
             background: #0d6efd;
             color: white;
@@ -85,6 +150,7 @@ if (!$hasil) {
             color: white;
         }
 
+        /* TOMBOL KEMBALI */
         .btn-back {
             display: inline-block;
             background: #6c757d;
@@ -100,6 +166,7 @@ if (!$hasil) {
             color: white;
         }
 
+        /* CARD TABEL */
         .table-card {
             background: white;
             padding: 18px 22px 14px;
@@ -133,6 +200,7 @@ if (!$hasil) {
             background: #e8f1ff;
         }
 
+        /* STATUS */
         .badge-status {
             display: inline-block;
             font-size: 10px;
@@ -150,6 +218,7 @@ if (!$hasil) {
             background: #dc3545;
         }
 
+        /* TOMBOL AKSI */
         .btn-edit,
         .btn-delete {
             border: none;
@@ -180,6 +249,7 @@ if (!$hasil) {
             color: white;
         }
 
+        /* DATATABLES */
         .dataTables_wrapper {
             font-size: 12px;
         }
@@ -200,8 +270,18 @@ if (!$hasil) {
             margin-top: 8px;
         }
 
+        /* RESPONSIVE */
         @media (max-width: 768px) {
+
+            .row > .col-md-3.col-lg-2.bg-dark {
+                flex: 0 0 170px;
+                width: 170px;
+                max-width: 170px;
+            }
+
             main.content-area {
+                width: calc(100% - 170px);
+                max-width: calc(100% - 170px);
                 padding: 15px 10px !important;
             }
 
@@ -217,12 +297,39 @@ if (!$hasil) {
                 overflow-x: auto;
             }
         }
+
+        @media (max-width: 500px) {
+
+            .row > .col-md-3.col-lg-2.bg-dark {
+                flex: 0 0 125px;
+                width: 125px;
+                max-width: 125px;
+                padding-right: 5px !important;
+            }
+
+            .bg-dark h4 {
+                font-size: 17px;
+            }
+
+            .bg-dark .nav-pills .nav-link {
+                font-size: 12px;
+                padding: 10px 8px;
+            }
+
+            main.content-area {
+                width: calc(100% - 125px);
+                max-width: calc(100% - 125px);
+                padding: 12px !important;
+            }
+        }
+
     </style>
 </head>
 
 <body>
 
 <div class="container-fluid">
+
     <div class="row">
 
         <?php include 'layout/sidebar.php'; ?>
@@ -231,11 +338,13 @@ if (!$hasil) {
         <main class="col-md-9 col-lg-10 content-area">
 
             <div class="page-header">
+
                 <h1>Kelola Wali Kelas</h1>
 
                 <a href="tambah_walikelas.php" class="btn-add">
                     + Tambah Wali Kelas
                 </a>
+
             </div>
 
             <a href="dashboard.php" class="btn-back">
@@ -243,12 +352,12 @@ if (!$hasil) {
             </a>
 
             <div class="table-card">
+
                 <div class="table-responsive">
 
-                    <table
-                        id="tabelWaliKelas"
-                        class="table table-striped table-bordered"
-                    >
+                    <table id="tabelWaliKelas"
+                           class="table table-striped table-bordered">
+
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -263,8 +372,11 @@ if (!$hasil) {
                         </thead>
 
                         <tbody>
+
                         <?php while ($row = mysqli_fetch_assoc($hasil)) { ?>
+
                             <tr>
+
                                 <td>
                                     <?= htmlspecialchars((string)$row['id']) ?>
                                 </td>
@@ -290,39 +402,54 @@ if (!$hasil) {
                                 </td>
 
                                 <td>
+
                                     <?php if ((int)$row['status_aktif'] === 1) { ?>
+
                                         <span class="badge-status status-aktif">
                                             Aktif
                                         </span>
+
                                     <?php } else { ?>
+
                                         <span class="badge-status status-nonaktif">
                                             Tidak Aktif
                                         </span>
+
                                     <?php } ?>
+
                                 </td>
 
                                 <td class="text-nowrap">
-                                    <a
-                                        href="edit_walikelas.php?id=<?= urlencode((string)$row['id']) ?>"
-                                        class="btn-edit"
-                                    >Edit</a>
 
-                                    <a
-                                        href="hapus_walikelas.php?id=<?= urlencode((string)$row['id']) ?>"
-                                        class="btn-delete"
-                                        onclick="return confirm('Yakin ingin menghapus data wali kelas ini?');"
-                                    >Hapus</a>
+                                    <a href="edit_walikelas.php?id=<?= urlencode((string)$row['id']) ?>"
+                                       class="btn-edit">
+                                        Edit
+                                    </a>
+
+                                    <a href="hapus_walikelas.php?id=<?= urlencode((string)$row['id']) ?>"
+                                       class="btn-delete"
+                                       onclick="return confirm('Yakin ingin menghapus data wali kelas ini?');">
+                                        Hapus
+                                    </a>
+
                                 </td>
+
                             </tr>
+
                         <?php } ?>
+
                         </tbody>
+
                     </table>
 
                 </div>
+
             </div>
 
         </main>
+
     </div>
+
 </div>
 
 <!-- jQuery -->
@@ -333,30 +460,53 @@ if (!$hasil) {
 
 <!-- DataTables -->
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
+
 $(document).ready(function () {
+
     $('#tabelWaliKelas').DataTable({
+
         pageLength: 10,
+
         lengthMenu: [10, 25, 50, 100],
+
         order: [],
+
         language: {
+
             lengthMenu: 'Tampilkan _MENU_ data',
+
             search: 'Cari:',
+
             info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data wali kelas',
+
             infoEmpty: 'Tidak ada data wali kelas',
+
             zeroRecords: 'Data tidak ditemukan',
+
             emptyTable: 'Belum ada data wali kelas',
+
             paginate: {
+
                 first: 'Pertama',
+
                 last: 'Terakhir',
+
                 next: 'Berikutnya',
+
                 previous: 'Sebelumnya'
+
             }
+
         }
+
     });
+
 });
+
 </script>
 
 </body>

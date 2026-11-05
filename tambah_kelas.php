@@ -1,3 +1,4 @@
+
 <?php
 // tambah_kelas.php
 include 'includes/cek_session.php';
@@ -7,148 +8,316 @@ include 'includes/cek_session.php';
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Kelas</title>
 
-    <!-- Bootstrap 5.3.3 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6fb;
+            font-family: Arial, sans-serif;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 211px;
+            height: 100vh;
+            background: #212529;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 10px 2px;
+            overflow-y: auto;
+        }
+
+        .sidebar h4 {
+            font-size: 23px;
+            font-weight: normal;
+            margin-bottom: 25px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 11px 16px;
+            margin-bottom: 5px;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background: #343a40;
+        }
+
+        .sidebar a.active {
+            background: #0d6efd;
+        }
+
+        .sidebar hr {
+            border-color: #495057;
+            margin: 20px 0;
+        }
+
+        .sidebar .logout {
+            color: #dc3545;
+        }
+
+        /* KONTEN UTAMA */
+        .main-content {
+            margin-left: 211px;
+            padding: 16px 24px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            font-size: 40px;
+            font-weight: normal;
+            color: #102b50;
+            margin: 0;
+        }
+
+        /* TOMBOL KEMBALI */
+        .btn-back {
+            margin-bottom: 16px;
+        }
+
+        /* FORM CARD */
+        .form-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            overflow: hidden;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .form-card-header {
+            background: #198754;
+            color: white;
+            padding: 12px 16px;
+        }
+
+        .form-card-header h3 {
+            margin: 0;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        .form-card-body {
+            padding: 20px;
+        }
+
+        .form-label {
+            font-size: 15px;
+        }
+
+        .form-control,
+        .form-select {
+            height: 40px;
+            font-size: 15px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 170px;
+            }
+
+            .main-content {
+                margin-left: 170px;
+                padding: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 28px;
+            }
+
+            .form-card-header h3 {
+                font-size: 23px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .sidebar {
+                width: 125px;
+            }
+
+            .sidebar h4 {
+                font-size: 17px;
+            }
+
+            .sidebar a {
+                font-size: 12px;
+                padding: 10px 8px;
+            }
+
+            .main-content {
+                margin-left: 125px;
+                padding: 12px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container py-5">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
 
-    <div class="row justify-content-center">
+        <h4>Pelanggaran<br>Siswa</h4>
 
-        <div class="col-md-8 col-lg-7">
+        <a href="dashboard.php">Dashboard</a>
 
-            <div class="card shadow">
+        <a href="data_siswa.php">Data Siswa</a>
 
-                <!-- Header -->
-                <div class="card-header bg-success text-white">
+        <a href="data_guru.php">Data Guru</a>
 
-                    <h3 class="mb-0">
-                        Tambah Kelas
-                    </h3>
+        <a href="kelola_kelas.php" class="active">Data Kelas</a>
 
-                </div>
+        <a href="data_tahun_ajaran.php">Data Tahun Ajaran</a>
 
-                <!-- Body -->
-                <div class="card-body">
+        <a href="data_wali_kelas.php">Data Wali Kelas</a>
 
-                    <form
-                        action="proses_tambah_kelas.php"
-                        method="POST">
+        <a href="penempatan_siswa.php">Penempatan Siswa</a>
 
+        <a href="kategori_pelanggaran.php">Kategori Pelanggaran</a>
 
-                        <!-- Nama Kelas -->
-                        <div class="mb-3">
+        <a href="about.php">About Me</a>
 
-                            <label class="form-label">
-                                Nama Kelas
-                            </label>
+        <hr>
 
-                            <input
-                                type="text"
-                                name="nama"
-                                class="form-control"
-                                placeholder="Contoh: XI RPL 1"
-                                required>
+        <a href="logout.php" class="logout">Logout</a>
 
-                        </div>
+    </div>
 
 
-                        <!-- Tingkat -->
-                        <div class="mb-3">
+    <!-- KONTEN UTAMA -->
+    <div class="main-content">
 
-                            <label class="form-label">
-                                Tingkat
-                            </label>
+        <!-- HEADER -->
+        <div class="page-header">
 
-                            <input
-                                type="text"
-                                name="tingkat"
-                                class="form-control"
-                                placeholder="Contoh: 11"
-                                required>
+            <h1>Tambah Kelas</h1>
 
-                        </div>
+        </div>
 
 
-                        <!-- Jurusan -->
-                        <div class="mb-3">
-
-                            <label class="form-label">
-                                Jurusan
-                            </label>
-
-                            <input
-                                type="text"
-                                name="jurusan"
-                                class="form-control"
-                                placeholder="Contoh: Rekayasa Perangkat Lunak"
-                                required>
-
-                        </div>
+        <!-- TOMBOL KEMBALI -->
+        <a href="kelola_kelas.php" class="btn btn-secondary btn-back">
+            Kembali ke Kelola Kelas
+        </a>
 
 
-                        <!-- Status Aktif -->
-                        <div class="mb-4">
+        <!-- FORM TAMBAH KELAS -->
+        <div class="form-card">
 
-                            <label class="form-label">
-                                Status Aktif
-                            </label>
+            <div class="form-card-header">
+                <h3>Tambah Kelas</h3>
+            </div>
 
-                            <select
-                                name="status_aktif"
-                                class="form-select"
-                                required>
+            <div class="form-card-body">
 
-                                <option value="1">
-                                    Aktif
-                                </option>
+                <form action="proses_tambah_kelas.php" method="POST">
 
-                                <option value="0">
-                                    Tidak Aktif
-                                </option>
+                    <!-- Nama Kelas -->
+                    <div class="mb-3">
 
-                            </select>
+                        <label class="form-label">Nama Kelas</label>
 
-                        </div>
+                        <input
+                            type="text"
+                            name="nama"
+                            class="form-control"
+                            placeholder="Contoh: XI RPL 1"
+                            required>
+
+                    </div>
 
 
-                        <!-- Tombol -->
-                        <div class="d-flex gap-2">
+                    <!-- Tingkat -->
+                    <div class="mb-3">
 
-                            <button
-                                type="submit"
-                                class="btn btn-success">
+                        <label class="form-label">Tingkat</label>
 
-                                Simpan
+                        <input
+                            type="text"
+                            name="tingkat"
+                            class="form-control"
+                            placeholder="Contoh: 11"
+                            required>
 
-                            </button>
+                    </div>
 
-                            <a
-                                href="kelola_kelas.php"
-                                class="btn btn-secondary">
 
-                                Kembali
+                    <!-- Jurusan -->
+                    <div class="mb-3">
 
-                            </a>
+                        <label class="form-label">Jurusan</label>
 
-                        </div>
+                        <input
+                            type="text"
+                            name="jurusan"
+                            class="form-control"
+                            placeholder="Contoh: Rekayasa Perangkat Lunak"
+                            required>
 
-                    </form>
+                    </div>
 
-                </div>
+
+                    <!-- Status Aktif -->
+                    <div class="mb-4">
+
+                        <label class="form-label">Status Aktif</label>
+
+                        <select
+                            name="status_aktif"
+                            class="form-select"
+                            required>
+
+                            <option value="1">Aktif</option>
+
+                            <option value="0">Tidak Aktif</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TOMBOL -->
+                    <div class="d-flex gap-2">
+
+                        <button type="submit" class="btn btn-success">
+                            Simpan
+                        </button>
+
+                        <a href="kelola_kelas.php" class="btn btn-secondary">
+                            Kembali
+                        </a>
+
+                    </div>
+
+                </form>
 
             </div>
 
@@ -156,14 +325,7 @@ include 'includes/cek_session.php';
 
     </div>
 
-</div>
-
-
-<!-- Bootstrap JS -->
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
