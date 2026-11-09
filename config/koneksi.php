@@ -1,22 +1,28 @@
-
 <?php
-// config/koneksi.php
 
+// Konfigurasi database
 $host = "localhost";
 $username = "root";
 $password = "";
 $database = "db_ukk_2026";
 
-$koneksi = mysqli_connect(
-    $host,
-    $username,
-    $password,
-    $database
-);
+// Membuat koneksi
+try {
 
-if (!$koneksi) {
-    die("Koneksi database gagal: " . mysqli_connect_error());
+    $koneksi = new mysqli(
+        $host,
+        $username,
+        $password,
+        $database
+    );
+
+    // Mengatur karakter database
+    $koneksi->set_charset("utf8mb4");
+
+} catch (mysqli_sql_exception $e) {
+
+    die("Koneksi database gagal: " . $e->getMessage());
+
 }
 
-mysqli_set_charset($koneksi, "utf8mb4");
 ?>

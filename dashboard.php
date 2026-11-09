@@ -44,7 +44,7 @@ if (
                                 Data Siswa
                             </h5>
                             <h2>
-                                50
+                                26
                             </h2>
                         </div>
                     </div>
@@ -57,7 +57,7 @@ if (
                                 Data Guru
                             </h5>
                             <h2>
-                                25
+                                52
                             </h2>
                         </div>
                     </div>
@@ -70,7 +70,7 @@ if (
                                 Kelas
                             </h5>
                             <h2>
-                             12
+                             2
                           </h2>
                         </div>
                     </div>
