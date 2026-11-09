@@ -5,6 +5,7 @@
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
+// AMBIL DATA
 $sql = "SELECT * FROM t_tahun_ajaran ORDER BY tanggal_mulai DESC";
 $hasil = mysqli_query($koneksi, $sql);
 
@@ -15,6 +16,7 @@ if (!$hasil) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,338 +24,293 @@ if (!$hasil) {
     <title>Kelola Tahun Ajaran</title>
 
     <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
-    <!-- DataTables -->
-    <link
-        href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css"
-        rel="stylesheet"
-    >
+    <!-- DataTables Bootstrap 5 -->
+    <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css"
+        rel="stylesheet">
 
+    <!-- CSS UTAMA -->
     <link rel="stylesheet" href="layout/style.css">
 
     <style>
+        /* TAMPILAN SAMA DENGAN KELOLA SISWA */
+
         body {
-            background: #f4f6fb;
+            background-color: #f4f6fb;
             font-family: Arial, sans-serif;
-            font-size: 13px;
+            font-size: 16px;
         }
 
         main.content-area {
             min-width: 0;
-            padding: 20px 18px !important;
+            padding: 24px !important;
         }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 22px;
-        }
-
-        .page-header h1 {
-            font-size: 30px;
-            font-weight: 400;
+        /* JUDUL HALAMAN */
+        main.content-area h1 {
+            font-size: 32px;
+            font-weight: 500;
+            color: #212529;
             margin: 0;
-            color: #182338;
         }
 
-        .btn-add {
-            background: #0d6efd;
-            color: white;
+        /* CARD */
+        .card {
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-            white-space: nowrap;
+            border-radius: 8px;
         }
 
-        .btn-add:hover {
-            background: #0b5ed7;
-            color: white;
+        .card-body {
+            padding: 20px;
         }
 
-        .btn-back {
-            display: inline-block;
-            background: #6c757d;
-            color: white;
-            text-decoration: none;
-            padding: 7px 11px;
-            border-radius: 5px;
-            margin-bottom: 12px;
-        }
-
-        .btn-back:hover {
-            background: #5c636a;
-            color: white;
-        }
-
-        .table-card {
-            background: white;
-            padding: 18px 22px 14px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, .06);
-            width: 100%;
-        }
-
+        /* TABEL */
         #tabelTahunAjaran {
             width: 100% !important;
-            border-collapse: collapse !important;
+            font-size: 14px;
+            vertical-align: middle;
         }
 
         #tabelTahunAjaran thead th {
-            background: #212529 !important;
+            background-color: #212529 !important;
             color: white !important;
-            font-weight: bold;
-            vertical-align: middle;
             white-space: nowrap;
+            vertical-align: middle;
         }
 
         #tabelTahunAjaran th,
         #tabelTahunAjaran td {
-            border: 1px solid #dee2e6;
-            padding: 7px 8px;
+            padding: 10px;
             vertical-align: middle;
         }
 
-        #tabelTahunAjaran tbody tr:nth-child(odd) {
-            background: #f1f1f1;
-        }
-
-        #tabelTahunAjaran tbody tr:hover {
-            background: #e8f1ff;
-        }
-
-        .badge-status {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: bold;
-            color: white;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
-
-        .status-aktif {
-            background: #198754;
-        }
-
-        .status-nonaktif {
-            background: #dc3545;
-        }
-
-        .btn-edit,
-        .btn-delete {
-            border: none;
-            border-radius: 4px;
-            padding: 5px 8px;
+        /* STATUS */
+        .badge {
             font-size: 12px;
-            text-decoration: none;
-            display: inline-block;
+            padding: 6px 9px;
         }
 
-        .btn-edit {
-            background: #ffc107;
-            color: #212529;
-        }
-
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background: #e0a800;
-            color: #212529;
-        }
-
-        .btn-delete:hover {
-            background: #bb2d3b;
-            color: white;
-        }
-
-        .dataTables_wrapper {
-            font-size: 12px;
-        }
-
+        /* DATATABLES */
         .dt-search input,
         .dt-length select {
             border: 1px solid #ced4da !important;
-            border-radius: 4px !important;
+            border-radius: 5px !important;
             padding: 5px 8px !important;
-            margin-bottom: 8px;
         }
 
-        .dt-paging .dt-paging-button {
-            padding: 4px 10px !important;
+        .dataTables_wrapper {
+            font-size: 14px;
         }
 
-        .dt-info {
-            margin-top: 8px;
-        }
-
+        /* RESPONSIVE */
         @media (max-width: 768px) {
             main.content-area {
-                padding: 15px 10px !important;
+                padding: 15px !important;
             }
 
-            .page-header h1 {
-                font-size: 23px;
-            }
-
-            .table-card {
-                padding: 12px 8px;
-            }
-
-            .table-responsive {
-                overflow-x: auto;
+            main.content-area h1 {
+                font-size: 24px;
             }
         }
     </style>
+
 </head>
 
 <body>
 
-<div class="container-fluid">
-    <div class="row">
+    <div class="container-fluid">
+        <div class="row">
 
-        <?php include 'layout/sidebar.php'; ?>
+            <!-- SIDEBAR SAMA DENGAN KELOLA SISWA -->
+            <?php include 'layout/sidebar.php'; ?>
 
-        <!-- KONTEN UTAMA -->
-        <main class="col-md-9 col-lg-10 content-area">
+            <!-- KONTEN -->
+            <main class="col-md-9 col-lg-10 p-4 content-area">
 
-            <div class="page-header">
-                <h1>Kelola Tahun Ajaran</h1>
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
 
-                <a href="tambah_tahun_ajaran.php" class="btn-add">
-                    + Tambah Tahun Ajaran
-                </a>
-            </div>
+                    <h1>Kelola Tahun Ajaran</h1>
 
-            <a href="dashboard.php" class="btn-back">
-                Kembali ke Dashboard
-            </a>
-
-            <div class="table-card">
-                <div class="table-responsive">
-
-                    <table
-                        id="tabelTahunAjaran"
-                        class="table table-striped table-bordered"
-                    >
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nama Tahun Ajaran</th>
-                                <th>Tanggal Mulai</th>
-                                <th>Tanggal Selesai</th>
-                                <th>Status Aktif</th>
-                                <th>Dibuat</th>
-                                <th>Diubah</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                        <?php while ($row = mysqli_fetch_assoc($hasil)) { ?>
-                            <tr>
-                                <td>
-                                    <?= htmlspecialchars((string)$row['id']) ?>
-                                </td>
-
-                                <td>
-                                    <?= htmlspecialchars((string)$row['nama']) ?>
-                                </td>
-
-                                <td>
-                                    <?= htmlspecialchars((string)$row['tanggal_mulai']) ?>
-                                </td>
-
-                                <td>
-                                    <?= htmlspecialchars((string)$row['tanggal_selesai']) ?>
-                                </td>
-
-                                <td>
-                                    <?php if ((int)$row['status_aktif'] === 1) { ?>
-                                        <span class="badge-status status-aktif">
-                                            Aktif
-                                        </span>
-                                    <?php } else { ?>
-                                        <span class="badge-status status-nonaktif">
-                                            Tidak Aktif
-                                        </span>
-                                    <?php } ?>
-                                </td>
-
-                                <td>
-                                    <?= htmlspecialchars((string)$row['created_at']) ?>
-                                </td>
-
-                                <td>
-                                    <?= htmlspecialchars((string)$row['updated_at']) ?>
-                                </td>
-
-                                <td class="text-nowrap">
-                                    <a
-                                        href="edit_tahun_ajaran.php?id=<?= urlencode((string)$row['id']) ?>"
-                                        class="btn-edit"
-                                    >Edit</a>
-
-                                    <a
-                                        href="hapus_tahun_ajaran.php?id=<?= urlencode((string)$row['id']) ?>"
-                                        class="btn-delete"
-                                        onclick="return confirm('Yakin ingin menghapus tahun ajaran ini?');"
-                                    >Hapus</a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
+                    <a href="tambah_tahun_ajaran.php" class="btn btn-primary">
+                        + Tambah Tahun Ajaran
+                    </a>
 
                 </div>
-            </div>
 
-        </main>
+                <!-- KEMBALI -->
+                <a href="dashboard.php" class="btn btn-secondary mb-3">
+                    Kembali ke Dashboard
+                </a>
+
+                <!-- CARD TABEL -->
+                <div class="card shadow-sm">
+
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+
+                            <table id="tabelTahunAjaran"
+                                class="table table-striped table-bordered table-hover align-middle w-100">
+
+                                <thead class="table-dark">
+
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Nama Tahun Ajaran</th>
+                                        <th>Tanggal Mulai</th>
+                                        <th>Tanggal Selesai</th>
+                                        <th>Status Aktif</th>
+                                        <th>Dibuat</th>
+                                        <th>Diubah</th>
+                                        <th>Aksi</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <?php
+                                    $no = 1;
+
+                                    while ($row = mysqli_fetch_assoc($hasil)) {
+                                    ?>
+
+                                        <tr>
+
+                                            <td>
+                                                <?= $no++; ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($row['nama']); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($row['tanggal_mulai']); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($row['tanggal_selesai']); ?>
+                                            </td>
+
+                                            <td>
+
+                                                <?php if ((int)$row['status_aktif'] === 1) { ?>
+
+                                                    <span class="badge bg-success">
+                                                        Aktif
+                                                    </span>
+
+                                                <?php } else { ?>
+
+                                                    <span class="badge bg-secondary">
+                                                        Tidak Aktif
+                                                    </span>
+
+                                                <?php } ?>
+
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($row['created_at'] ?? '-'); ?>
+                                            </td>
+
+                                            <td>
+                                                <?= htmlspecialchars($row['updated_at'] ?? '-'); ?>
+                                            </td>
+
+                                            <td class="text-nowrap">
+
+                                                <a href="edit_tahun_ajaran.php?id=<?= urlencode((string)$row['id']); ?>"
+                                                    class="btn btn-warning btn-sm">
+                                                    Edit
+                                                </a>
+
+                                                <a href="hapus_tahun_ajaran.php?id=<?= urlencode((string)$row['id']); ?>"
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Yakin ingin menghapus data tahun ajaran ini?');">
+                                                    Hapus
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    <?php } ?>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
     </div>
-</div>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
+    <!-- DataTables Bootstrap 5 -->
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
-<script>
-$(document).ready(function () {
-    $('#tabelTahunAjaran').DataTable({
-        pageLength: 10,
-        lengthMenu: [10, 25, 50, 100],
-        order: [],
-        language: {
-            lengthMenu: 'Tampilkan _MENU_ data',
-            search: 'Cari:',
-            info: 'Menampilkan _START_ sampai _END_ dari _TOTAL_ data tahun ajaran',
-            infoEmpty: 'Tidak ada data tahun ajaran',
-            zeroRecords: 'Data tidak ditemukan',
-            emptyTable: 'Belum ada data tahun ajaran',
-            paginate: {
-                first: 'Pertama',
-                last: 'Terakhir',
-                next: 'Berikutnya',
-                previous: 'Sebelumnya'
-            }
-        }
-    });
-});
-</script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#tabelTahunAjaran').DataTable({
+
+                pageLength: 10,
+
+                lengthMenu: [5, 10, 25, 50, 100],
+
+                order: [[1, 'asc']],
+
+                scrollX: true,
+
+                language: {
+
+                    search: "Cari:",
+
+                    lengthMenu: "Tampilkan _MENU_ data",
+
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data tahun ajaran",
+
+                    infoEmpty: "Tidak ada data tahun ajaran",
+
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+
+                    zeroRecords: "Data tahun ajaran tidak ditemukan",
+
+                    emptyTable: "Belum ada data tahun ajaran",
+
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Berikutnya",
+                        previous: "Sebelumnya"
+                    }
+
+                }
+
+            });
+
+        });
+    </script>
 
 </body>
+
 </html>
