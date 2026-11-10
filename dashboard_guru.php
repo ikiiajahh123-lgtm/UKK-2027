@@ -127,7 +127,7 @@ if (isset($_GET['id_hapus'])) {
                 <div class="col-md-4">
                     <div class="card border shadow-sm p-3">
                         <h5 class="text-secondary fs-6 mb-3">Total Siswa Terdaftar</h5>
-                        <h3 class="text-primary fw-normal mb-0">50</h3>
+                        <h3 class="text-primary fw-normal mb-0">55</h3>
                     </div>
                 </div>
                 <div class="col-md-4">

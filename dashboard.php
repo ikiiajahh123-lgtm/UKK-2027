@@ -57,7 +57,7 @@ if (
                                 Data Guru
                             </h5>
                             <h2>
-                                52
+                                55
                             </h2>
                         </div>
                     </div>
