@@ -1,228 +1,779 @@
-       :root {
-            --primary: #3659d9;
-            --navy: #17233f;
-            --background: #f4f6fb;
-            --text-muted: #778198;
-            --border: #e8ecf4;
-        }
 
-        * {
-            box-sizing: border-box;
-        }
+/* =========================================
+   1. FONT DAN VARIABEL WARNA
+========================================= */
 
-        body {
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background: var(--background);
-            color: var(--navy);
-        }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-        /* KONTEN UTAMA */
-        .main-content {
-            padding: 35px;
-            min-height: 100vh;
-        }
+:root {
+    --bg: #101827;
+    --panel: #1d2a3a;
+    --sidebar: #1c2939;
+    --panel-border: rgba(161, 179, 205, 0.16);
+    --muted: #9aa9bd;
+    --text: #f4f7fb;
+    --accent: #397cf6;
+}
 
-        .page-header {
-            margin-bottom: 28px;
-        }
+/* =========================================
+   2. RESET DAN BODY
+========================================= */
 
-        .page-subtitle {
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .page-title {
-            font-size: 27px;
-            font-weight: 700;
-            margin-top: 7px;
-        }
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', Arial, sans-serif;
+}
 
-        /* KARTU PROFIL */
-        .profile-card {
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            padding: 45px 30px;
-            text-align: center;
-            box-shadow: 0 10px 35px rgba(23, 35, 63, 0.04);
-            margin-bottom: 25px;
-        }
+a {
+    text-decoration: none;
+}
 
-        .profile-photo-wrapper {
-            width: 175px;
-            height: 175px;
-            padding: 6px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3659d9, #a9baff);
-            margin: 0 auto 25px;
-            box-shadow: 0 10px 28px rgba(54, 89, 217, 0.17);
-        }
+/* =========================================
+   3. APP LAYOUT
+========================================= */
 
-        .profile-photo {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            border: 4px solid #ffffff;
-            border-radius: 50%;
-        }
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
 
-        .profile-name {
-            font-size: 29px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            letter-spacing: -0.7px;
-        }
+.main-area {
+    min-width: 0;
+    flex: 1;
+}
 
-        .profile-role {
-            display: inline-block;
-            background: #edf1ff;
-            color: var(--primary);
-            border-radius: 30px;
-            padding: 8px 17px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
+/* =========================================
+   4. SIDEBAR
+========================================= */
 
-        .profile-description {
-            max-width: 610px;
-            margin: 0 auto;
-            color: var(--text-muted);
-            font-size: 13px;
-            line-height: 2;
-        }
+.sidebar {
+    width: 104px;
+    flex: 0 0 104px;
+    min-height: 100vh;
+    background: var(--sidebar);
+    border-right: 1px solid var(--panel-border);
 
-        .profile-divider {
-            width: 55px;
-            height: 3px;
-            background: var(--primary);
-            border: 0;
-            border-radius: 5px;
-            margin: 25px auto;
-        }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-        /* JUDUL BAGIAN */
-        .section-title {
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 18px;
-        }
+    padding: 18px 10px;
+}
 
-        /* INFORMASI DIRI */
-        .info-card {
-            height: 100%;
-            padding: 23px;
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            background: #ffffff;
-            transition: .25s ease;
-        }
+.sidebar-logo {
+    width: 54px;
+    height: 54px;
 
-        .info-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(23, 35, 63, 0.06);
-        }
+    display: grid;
+    place-items: center;
 
-        .info-label {
-            color: var(--text-muted);
-            font-size: 11px;
-            font-weight: 500;
-            margin-bottom: 9px;
-        }
+    border-radius: 16px;
+    color: white;
+    font-size: 27px;
 
-        .info-value {
-            color: var(--navy);
-            font-size: 13px;
-            font-weight: 600;
-            line-height: 1.8;
-            overflow-wrap: anywhere;
-        }
+    background: linear-gradient(135deg, #397cf6, #9b4de8);
+    box-shadow: 0 8px 24px rgba(75, 91, 240, 0.25);
 
-        /* DESKRIPSI */
-        .description-card {
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-radius: 17px;
-            padding: 27px;
-            height: 100%;
-        }
+    margin-bottom: 30px;
+}
 
-        .description-card p {
-            color: var(--text-muted);
-            font-size: 13px;
-            line-height: 2;
-            margin-bottom: 0;
-        }
+.sidebar-caption {
+    color: #718198;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+}
 
-        .skill-item {
-            display: inline-block;
-            background: #f0f3ff;
-            color: #3659d9;
-            border: 1px solid #e0e7ff;
-            padding: 9px 14px;
-            margin: 0 5px 9px 0;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-        }
+.sidebar-nav {
+    width: 100%;
 
-        /* FOOTER */
-        .footer {
-            text-align: center;
-            color: #929bb0;
-            font-size: 11px;
-            padding: 30px 0 5px;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-        .back-button {
-            display: inline-block;
-            padding: 10px 17px;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            color: var(--navy);
-            background: #fff;
-            font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: .2s;
-        }
+.sidebar-link {
+    width: 100%;
+    min-height: 65px;
 
-        .back-button:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
-        }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
 
-        @media (max-width: 767px) {
-            .main-content {
-                padding: 23px 15px;
-            }
+    padding: 8px 3px;
 
-            .page-title {
-                font-size: 23px;
-            }
+    border-radius: 13px;
+    color: #9eacbf;
 
-            .profile-card {
-                padding: 35px 20px;
-            }
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
 
-            .profile-photo-wrapper {
-                width: 145px;
-                height: 145px;
-            }
+    transition: 0.2s;
+}
 
-            .profile-name {
-                font-size: 23px;
-            }
+.sidebar-link i {
+    font-size: 20px;
+}
 
-            .info-card,
-            .description-card {
-                padding: 20px;
-            }
-        }
+.sidebar-link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-link.active {
+    color: #fff;
+    background: linear-gradient(135deg, #397cf6, #9853e8);
+    box-shadow: 0 8px 20px rgba(57, 124, 246, 0.2);
+}
+
+.sidebar-bottom {
+    width: 100%;
+    margin-top: auto;
+
+    border-top: 1px solid var(--panel-border);
+    padding-top: 14px;
+}
+
+.logout-link {
+    color: #ff777f;
+}
+
+/* =========================================
+   5. TOPBAR
+========================================= */
+
+.topbar {
+    height: 86px;
+    padding: 0 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    background: var(--sidebar);
+    border-bottom: 1px solid var(--panel-border);
+}
+
+.school-brand,
+.topbar-right,
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.school-brand {
+    gap: 14px;
+    min-width: 260px;
+}
+
+.brand-icon {
+    width: 43px;
+    height: 43px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+    background: #33445b;
+    color: #dce8ff;
+    font-size: 21px;
+}
+
+.school-brand strong {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.school-brand small,
+.user-info small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.topbar-right {
+    gap: 14px;
+}
+
+.top-search {
+    width: min(28vw, 340px);
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 0 15px;
+
+    border: 1px solid var(--panel-border);
+    border-radius: 11px;
+
+    background: #29384b;
+    color: #8f9db0;
+    font-size: 13px;
+}
+
+.top-search i {
+    font-size: 17px;
+}
+
+.top-icon {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--panel-border);
+    border-radius: 11px;
+
+    background: #29384b;
+    color: #cbd6e5;
+    font-size: 18px;
+}
+
+.user-info {
+    gap: 10px;
+    padding-left: 4px;
+}
+
+.user-info strong {
+    display: block;
+    font-size: 12px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+    background: #34465d;
+    color: #e4edfa;
+    font-size: 19px;
+}
+
+/* =========================================
+   6. KONTEN UTAMA
+========================================= */
+
+.content-area {
+    max-width: 1800px;
+    margin: auto;
+    padding: 34px 4.2%;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    margin-bottom: 30px;
+}
+
+.page-heading h1 {
+    margin: 0 0 8px;
+
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+}
+
+.page-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.role-chip,
+.panel-tag {
+    padding: 8px 13px;
+
+    border: 1px solid rgba(57, 124, 246, 0.18);
+    border-radius: 30px;
+
+    background: rgba(57, 124, 246, 0.13);
+    color: #8fb5ff;
+
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* =========================================
+   7. KARTU STATISTIK
+========================================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    min-height: 164px;
+    padding: 25px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: relative;
+    overflow: hidden;
+
+    border: 1px solid var(--panel-border);
+    border-radius: 19px;
+
+    background: var(--panel);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.stat-copy {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-copy span {
+    margin-bottom: 9px;
+    color: #aab6c7;
+    font-size: 13px;
+}
+
+.stat-copy strong {
+    font-size: 32px;
+    line-height: 1.15;
+    font-weight: 800;
+}
+
+.stat-copy small {
+    margin-top: 12px;
+    color: #7e91a8;
+    font-size: 11px;
+}
+
+.stat-copy small i {
+    margin-right: 4px;
+    color: #21c58b;
+}
+
+.stat-icon {
+    width: 68px;
+    height: 68px;
+    flex: 0 0 68px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+    font-size: 27px;
+}
+
+.stat-icon.blue {
+    color: #5594ff;
+    background: rgba(57, 124, 246, 0.16);
+}
+
+.stat-icon.purple {
+    color: #bd79ff;
+    background: rgba(155, 93, 229, 0.17);
+}
+
+.stat-icon.orange {
+    color: #ffc342;
+    background: rgba(245, 165, 36, 0.15);
+}
+
+.stat-icon.green {
+    color: #28d69b;
+    background: rgba(22, 184, 137, 0.15);
+}
+
+.stat-word {
+    font-size: 24px !important;
+}
+
+/* =========================================
+   8. DASHBOARD DAN GRAFIK
+========================================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 22px;
+
+    margin-bottom: 22px;
+}
+
+.panel {
+    min-width: 0;
+    padding: 25px;
+
+    border: 1px solid var(--panel-border);
+    border-radius: 19px;
+
+    background: var(--panel);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+}
+
+.panel-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+.panel-heading h2 {
+    margin: 0 0 7px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.panel-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.chart-wrap {
+    height: 285px;
+    position: relative;
+}
+
+.doughnut-wrap {
+    height: 255px;
+    max-width: 340px;
+    margin: 0 auto;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+
+    margin-top: 10px;
+
+    color: #aab6c7;
+    font-size: 11px;
+}
+
+.legend-dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    margin-right: 6px;
+    border-radius: 50%;
+}
+
+.dot-blue {
+    background: #397cf6;
+}
+
+.dot-purple {
+    background: #9b5de5;
+}
+
+.dot-orange {
+    background: #f5a524;
+}
+
+/* =========================================
+   9. QUICK LINKS
+========================================= */
+
+.quick-panel {
+    margin-bottom: 20px;
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.quick-links a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 15px;
+
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+
+    color: #dce6f4;
+    font-size: 12px;
+}
+
+.quick-links a > i:first-child {
+    color: #6da0ff;
+    font-size: 18px;
+}
+
+.quick-links a > i:last-child {
+    margin-left: auto;
+    color: #718198;
+}
+
+.quick-links a:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(109, 160, 255, 0.4);
+}
+
+/* =========================================
+   10. DASHBOARD GURU
+========================================= */
+
+.guru-stats .stat-card {
+    cursor: pointer;
+}
+
+.card-hit {
+    position: absolute;
+    inset: 0;
+}
+
+.welcome-panel {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.welcome-icon {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+    background: rgba(57, 124, 246, 0.15);
+    color: #70a5ff;
+    font-size: 25px;
+}
+
+.welcome-panel h2 {
+    margin: 0 0 7px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.welcome-panel p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.primary-link {
+    margin-left: auto;
+    padding: 11px 15px;
+
+    border-radius: 10px;
+
+    background: #397cf6;
+    color: white;
+
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.primary-link:hover {
+    background: #2868dc;
+    color: white;
+}
+
+/* =========================================
+   11. RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-links {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .topbar {
+        padding: 0 20px;
+    }
+}
+
+/* =========================================
+   12. RESPONSIVE MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+    .sidebar {
+        width: 70px;
+        flex-basis: 70px;
+        padding: 12px 6px;
+    }
+
+    .sidebar-logo {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-caption {
+        display: none;
+    }
+
+    .sidebar-link {
+        min-height: 58px;
+        font-size: 9px;
+    }
+
+    .sidebar-link i {
+        font-size: 18px;
+    }
+
+    .topbar {
+        height: auto;
+        min-height: 75px;
+        padding: 12px;
+    }
+
+    .school-brand {
+        min-width: 0;
+        gap: 8px;
+    }
+
+    .school-brand strong {
+        font-size: 11px;
+    }
+
+    .school-brand small,
+    .top-search,
+    .top-icon {
+        display: none;
+    }
+
+    .brand-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 17px;
+    }
+
+    .topbar-right {
+        gap: 7px;
+    }
+
+    .user-info {
+        gap: 6px;
+    }
+
+    .user-info strong {
+        max-width: 95px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 10px;
+    }
+
+    .user-info small {
+        max-width: 95px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 9px;
+    }
+
+    .avatar {
+        width: 31px;
+        height: 31px;
+    }
+
+    .content-area {
+        padding: 24px 14px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+
+    .page-heading h1 {
+        font-size: 25px;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-card {
+        min-height: 130px;
+        padding: 15px 12px;
+        border-radius: 14px;
+    }
+
+    .stat-copy span {
+        font-size: 11px;
+    }
+
+    .stat-copy strong {
+        font-size: 25px;
+    }
+
+    .stat-copy small {
+        font-size: 9px;
+    }
+
+    .stat-icon {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        font-size: 18px;
+    }
+
+    .panel {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    .chart-wrap {
+        height: 230px;
+    }
+
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-panel {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .primary-link {
+        margin-left: 0;
+    }
+}
