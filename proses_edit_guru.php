@@ -3,214 +3,184 @@
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-$id = $_GET['id'] ?? '';
-
-if ($id === '' || !ctype_digit((string)$id)) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: kelola_guru.php");
     exit;
 }
 
-$stmt = mysqli_prepare($koneksi, "SELECT * FROM t_guru WHERE id = ?");
-mysqli_stmt_bind_param($stmt, "i", $id);
-mysqli_stmt_execute($stmt);
+$id = $_POST['id'] ?? '';
+$nip = trim($_POST['nip'] ?? '');
+$nama = trim($_POST['nama'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$status = $_POST['status_aktif'] ?? '';
+$password = $_POST['password'] ?? '';
+$konfirmasi = $_POST['konfirmasi_password'] ?? '';
 
-$result = mysqli_stmt_get_result($stmt);
-$guru = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
-
-if (!$guru) {
-    header("Location: kelola_guru.php");
+function kembaliDenganPesan($pesan) {
+    echo "<script>
+        alert(" . json_encode($pesan) . ");
+        history.back();
+    </script>";
     exit;
+}
+
+// Validasi
+if (
+    !ctype_digit((string)$id) ||
+    $nip === '' ||
+    $nama === '' ||
+    $email === ''
+) {
+    kembaliDenganPesan("Data guru tidak lengkap.");
+}
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    kembaliDenganPesan("Format email tidak valid.");
+}
+
+if (!in_array($status, ['0', '1'], true)) {
+    kembaliDenganPesan("Status aktif tidak valid.");
+}
+
+if ($password !== '' || $konfirmasi !== '') {
+    if (strlen($password) < 8) {
+        kembaliDenganPesan("Password minimal 8 karakter.");
+    }
+
+    if ($password !== $konfirmasi) {
+        kembaliDenganPesan("Konfirmasi password tidak sama.");
+    }
+}
+
+try {
+    $koneksi->begin_transaction();
+
+    // Ambil data guru dan user_id
+    $stmt = $koneksi->prepare(
+        "SELECT user_id FROM t_guru WHERE id = ? LIMIT 1"
+    );
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    $guru = $stmt->get_result()->fetch_assoc();
+    $stmt->close();
+
+    if (!$guru || empty($guru['user_id'])) {
+        throw new Exception("Data guru atau akun login tidak ditemukan.");
+    }
+
+    $user_id = (int)$guru['user_id'];
+
+    // Pastikan akun login tersedia
+    $cekUser = $koneksi->prepare(
+        "SELECT id FROM t_users WHERE id = ? LIMIT 1"
+    );
+    $cekUser->bind_param("i", $user_id);
+    $cekUser->execute();
+
+    if ($cekUser->get_result()->num_rows === 0) {
+        throw new Exception("Akun login guru tidak ditemukan.");
+    }
+    $cekUser->close();
+
+    // Cek NIP duplikat
+    $cekNip = $koneksi->prepare(
+        "SELECT id FROM t_guru WHERE nip = ? AND id != ? LIMIT 1"
+    );
+    $cekNip->bind_param("si", $nip, $id);
+    $cekNip->execute();
+
+    if ($cekNip->get_result()->num_rows > 0) {
+        throw new Exception("NIP sudah digunakan guru lain.");
+    }
+    $cekNip->close();
+
+    // Cek email duplikat
+    $cekEmail = $koneksi->prepare(
+        "SELECT id FROM t_users WHERE email = ? AND id != ? LIMIT 1"
+    );
+    $cekEmail->bind_param("si", $email, $user_id);
+    $cekEmail->execute();
+
+    if ($cekEmail->get_result()->num_rows > 0) {
+        throw new Exception("Email sudah digunakan akun lain.");
+    }
+    $cekEmail->close();
+
+    $waktu = date('Y-m-d H:i:s');
+
+    // Update akun login: nama dan email
+    $updateUser = $koneksi->prepare(
+        "UPDATE t_users
+         SET name = ?, email = ?, updated_at = ?
+         WHERE id = ?"
+    );
+
+    $updateUser->bind_param(
+        "sssi",
+        $nama,
+        $email,
+        $waktu,
+        $user_id
+    );
+    $updateUser->execute();
+    $updateUser->close();
+
+    // Update password jika diisi
+    if ($password !== '') {
+        $passwordHash = password_hash(
+            $password,
+            PASSWORD_DEFAULT
+        );
+
+        $updatePassword = $koneksi->prepare(
+            "UPDATE t_users
+             SET password = ?, updated_at = ?
+             WHERE id = ?"
+        );
+
+        $updatePassword->bind_param(
+            "ssi",
+            $passwordHash,
+            $waktu,
+            $user_id
+        );
+
+        $updatePassword->execute();
+        $updatePassword->close();
+    }
+
+    // Update data guru
+    $updateGuru = $koneksi->prepare(
+        "UPDATE t_guru
+         SET nip = ?, nama = ?, email = ?, status_aktif = ?
+         WHERE id = ?"
+    );
+
+    $statusAngka = (int)$status;
+
+    $updateGuru->bind_param(
+        "sssii",
+        $nip,
+        $nama,
+        $email,
+        $statusAngka,
+        $id
+    );
+
+    $updateGuru->execute();
+    $updateGuru->close();
+
+    // Simpan seluruh perubahan
+    $koneksi->commit();
+
+    header("Location: kelola_guru.php?pesan=edit_berhasil");
+    exit;
+
+} catch (Throwable $e) {
+
+    $koneksi->rollback();
+
+    kembaliDenganPesan("Gagal memperbarui data: " . $e->getMessage());
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Edit Guru - SIPES</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f1f5f9;
-    color: #1e293b;
-}
-
-.container {
-    width: 90%;
-    max-width: 650px;
-    margin: 45px auto;
-}
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 18px rgba(0,0,0,.08);
-}
-
-.header {
-    background: #212529;
-    color: white;
-    padding: 20px 25px;
-}
-
-.header h2 {
-    margin: 0;
-    font-size: 23px;
-}
-
-.content {
-    padding: 25px;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-label {
-    display: block;
-    margin-bottom: 7px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-input, select {
-    display: block;
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-    font-size: 15px;
-    background: white;
-}
-
-input:focus, select:focus {
-    outline: 2px solid #b6d4fe;
-    border-color: #86b7fe;
-}
-
-input:disabled {
-    background: #e9ecef;
-}
-
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 24px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 11px 17px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.btn-primary {
-    background: #0d6efd;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #0b5ed7;
-}
-
-.btn-secondary {
-    background: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #565e64;
-}
-
-@media (max-width: 480px) {
-    .container {
-        margin: 20px auto;
-    }
-
-    .content {
-        padding: 18px;
-    }
-}
-</style>
-</head>
-
-<body>
-<div class="container">
-    <div class="card">
-        <div class="header">
-            <h2>Edit Guru</h2>
-        </div>
-
-        <div class="content">
-            <form action="proses_edit_guru.php" method="POST">
-                <input type="hidden" name="id"
-                       value="<?= htmlspecialchars($guru['id']) ?>">
-
-                <div class="form-group">
-                    <label for="nip">NIP</label>
-                    <input id="nip" type="text" name="nip" required
-                           value="<?= htmlspecialchars($guru['nip'] ?? '') ?>">
-                </div>
-
-                <div class="form-group">
-                    <label for="nama">Nama Guru</label>
-                    <input id="nama" type="text" name="nama" required
-                           value="<?= htmlspecialchars($guru['nama'] ?? '') ?>">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" name="email" required
-                           value="<?= htmlspecialchars($guru['email'] ?? '') ?>">
-                </div>
-
-                <div class="form-group">
-                    <label for="status_aktif">Status Aktif</label>
-                    <select id="status_aktif" name="status_aktif" required>
-                        <option value="1"
-                            <?= (string)$guru['status_aktif'] === '1' ? 'selected' : '' ?>>
-                            Aktif
-                        </option>
-                        <option value="0"
-                            <?= (string)$guru['status_aktif'] === '0' ? 'selected' : '' ?>>
-                            Tidak Aktif
-                        </option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="user_id">User ID</label>
-                    <input id="user_id" type="text"
-                           value="<?= htmlspecialchars((string)($guru['user_id'] ?? '-')) ?>"
-                           disabled>
-                </div>
-
-                <div class="actions">
-                    <button type="submit" class="btn btn-primary">
-                        Simpan Perubahan
-                    </button>
-
-                    <a href="kelola_guru.php" class="btn btn-secondary">
-                        Kembali
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</body>
-</html>

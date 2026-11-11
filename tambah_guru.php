@@ -8,7 +8,7 @@ require_once 'config/koneksi.php';
 if (
     !isset($_SESSION['login']) ||
     $_SESSION['login'] !== true ||
-    $_SESSION['role'] !== 'admin'
+    ($_SESSION['role'] ?? '') !== 'admin'
 ) {
     header("Location: login.php");
     exit;
@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $konfirmasi = $_POST['konfirmasi_password'] ?? '';
     $status = $_POST['status_aktif'] ?? 'Aktif';
 
-    // Validasi
     if (
         $nip === '' ||
         $nama === '' ||
@@ -53,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $koneksi->begin_transaction();
 
-            // Cek NIP sudah digunakan
+            // Cek NIP
             $cekNip = $koneksi->prepare(
                 "SELECT nip FROM t_guru WHERE nip = ? LIMIT 1"
             );
@@ -67,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $cekNip->close();
 
-            // Cek email sudah digunakan
+            // Cek email
             $cekEmail = $koneksi->prepare(
                 "SELECT id FROM t_users WHERE email = ? LIMIT 1"
             );
@@ -89,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $waktu = date('Y-m-d H:i:s');
 
-            // Simpan akun login guru
+            // Simpan akun guru
             $queryUser = $koneksi->prepare(
                 "INSERT INTO t_users
                 (name, email, password, role, created_at, updated_at)
@@ -107,12 +106,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $queryUser->execute();
 
-            // Ambil ID akun yang baru dibuat
             $user_id = $koneksi->insert_id;
 
             $queryUser->close();
 
-            // Simpan data guru dan hubungkan dengan t_users
+            // Simpan data guru
             $queryGuru = $koneksi->prepare(
                 "INSERT INTO t_guru
                 (user_id, nip, nama, email, status_aktif)
@@ -131,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $queryGuru->execute();
             $queryGuru->close();
 
-            // Simpan transaksi
             $koneksi->commit();
 
             header("Location: kelola_guru.php?pesan=berhasil");
@@ -165,152 +162,167 @@ function aman($nilai) {
     <link rel="stylesheet" href="layout/style.css">
 
     <style>
+        /* AREA KONTEN */
         .guru-content {
-            padding: 30px 4%;
+            padding: 0 4% 30px;
             max-width: 1500px;
             margin: auto;
         }
 
-        .guru-heading h1 {
-            font-size: 30px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #f4f7fb;
-        }
-
-        .guru-heading p {
-            color: #9aa9bd;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
+        /* TOMBOL KEMBALI ATAS */
         .guru-back {
             display: inline-block;
-            background: #687582;
+            background: #6c757d;
             color: white;
             text-decoration: none;
             padding: 10px 16px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            font-size: 13px;
+            border-radius: 7px;
+            margin-bottom: 22px;
+            font-size: 15px;
         }
 
         .guru-back:hover {
-            background: #536171;
+            background: #5c636a;
             color: white;
         }
 
+        /* KARTU FORM */
         .guru-form-card {
-            max-width: 650px;
+            max-width: 886px;
             margin: 10px auto 30px;
-            background: #1d2a3a;
-            border: 1px solid rgba(161,179,205,.16);
-            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 9px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,.15);
+            box-shadow: none;
         }
 
+        /* HEADER HIJAU */
         .guru-form-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid rgba(161,179,205,.16);
+            background: #198754;
+            padding: 12px 18px;
+            border-bottom: 1px solid #198754;
         }
 
         .guru-form-header h2 {
-            color: white;
-            font-size: 19px;
+            color: #ffffff;
+            font-size: 25px;
             font-weight: 700;
             margin: 0;
         }
 
+        /* ISI FORM */
         .guru-form-body {
-            padding: 25px;
+            padding: 25px 27px;
+            background: #ffffff;
         }
 
         .guru-form-body label {
-            color: #dce6f4;
-            font-size: 13px;
-            font-weight: 600;
+            display: block;
+            color: #212529;
+            font-size: 16px;
+            font-weight: 400;
             margin-bottom: 8px;
         }
 
+        /* INPUT PUTIH */
         .guru-form-body .form-control,
         .guru-form-body .form-select {
-            background-color: #29384b;
-            border: 1px solid rgba(161,179,205,.22);
-            color: white;
-            padding: 11px 13px;
-            border-radius: 8px;
-            font-size: 13px;
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            color: #212529;
+            padding: 9px 13px;
+            border-radius: 7px;
+            font-size: 16px;
+            min-height: 42px;
         }
 
         .guru-form-body .form-control::placeholder {
-            color: #91a0b5;
+            color: #6c757d;
+            opacity: 1;
         }
 
         .guru-form-body .form-control:focus,
         .guru-form-body .form-select:focus {
-            background-color: #29384b;
-            color: white;
-            border-color: #397cf6;
-            box-shadow: 0 0 0 .2rem rgba(57,124,246,.18);
+            background-color: #ffffff;
+            color: #212529;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
         }
 
         .guru-form-body .form-select option {
-            background: #1d2a3a;
-            color: white;
+            background: #ffffff;
+            color: #212529;
         }
 
+        /* JARAK ANTAR INPUT */
+        .guru-form-body .mb-3 {
+            margin-bottom: 16px !important;
+        }
+
+        /* KETERANGAN PASSWORD */
+        .password-info {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        /* TOMBOL */
         .guru-form-actions {
             display: flex;
             gap: 10px;
-            margin-top: 25px;
+            margin-top: 22px;
         }
 
         .btn-simpan {
-            background: #397cf6;
-            color: white;
+            background: #0d6efd;
+            color: #ffffff;
             border: none;
-            padding: 11px 22px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 500;
         }
 
         .btn-simpan:hover {
-            background: #2868dc;
-            color: white;
+            background: #0b5ed7;
+            color: #ffffff;
         }
 
         .btn-kembali {
-            background: #687582;
+            background: #6c757d;
             color: white;
             text-decoration: none;
-            padding: 11px 20px;
-            border-radius: 8px;
-            font-size: 13px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 15px;
         }
 
         .btn-kembali:hover {
-            background: #536171;
+            background: #5c636a;
             color: white;
         }
 
         .guru-alert {
-            max-width: 650px;
+            max-width: 886px;
             margin: 0 auto 15px;
         }
 
+        /* RESPONSIVE */
         @media(max-width: 700px) {
             .guru-content {
-                padding: 20px 14px;
+                padding: 0 14px 25px;
             }
 
-            .guru-heading h1 {
-                font-size: 24px;
+            .guru-form-card {
+                width: 100%;
             }
 
             .guru-form-body {
                 padding: 18px;
+            }
+
+            .guru-form-header h2 {
+                font-size: 21px;
             }
         }
     </style>
@@ -325,11 +337,6 @@ function aman($nilai) {
     <main class="main-area">
 
         <div class="guru-content">
-
-            <div class="guru-heading">
-                <h1>Tambah Guru</h1>
-                <p>Tambahkan data guru baru ke dalam sistem.</p>
-            </div>
 
             <a href="kelola_guru.php" class="guru-back">
                 ← Kembali ke Kelola Guru
@@ -397,7 +404,8 @@ function aman($nilai) {
                                 placeholder="Minimal 8 karakter"
                                 minlength="8"
                                 required>
-                            <small style="color:#9aa9bd;">
+
+                            <small class="password-info">
                                 Password minimal 8 karakter.
                             </small>
                         </div>
@@ -406,6 +414,7 @@ function aman($nilai) {
                             <label for="konfirmasi_password">
                                 Konfirmasi Password
                             </label>
+
                             <input
                                 type="password"
                                 class="form-control"

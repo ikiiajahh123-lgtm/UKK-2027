@@ -1,42 +1,126 @@
+
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 $role = $_SESSION['role'] ?? '';
 
-$menuAdmin = [
-    ['dashboard.php', 'Dashboard', 'bi-speedometer2'],
-    ['kelola_siswa.php', 'Data Siswa', 'bi-people'],
-    ['kelola_guru.php', 'Data Guru', 'bi-person-workspace'],
-    ['kelola_kelas.php', 'Data Kelas', 'bi-door-open'],
-    ['kelola_tahun_ajaran.php', 'Data Tahun Ajaran', 'bi-calendar3'],
-    ['kelola_walikelas.php', 'Data Wali Kelas', 'bi-person-badge'],
-    ['penempatan_siswa.php', 'Penempatan Siswa', 'bi-diagram-3'],
-    ['kelola_pelanggaran_kategori.php', 'Kategori Pelanggaran', 'bi-clipboard2-check'],
-    ['about_me.php', 'About Me', 'bi-info-circle']
-];
-$menuGuru = [
-    ['dashboard_guru.php', 'Dashboard', 'bi-speedometer2'],
-    ['catat_pelanggaran.php', 'Catat Pelanggaran', 'bi-pencil-square'],
-    ['tindakan.php', 'Tindakan', 'bi-clipboard2-check'],
-    ['riwayat.php', 'Riwayat', 'bi-clock-history'],
-    ['rekap_poin.php', 'Rekap Poin', 'bi-bar-chart']
-];
-$menus = $role === 'admin' ? $menuAdmin : $menuGuru;
+$menu = [];
+
+// MENU ADMIN
+if ($role === 'admin') {
+
+    $menu = [
+        'dashboard.php' => 'Dashboard',
+        'kelola_siswa.php' => 'Data Siswa',
+        'kelola_guru.php' => 'Data Guru',
+        'kelola_kelas.php' => 'Data Kelas',
+        'kelola_tahun_ajaran.php' => 'Data Tahun Ajaran',
+        'kelola_walikelas.php' => 'Data Wali Kelas',
+        'penempatan_siswa.php' => 'Penempatan Siswa',
+        'kelola_pelanggaran_kategori.php' => 'Kategori Pelanggaran',
+        'about_me.php' => 'About Me'
+    ];
+
+// MENU GURU
+} elseif ($role === 'guru') {
+
+    $menu = [
+        'dashboard_guru.php' => 'Dashboard',
+        'catat_pelanggaran.php' => 'Catat Pelanggaran',
+        'kelola_tindakan.php' => 'Tindakan',
+        'kelola_riwayat.php' => 'Riwayat',
+        'kelola_rekap_poin.php' => 'Rekap Poin',
+        'kelola_laporan.php' => 'laporan'
+    ];
+}
 ?>
-<aside class="sidebar">
-    <a class="sidebar-logo" href="<?= $role === 'admin' ? 'dashboard.php' : 'dashboard_guru.php' ?>">
-        <i class="bi bi-buildings"></i>
-    </a>
-    <div class="sidebar-caption">MENU UTAMA</div>
-    <nav class="sidebar-nav">
-        <?php foreach ($menus as $menu): ?>
-            <a href="<?= htmlspecialchars($menu[0], ENT_QUOTES, 'UTF-8') ?>"
-               class="sidebar-link <?= $current_page === $menu[0] ? 'active' : '' ?>">
-                <i class="bi <?= htmlspecialchars($menu[2], ENT_QUOTES, 'UTF-8') ?>"></i>
-                <span><?= htmlspecialchars($menu[1], ENT_QUOTES, 'UTF-8') ?></span>
-            </a>
+
+<!-- SIDEBAR UTAMA -->
+<div class="bg-dark min-vh-100 flex-shrink-0 p-0"
+     style="width:230px; flex:0 0 230px;">
+
+    <!-- JUDUL SIDEBAR -->
+    <h4 class="text-white fw-normal mb-4"
+        style="
+            font-size:23px;
+            padding:8px 0 0 0;
+            line-height:1.3;
+        ">
+        Pelanggaran<br>Siswa
+    </h4>
+
+    <!-- DAFTAR MENU -->
+    <ul class="nav nav-pills flex-column">
+
+        <?php foreach ($menu as $link => $nama): ?>
+
+            <?php
+            // Menentukan menu aktif
+            $aktif = ($current_page === $link);
+
+            // Menu Dashboard Guru
+            if (
+                $role === 'guru' &&
+                $link === 'dashboard_guru.php' &&
+                $current_page === 'dashboard.php'
+            ) {
+                $aktif = true;
+            }
+
+            // Menu Tindakan Guru
+            if (
+                $role === 'guru' &&
+                $link === 'kelola_tindakan.php' &&
+                $current_page === 'kelola_guru.php'
+            ) {
+                $aktif = true;
+            }
+            ?>
+
+            <li class="nav-item mb-2">
+
+                <a href="<?= htmlspecialchars($link, ENT_QUOTES, 'UTF-8'); ?>"
+                   class="nav-link <?= $aktif ? 'active' : 'text-white'; ?>"
+                   style="
+                       display:block;
+                       width:calc(100% - 8px);
+                       padding:10px 15px;
+                       margin-right:8px;
+                       border-radius:6px;
+                       box-sizing:border-box;
+                   ">
+
+                    <?= htmlspecialchars($nama, ENT_QUOTES, 'UTF-8'); ?>
+
+                </a>
+
+            </li>
+
         <?php endforeach; ?>
-    </nav>
-    <div class="sidebar-bottom">
-        <a href="logout.php" class="sidebar-link logout-link"><i class="bi bi-box-arrow-left"></i><span>Logout</span></a>
-    </div>
-</aside>
+
+        <!-- GARIS PEMISAH -->
+        <hr class="text-secondary"
+            style="margin:20px 16px 20px 0;">
+
+        <!-- LOGOUT -->
+        <li class="nav-item">
+
+            <a href="logout.php"
+               class="nav-link text-danger"
+               style="
+                   display:block;
+                   width:calc(100% - 8px);
+                   padding:10px 15px;
+                   margin-right:8px;
+                   border-radius:6px;
+                   box-sizing:border-box;
+               ">
+
+                Logout
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>

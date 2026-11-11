@@ -110,15 +110,12 @@ $data = mysqli_query($koneksi, "
         ta.nama AS nama_tahun,
         kp.nama AS nama_pelanggaran,
         g.nama AS nama_guru
-
     FROM t_pelanggaran p
-
     LEFT JOIN t_siswa s ON p.siswa_id = s.id
     LEFT JOIN t_kelas k ON p.kelas_id = k.id
     LEFT JOIN t_tahun_ajaran ta ON p.tahun_ajaran_id = ta.id
     LEFT JOIN t_kategori_pelanggaran kp ON p.kategori_id = kp.id
     LEFT JOIN t_guru g ON p.guru_id = g.id
-
     ORDER BY p.tanggal DESC, p.id DESC
 ");
 
@@ -129,6 +126,11 @@ if (!$siswa || !$kelas || !$tahun || !$guru || !$kategori || !$data) {
 function e($value) {
     return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
 }
+
+// LINK DASHBOARD SESUAI ROLE
+$dashboardLink = ($_SESSION['role'] === 'guru')
+    ? 'dashboard_guru.php'
+    : 'dashboard.php';
 ?>
 
 <!DOCTYPE html>
@@ -138,365 +140,74 @@ function e($value) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Catat Pelanggaran Siswa</title>
+    <title>Catat Pelanggaran Siswa - SIPES</title>
 
-    <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <!-- BOOTSTRAP 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-    <!-- DATATABLES -->
+    <!-- DATATABLES BOOTSTRAP 5 -->
     <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css"
-        rel="stylesheet">
+          rel="stylesheet">
 
     <!-- FONT AWESOME -->
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-        :root {
-            --bg: #101827;
-            --panel: #1d2a3a;
-            --border: rgba(161,179,205,.16);
-            --muted: #9aa9bd;
-            --text: #f4f7fb;
-            --accent: #397cf6;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Inter', Arial, sans-serif;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        /* LAYOUT */
-        .app-shell {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-area {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .content-area {
-            padding: 34px 4.2%;
-            max-width: 1800px;
-            margin: auto;
-        }
-
-        /* HEADER */
-        .page-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .page-heading h1 {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .page-heading p {
-            color: var(--muted);
-            font-size: 14px;
-            margin: 0;
-        }
-
-        /* BUTTON */
-        .btn {
-            border-radius: 7px;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 9px 14px;
-        }
-
-        .btn-primary {
-            background: #397cf6;
-            border-color: #397cf6;
-        }
-
-        .btn-primary:hover {
-            background: #2868dc;
-        }
-
-        .btn-back {
-            background: #66717e;
-            border-color: #66717e;
-            margin: 15px 0 20px;
-        }
-
-        /* CARD */
-        .content-card {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            margin-bottom: 22px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0,0,0,.08);
-        }
-
-        .card-header-custom {
-            padding: 18px 22px;
-            border-bottom: 1px solid var(--border);
-            background: #202f43;
-        }
-
-        .card-header-custom h5 {
-            font-size: 17px;
-            font-weight: 700;
-            margin: 0 0 5px;
-            color: white;
-        }
-
-        .card-header-custom p {
-            color: var(--muted);
-            font-size: 12px;
-            margin: 0;
-        }
-
-        .card-body-custom {
-            padding: 22px;
-        }
-
-        /* FORM */
-        .form-label {
-            color: #eaf0f8;
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-control,
-        .form-select {
-            background-color: #29384b;
-            border: 1px solid #40516a;
-            color: white;
-            border-radius: 7px;
-            font-size: 13px;
-            min-height: 40px;
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            background-color: #29384b;
-            color: white;
-            border-color: #397cf6;
-            box-shadow: 0 0 0 3px rgba(57,124,246,.15);
-        }
-
-        .form-control::placeholder {
-            color: #91a4bf;
-        }
-
-        .form-select option {
-            background: #29384b;
-            color: white;
-        }
-
-        textarea.form-control {
-            min-height: 90px;
-        }
-
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            cursor: pointer;
-        }
-
-        /* TABLE */
-        .table-card-body {
-            padding: 22px;
-        }
-
-        #tabelPelanggaran {
-            width: 100% !important;
-            font-size: 12px;
-            color: white;
-        }
-
-        #tabelPelanggaran thead th {
-            background: #192330 !important;
-            color: white !important;
-            border-color: #344256 !important;
-            padding: 13px 10px;
-            white-space: nowrap;
-        }
-
-        #tabelPelanggaran tbody td {
-            background: #1d2a3a;
-            color: #eaf0f8;
-            border-color: #344256;
-            padding: 12px 10px;
-            vertical-align: middle;
-        }
-
-        #tabelPelanggaran tbody tr:hover td {
-            background: #29394e;
-        }
-
-        .table-striped > tbody > tr:nth-of-type(odd) > * {
-            color: #eaf0f8;
-            background-color: #202e40;
-        }
-
-        .badge {
-            font-size: 10px;
-            padding: 6px 9px;
-        }
-
-        /* DATATABLES */
-        .dt-container {
-            color: var(--text);
-            font-size: 12px;
-        }
-
-        .dt-search input,
-        .dt-length select {
-            background: #29384b !important;
-            color: white !important;
-            border: 1px solid #40516a !important;
-            border-radius: 7px !important;
-            padding: 7px 10px !important;
-        }
-
-        .dt-search input {
-            margin-left: 8px;
-        }
-
-        .dt-length select {
-            margin: 0 5px;
-        }
-
-        .dt-info {
-            color: var(--muted) !important;
-            padding-top: 15px !important;
-        }
-
-        .dt-paging .dt-paging-button {
-            color: #dce6f4 !important;
-            border-radius: 6px !important;
-        }
-
-        .dt-paging .dt-paging-button.current {
-            background: #397cf6 !important;
-            color: white !important;
-            border: 1px solid #397cf6 !important;
-        }
-
-        .dt-paging .dt-paging-button:hover {
-            background: #29384b !important;
-            color: white !important;
-            border: 1px solid #40516a !important;
-        }
-
-        /* ALERT */
-        .alert {
-            border-radius: 8px;
-            font-size: 13px;
-        }
-
-        /* RESPONSIVE */
-        @media(max-width: 1100px) {
-            .content-area {
-                padding: 25px 20px;
-            }
-
-            .card-body-custom,
-            .table-card-body {
-                padding: 16px;
-            }
-        }
-
-        @media(max-width: 700px) {
-            .content-area {
-                padding: 22px 12px;
-            }
-
-            .page-heading {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .page-heading h1 {
-                font-size: 24px;
-            }
-
-            .card-body-custom,
-            .table-card-body {
-                padding: 13px;
-            }
-        }
-    </style>
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
-<body>
+<body class="bg-dark text-white">
 
-<div class="app-shell">
+<div class="d-flex min-vh-100">
 
-    <!-- SIDEBAR ADMIN -->
+    <!-- SIDEBAR -->
     <?php include 'layout/sidebar.php'; ?>
 
-    <!-- KONTEN -->
-    <div class="main-area">
+    <!-- KONTEN UTAMA -->
+    <main class="flex-grow-1 min-vw-0 bg-dark">
 
-        <main class="content-area">
+        <div class="container-fluid p-3 p-lg-4">
 
-            <!-- HEADER -->
-            <div class="page-heading">
-                <div>
-                    <h1>Catat Pelanggaran Siswa</h1>
-                    <p>Kelola dan catat data pelanggaran siswa dengan mudah.</p>
-                </div>
-            </div>
+            <!-- JUDUL -->
+            <h2 class="fw-bold mb-3 text-white">
+                Catat Pelanggaran Siswa
+            </h2>
 
-            <a href="dashboard.php" class="btn btn-secondary btn-back">
+            <!-- TOMBOL KEMBALI -->
+            <a href="<?= e($dashboardLink); ?>" class="btn btn-secondary mb-3">
                 <i class="fas fa-arrow-left me-1"></i>
                 Kembali ke Dashboard
             </a>
 
-            <!-- PESAN -->
-            <?php if ($pesan) { ?>
-                <div class="alert alert-success">
+            <!-- PESAN BERHASIL -->
+            <?php if ($pesan): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
                     <?= e($pesan); ?>
-                </div>
-            <?php } ?>
 
-            <?php if ($error) { ?>
-                <div class="alert alert-danger">
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <!-- PESAN ERROR -->
+            <?php if ($error): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>
                     <?= e($error); ?>
+
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="alert"></button>
                 </div>
-            <?php } ?>
+            <?php endif; ?>
 
             <!-- FORM CATAT PELANGGARAN -->
-            <div class="content-card">
+            <div class="card bg-white text-dark border-0 shadow-sm rounded-3 mb-4">
 
-                <div class="card-header-custom">
-                    <h5>
-                        <i class="fas fa-clipboard-list me-2"></i>
-                        Form Catat Pelanggaran
-                    </h5>
-                    <p>Lengkapi informasi pelanggaran siswa di bawah ini.</p>
+                <div class="card-header bg-light text-dark border-bottom p-3">
+                    Form Catat Pelanggaran
                 </div>
 
-                <div class="card-body-custom">
+                <div class="card-body p-3 p-lg-4">
 
                     <form method="POST" action="">
 
@@ -504,103 +215,106 @@ function e($value) {
 
                             <!-- SISWA -->
                             <div class="col-md-6">
-                                <label class="form-label">Siswa *</label>
+                                <label class="form-label">Siswa</label>
+
                                 <select name="siswa_id" class="form-select" required>
                                     <option value="">-- Pilih Siswa --</option>
 
-                                    <?php while ($row = mysqli_fetch_assoc($siswa)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($siswa)): ?>
                                         <option value="<?= (int)$row['id']; ?>">
                                             <?= e($row['nama']); ?>
                                         </option>
-                                    <?php } ?>
-
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
 
                             <!-- TAHUN AJARAN -->
                             <div class="col-md-6">
-                                <label class="form-label">Tahun Ajaran *</label>
+                                <label class="form-label">Tahun Ajaran</label>
+
                                 <select name="tahun_ajaran_id" class="form-select" required>
                                     <option value="">-- Pilih Tahun Ajaran --</option>
 
-                                    <?php while ($row = mysqli_fetch_assoc($tahun)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($tahun)): ?>
                                         <option value="<?= (int)$row['id']; ?>">
                                             <?= e($row['nama']); ?>
                                         </option>
-                                    <?php } ?>
-
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
 
                             <!-- KELAS -->
                             <div class="col-md-6">
-                                <label class="form-label">Kelas *</label>
+                                <label class="form-label">Kelas</label>
+
                                 <select name="kelas_id" class="form-select" required>
                                     <option value="">-- Pilih Kelas --</option>
 
-                                    <?php while ($row = mysqli_fetch_assoc($kelas)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($kelas)): ?>
                                         <option value="<?= (int)$row['id']; ?>">
                                             <?= e($row['nama']); ?>
                                         </option>
-                                    <?php } ?>
-
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
 
                             <!-- JENIS PELANGGARAN -->
                             <div class="col-md-6">
-                                <label class="form-label">Jenis Pelanggaran *</label>
+                                <label class="form-label">Jenis Pelanggaran</label>
+
                                 <select name="kategori_id" class="form-select" required>
                                     <option value="">-- Pilih Pelanggaran --</option>
 
-                                    <?php while ($row = mysqli_fetch_assoc($kategori)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($kategori)): ?>
                                         <option value="<?= (int)$row['id']; ?>">
                                             <?= e($row['nama']); ?>
                                         </option>
-                                    <?php } ?>
-
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
 
                             <!-- GURU -->
                             <div class="col-md-6">
-                                <label class="form-label">Guru Pelapor *</label>
+                                <label class="form-label">Guru Pelapor</label>
+
                                 <select name="guru_id" class="form-select" required>
                                     <option value="">-- Pilih Guru --</option>
 
-                                    <?php while ($row = mysqli_fetch_assoc($guru)) { ?>
+                                    <?php while ($row = mysqli_fetch_assoc($guru)): ?>
                                         <option value="<?= (int)$row['id']; ?>">
                                             <?= e($row['nama']); ?>
                                         </option>
-                                    <?php } ?>
-
+                                    <?php endwhile; ?>
                                 </select>
                             </div>
 
                             <!-- TANGGAL -->
                             <div class="col-md-6">
-                                <label class="form-label">Tanggal *</label>
+                                <label class="form-label">Tanggal</label>
+
                                 <input type="date"
-                                    name="tanggal"
-                                    class="form-control"
-                                    value="<?= date('Y-m-d'); ?>"
-                                    required>
+                                       name="tanggal"
+                                       class="form-control"
+                                       value="<?= date('Y-m-d'); ?>"
+                                       required>
                             </div>
 
                             <!-- POIN -->
                             <div class="col-md-6">
-                                <label class="form-label">Poin Pelanggaran *</label>
+                                <label class="form-label">Poin Pelanggaran</label>
+
                                 <input type="number"
-                                    name="poin"
-                                    class="form-control"
-                                    min="1"
-                                    placeholder="Masukkan jumlah poin"
-                                    required>
+                                       name="poin"
+                                       class="form-control"
+                                       min="1"
+                                       placeholder="Masukkan jumlah poin"
+                                       required>
                             </div>
 
                             <!-- STATUS -->
                             <div class="col-md-6">
                                 <label class="form-label">Status</label>
+
                                 <select name="status" class="form-select">
                                     <option value="tercatat">Tercatat</option>
                                     <option value="Ditindaklanjuti">Ditindaklanjuti</option>
@@ -611,31 +325,34 @@ function e($value) {
                             <!-- KETERANGAN -->
                             <div class="col-md-6">
                                 <label class="form-label">Keterangan</label>
+
                                 <textarea name="keterangan"
-                                    class="form-control"
-                                    placeholder="Masukkan keterangan pelanggaran..."></textarea>
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Masukkan keterangan pelanggaran..."></textarea>
                             </div>
 
                             <!-- TINDAKAN -->
                             <div class="col-md-6">
                                 <label class="form-label">Tindakan</label>
+
                                 <textarea name="tindakan"
-                                    class="form-control"
-                                    placeholder="Masukkan tindakan yang diberikan..."></textarea>
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Masukkan tindakan yang diberikan..."></textarea>
                             </div>
 
                         </div>
 
-                        <!-- BUTTON -->
-                        <div class="d-flex gap-2 mt-4">
+                        <!-- TOMBOL -->
+                        <div class="d-flex flex-wrap gap-2 mt-3">
 
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save me-1"></i>
                                 Simpan Pelanggaran
                             </button>
 
-                            <a href="dashboard.php" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-1"></i>
+                            <a href="<?= e($dashboardLink); ?>" class="btn btn-secondary">
                                 Kembali
                             </a>
 
@@ -647,26 +364,22 @@ function e($value) {
             </div>
 
             <!-- TABEL CATATAN PELANGGARAN -->
-            <div class="content-card">
+            <div class="card bg-white text-dark border-0 shadow-sm rounded-3">
 
-                <div class="card-header-custom">
-                    <h5>
-                        <i class="fas fa-table me-2"></i>
-                        Data Catatan Pelanggaran
-                    </h5>
-                    <p>Daftar seluruh catatan pelanggaran siswa.</p>
+                <div class="card-header bg-light text-dark border-bottom p-3">
+                    Data Catatan Pelanggaran
                 </div>
 
-                <div class="table-card-body">
+                <div class="card-body p-3 p-lg-4">
 
                     <div class="table-responsive">
 
                         <table id="tabelPelanggaran"
-                            class="table table-bordered table-striped table-hover align-middle w-100">
+                               class="table table-bordered table-striped table-hover align-middle mb-0 w-100">
 
-                            <thead>
+                            <thead class="table-dark">
                                 <tr>
-                                    <th>No.</th>
+                                    <th>No</th>
                                     <th>Nama Siswa</th>
                                     <th>Kelas</th>
                                     <th>Tahun Ajaran</th>
@@ -684,13 +397,15 @@ function e($value) {
                                 <?php
                                 $no = 1;
 
-                                while ($row = mysqli_fetch_assoc($data)) {
+                                while ($row = mysqli_fetch_assoc($data)):
                                 ?>
 
                                     <tr>
                                         <td><?= $no++; ?></td>
 
-                                        <td><?= e($row['nama_siswa']); ?></td>
+                                        <td>
+                                            <strong><?= e($row['nama_siswa']); ?></strong>
+                                        </td>
 
                                         <td><?= e($row['nama_kelas']); ?></td>
 
@@ -700,32 +415,32 @@ function e($value) {
 
                                         <td><?= e($row['nama_guru']); ?></td>
 
-                                        <td><?= e($row['tanggal']); ?></td>
+                                        <td class="text-nowrap">
+                                            <?= e($row['tanggal']); ?>
+                                        </td>
 
-                                        <td>
-                                            <span class="badge bg-warning text-dark">
-                                                <?= (int)$row['poin']; ?>
-                                            </span>
+                                        <td class="text-center">
+                                            <strong><?= (int)$row['poin']; ?></strong>
                                         </td>
 
                                         <td><?= e($row['tindakan']); ?></td>
 
                                         <td>
                                             <?php
-                                            $status_data = strtolower($row['status']);
+                                            $status_data = strtolower($row['status'] ?? '');
 
                                             if ($status_data === 'selesai') {
                                                 echo '<span class="badge bg-success">Selesai</span>';
                                             } elseif ($status_data === 'ditindaklanjuti') {
-                                                echo '<span class="badge bg-warning text-dark">Ditindaklanjuti</span>';
+                                                echo '<span class="badge bg-success">Ditindaklanjuti</span>';
                                             } else {
-                                                echo '<span class="badge bg-secondary">Tercatat</span>';
+                                                echo '<span class="badge bg-warning text-dark">Tercatat</span>';
                                             }
                                             ?>
                                         </td>
                                     </tr>
 
-                                <?php } ?>
+                                <?php endwhile; ?>
 
                             </tbody>
 
@@ -736,8 +451,10 @@ function e($value) {
                 </div>
             </div>
 
-        </main>
-    </div>
+        </div>
+
+    </main>
+
 </div>
 
 <!-- JAVASCRIPT -->
@@ -747,8 +464,9 @@ function e($value) {
 
 <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<!-- DATATABLES -->
 <script>
 $(document).ready(function () {
 

@@ -12,7 +12,7 @@ $sql = "INSERT INTO t_users(name,email,password,role)";
 $sql .= "VALUES('$name','$email','$password','$role')";
 
 if (mysqli_query($koneksi, $sql)) {
-    echo 'User admin berhasil dibuat, silakan hapus file ini';
+    echo 'User guru berhasil dibuat, silakan hapus file ini';
 } else{
     echo 'Gagal memuat user: '. mysqli_error($koneksi);
 }

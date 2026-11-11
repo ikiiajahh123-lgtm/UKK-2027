@@ -1,31 +1,28 @@
-<?php
-// tindakan.php
 
+<?php
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-// Ambil ID guru dari URL
+// PENANDA MENU AKTIF
+$menu_aktif = 'tindakan';
+
+// Ambil ID dari URL
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-// Validasi ID
 if ($id <= 0) {
-    echo "<script>
-        alert('ID guru tidak valid!');
-        window.location.href = 'kelola_guru.php';
-    </script>";
+    header("Location: kelola_guru.php");
     exit;
 }
 
-// Ambil data guru berdasarkan ID
+// Ambil data guru menggunakan prepared statement
 $stmt = mysqli_prepare(
     $koneksi,
     "SELECT id, nip, nama, email, status_aktif
-     FROM t_guru
-     WHERE id = ?"
+     FROM t_guru WHERE id = ?"
 );
 
 if (!$stmt) {
-    die("Gagal menyiapkan query: " . mysqli_error($koneksi));
+    die("Query gagal: " . mysqli_error($koneksi));
 }
 
 mysqli_stmt_bind_param($stmt, "i", $id);
@@ -33,16 +30,20 @@ mysqli_stmt_execute($stmt);
 
 $result = mysqli_stmt_get_result($stmt);
 $guru = mysqli_fetch_assoc($result);
-
 mysqli_stmt_close($stmt);
 
-// Periksa apakah data ditemukan
+// Jika guru tidak ditemukan
 if (!$guru) {
     echo "<script>
         alert('Data guru tidak ditemukan!');
-        window.location.href = 'kelola_guru.php';
+        window.location.href='kelola_guru.php';
     </script>";
     exit;
+}
+
+// Keamanan output
+function e($value) {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
 }
 ?>
 
@@ -51,113 +52,119 @@ if (!$guru) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Tindakan Data Guru</title>
+    <title>Tindakan Data Guru | SIPES</title>
 
-    <!-- Bootstrap 5.3.3 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    <!-- BOOTSTRAP 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- BOOTSTRAP ICONS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
         rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body class="bg-dark text-white">
 
-<div class="container py-5">
+<div class="d-flex min-vh-100">
 
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-7">
+    <!-- SIDEBAR -->
+    <?php include 'layout/sidebar.php'; ?>
 
-            <div class="card shadow">
+    <!-- KONTEN UTAMA -->
+    <main class="flex-grow-1 min-vw-0">
 
-                <div class="card-header bg-success text-white">
-                    <h4 class="mb-0">Tindakan Data Guru</h4>
-                </div>
+        <div class="container-fluid p-3 p-md-4">
 
-                <div class="card-body">
+            <h2 class="fw-bold mb-4 text-white">
+                Tindakan Data Guru
+            </h2>
 
-                    <h5 class="mb-3">Informasi Guru</h5>
+            <div class="card shadow-sm border-0">
 
-                    <table class="table table-bordered">
-                        <tr>
-                            <th width="35%">NIP</th>
-                            <td>
-                                <?= htmlspecialchars($guru['nip']); ?>
-                            </td>
-                        </tr>
+                <div class="card-body p-3 p-md-4">
 
-                        <tr>
-                            <th>Nama Guru</th>
-                            <td>
-                                <?= htmlspecialchars($guru['nama']); ?>
-                            </td>
-                        </tr>
+                    <h5 class="fw-bold mb-3 text-dark">
+                        <i class="bi bi-person-badge me-2"></i>
+                        Informasi Guru
+                    </h5>
 
-                        <tr>
-                            <th>Email</th>
-                            <td>
-                                <?= htmlspecialchars($guru['email']); ?>
-                            </td>
-                        </tr>
+                    <div class="table-responsive">
 
-                        <tr>
-                            <th>Status</th>
-                            <td>
-                                <?php if ($guru['status_aktif'] == 1) : ?>
-                                    <span class="badge bg-success">
-                                        Aktif
-                                    </span>
-                                <?php else : ?>
-                                    <span class="badge bg-secondary">
-                                        Tidak Aktif
-                                    </span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    </table>
+                        <table class="table table-bordered table-striped align-middle mb-0">
+                            <tbody>
 
-                    <hr>
+                                <tr>
+                                    <th class="table-light" style="width:180px;">
+                                        NIP
+                                    </th>
+                                    <td><?= e($guru['nip']); ?></td>
+                                </tr>
 
-                    <h5 class="mb-3">Pilih Tindakan</h5>
+                                <tr>
+                                    <th class="table-light">Nama Guru</th>
+                                    <td><?= e($guru['nama']); ?></td>
+                                </tr>
+
+                                <tr>
+                                    <th class="table-light">Email</th>
+                                    <td><?= e($guru['email']); ?></td>
+                                </tr>
+
+                                <tr>
+                                    <th class="table-light">Status</th>
+                                    <td>
+                                        <?php if ((int)$guru['status_aktif'] === 1): ?>
+                                            <span class="badge bg-success">Aktif</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-secondary">Tidak Aktif</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <h5 class="fw-bold text-dark mt-4 mb-3">
+                        <i class="bi bi-tools me-2"></i>
+                        Pilih Tindakan
+                    </h5>
 
                     <div class="d-flex flex-wrap gap-2">
 
-                        <!-- Detail -->
-                        <a
-                            href="detail_guru.php?id=<?= (int) $guru['id']; ?>"
-                            class="btn btn-info text-white">
+                        <a href="detail_guru.php?id=<?= (int)$guru['id']; ?>"
+                           class="btn btn-info text-white">
+                            <i class="bi bi-eye me-1"></i>
                             Detail
                         </a>
 
-                        <!-- Edit -->
-                        <a
-                            href="edit_guru.php?id=<?= (int) $guru['id']; ?>"
-                            class="btn btn-warning">
+                        <a href="edit_guru.php?id=<?= (int)$guru['id']; ?>"
+                           class="btn btn-warning text-dark">
+                            <i class="bi bi-pencil-square me-1"></i>
                             Edit
                         </a>
 
-                        <!-- Hapus -->
-                        <form
-                            action="proses_hapus_guru.php"
-                            method="POST"
-                            onsubmit="return confirm('Yakin ingin menghapus data guru ini?');">
+                        <form action="proses_hapus_guru.php"
+                              method="POST"
+                              class="m-0"
+                              onsubmit="return confirm('Yakin ingin menghapus data guru ini?');">
 
-                            <input
-                                type="hidden"
-                                name="id"
-                                value="<?= (int) $guru['id']; ?>">
+                            <input type="hidden"
+                                   name="id"
+                                   value="<?= (int)$guru['id']; ?>">
 
-                            <button
-                                type="submit"
-                                class="btn btn-danger">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i>
                                 Hapus
                             </button>
+
                         </form>
 
-                        <!-- Kembali -->
-                        <a
-                            href="kelola_guru.php"
-                            class="btn btn-secondary">
+                        <a href="kelola_guru.php" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>
                             Kembali
                         </a>
 
@@ -165,15 +172,12 @@ if (!$guru) {
 
                 </div>
             </div>
-
         </div>
-    </div>
 
+    </main>
 </div>
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

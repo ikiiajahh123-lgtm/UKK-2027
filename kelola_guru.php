@@ -13,7 +13,7 @@ $hasil = mysqli_query($koneksi, $sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Kelola Guru</title>
+    <title>kelola guru</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -35,7 +35,9 @@ $hasil = mysqli_query($koneksi, $sql);
         <!-- KONTEN -->
         <main class="col-md-9 col-lg-10 p-4">
 
-            <h1 class="mb-4">Kelola Guru</h1>
+            <h1 class="mb-4">Kelola guru
+                
+            </h1>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <a href="dashboard.php" class="btn btn-secondary">

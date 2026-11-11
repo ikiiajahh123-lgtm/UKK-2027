@@ -1,3 +1,4 @@
+
 <?php
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
@@ -37,11 +38,54 @@ if (!$guru) {
 
     <title>Edit Guru - SIPES</title>
 
-    <!-- Bootstrap 5.3.3 -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
+
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 10px 18px;
+        }
+
+        .card-header h3 {
+            font-size: 30px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        .form-label {
+            font-size: 16px;
+            color: #212529;
+        }
+
+        .form-control,
+        .form-select {
+            min-height: 42px;
+            font-size: 16px;
+        }
+
+        .password-info {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .btn {
+            font-size: 16px;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -64,7 +108,6 @@ if (!$guru) {
 
                     <form action="proses_edit_guru.php" method="POST">
 
-                        <!-- ID -->
                         <input
                             type="hidden"
                             name="id"
@@ -116,6 +159,45 @@ if (!$guru) {
                                 class="form-control"
                                 required
                                 value="<?= htmlspecialchars($guru['email'] ?? '') ?>"
+                            >
+                        </div>
+
+                        <!-- Password Baru -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                Password Baru
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Masukkan password baru"
+                                minlength="8"
+                                autocomplete="new-password"
+                            >
+
+                            <small class="password-info">
+                                Kosongkan jika tidak ingin mengganti password.
+                                Password minimal 8 karakter.
+                            </small>
+                        </div>
+
+                        <!-- Konfirmasi Password -->
+                        <div class="mb-3">
+                            <label for="konfirmasi_password" class="form-label">
+                                Konfirmasi Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="konfirmasi_password"
+                                id="konfirmasi_password"
+                                class="form-control"
+                                placeholder="Ulangi password baru"
+                                minlength="8"
+                                autocomplete="new-password"
                             >
                         </div>
 
@@ -194,9 +276,25 @@ if (!$guru) {
 
 </div>
 
-<!-- Bootstrap JS -->
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const konfirmasi = document.getElementById('konfirmasi_password').value;
+
+    if (password !== '' || konfirmasi !== '') {
+        if (password.length < 8) {
+            e.preventDefault();
+            alert('Password minimal 8 karakter!');
+            return;
+        }
+
+        if (password !== konfirmasi) {
+            e.preventDefault();
+            alert('Konfirmasi password tidak sama!');
+            return;
+        }
+    }
+});
 </script>
 
 </body>
