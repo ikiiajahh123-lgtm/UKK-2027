@@ -330,11 +330,11 @@ function aman($nilai) {
 
 <body>
 
-<div class="app-shell">
+<div class="d-flex min-vh-100">
 
     <?php include "layout/sidebar.php"; ?>
 
-    <main class="main-area">
+    <main class="flex-grow-1 p-3 p-md-4" style="min-width: 0;">
 
         <div class="guru-content">
 

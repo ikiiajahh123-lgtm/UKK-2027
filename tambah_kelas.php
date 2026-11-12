@@ -183,36 +183,11 @@ include 'includes/cek_session.php';
 <body>
 
     <!-- SIDEBAR -->
-    <div class="sidebar">
-
-        <h4>Pelanggaran<br>Siswa</h4>
-
-        <a href="dashboard.php">Dashboard</a>
-
-        <a href="data_siswa.php">Data Siswa</a>
-
-        <a href="data_guru.php">Data Guru</a>
-
-        <a href="kelola_kelas.php" class="active">Data Kelas</a>
-
-        <a href="data_tahun_ajaran.php">Data Tahun Ajaran</a>
-
-        <a href="data_wali_kelas.php">Data Wali Kelas</a>
-
-        <a href="penempatan_siswa.php">Penempatan Siswa</a>
-
-        <a href="kategori_pelanggaran.php">Kategori Pelanggaran</a>
-
-        <a href="about.php">About Me</a>
-
-        <hr>
-
-        <a href="logout.php" class="logout">Logout</a>
-
-    </div>
+<?php include 'layout/sidebar.php'; ?>
 
 
     <!-- KONTEN UTAMA -->
+     <main class="p-4 flex-grow-1" style="min-width: 0; flex-basis: 0;"">
     <div class="main-content">
 
         <!-- HEADER -->
@@ -320,7 +295,7 @@ include 'includes/cek_session.php';
                 </form>
 
             </div>
-
+        </main>
         </div>
 
     </div>

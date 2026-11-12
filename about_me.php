@@ -177,7 +177,7 @@ $hobi = "Baca Buku";
         <?php include 'layout/sidebar.php'; ?>
 
         <!-- KONTEN UTAMA -->
-        <main class="col-md-9 col-lg-10 p-4">
+        <main class="p-4 flex-grow-1" style="min-width: 0; flex-basis: 0;">
 
             <!-- HEADER -->
             <div class="mb-4">

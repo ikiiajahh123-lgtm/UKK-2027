@@ -40,7 +40,7 @@ if (!$hasil) {
         <?php include 'layout/sidebar.php'; ?>
 
         <!-- KONTEN -->
-        <main class="col-md-9 col-lg-10 p-4">
+        <main class="p-4 flex-grow-1" style="min-width: 0; flex-basis: 0;">
 
             <!-- JUDUL DAN TOMBOL TAMBAH -->
             <div class="d-flex justify-content-between align-items-center mb-4">

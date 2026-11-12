@@ -5,7 +5,6 @@ $role = $_SESSION['role'] ?? '';
 
 $menu = [];
 
-// MENU ADMIN
 if ($role === 'admin') {
 
     $menu = [
@@ -20,7 +19,6 @@ if ($role === 'admin') {
         'about_me.php' => 'About Me'
     ];
 
-// MENU GURU
 } elseif ($role === 'guru') {
 
     $menu = [
@@ -29,98 +27,76 @@ if ($role === 'admin') {
         'kelola_tindakan.php' => 'Tindakan',
         'kelola_riwayat.php' => 'Riwayat',
         'kelola_rekap_poin.php' => 'Rekap Poin',
-        'kelola_laporan.php' => 'laporan'
+        'kelola_laporan.php' => 'Laporan'
     ];
 }
 ?>
 
-<!-- SIDEBAR UTAMA -->
-<div class="bg-dark min-vh-100 flex-shrink-0 p-0"
-     style="width:230px; flex:0 0 230px;">
+<aside
+    class="bg-dark text-white flex-shrink-0"
+    style="
+        width: 230px;
+        min-width: 230px;
+        flex: 0 0 230px;
+        height: 100vh;
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        align-self: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px;
+        box-sizing: border-box;
+        z-index: 1000;
+    "
+>
 
-    <!-- JUDUL SIDEBAR -->
-    <h4 class="text-white fw-normal mb-4"
-        style="
-            font-size:23px;
-            padding:8px 0 0 0;
-            line-height:1.3;
-        ">
-        Pelanggaran<br>Siswa
-    </h4>
+    <div class="mb-4">
+        <h5 class="fw-bold text-white mb-1 text-nowrap">
+            Pelanggaran Siswa
+        </h5>
 
-    <!-- DAFTAR MENU -->
-    <ul class="nav nav-pills flex-column">
+        <small class="text-secondary text-nowrap">
+            Sistem Informasi Sekolah
+        </small>
+    </div>
 
-        <?php foreach ($menu as $link => $nama): ?>
+    <hr class="border-secondary">
+
+    <nav class="d-flex flex-column gap-2">
+
+        <?php foreach ($menu as $link => $namaMenu): ?>
 
             <?php
-            // Menentukan menu aktif
-            $aktif = ($current_page === $link);
-
-            // Menu Dashboard Guru
-            if (
-                $role === 'guru' &&
-                $link === 'dashboard_guru.php' &&
-                $current_page === 'dashboard.php'
-            ) {
-                $aktif = true;
-            }
-
-            // Menu Tindakan Guru
-            if (
-                $role === 'guru' &&
-                $link === 'kelola_tindakan.php' &&
-                $current_page === 'kelola_guru.php'
-            ) {
-                $aktif = true;
-            }
+            $url = explode('?', $link)[0];
+            $aktif = ($current_page === $url);
             ?>
 
-            <li class="nav-item mb-2">
-
-                <a href="<?= htmlspecialchars($link, ENT_QUOTES, 'UTF-8'); ?>"
-                   class="nav-link <?= $aktif ? 'active' : 'text-white'; ?>"
-                   style="
-                       display:block;
-                       width:calc(100% - 8px);
-                       padding:10px 15px;
-                       margin-right:8px;
-                       border-radius:6px;
-                       box-sizing:border-box;
-                   ">
-
-                    <?= htmlspecialchars($nama, ENT_QUOTES, 'UTF-8'); ?>
-
-                </a>
-
-            </li>
+            <a
+                href="<?= htmlspecialchars($link, ENT_QUOTES, 'UTF-8'); ?>"
+                class="text-decoration-none rounded-2 px-3 py-2 text-nowrap"
+                style="
+                    display: block;
+                    width: 100%;
+                    box-sizing: border-box;
+                    color: #ffffff;
+                    background-color: <?= $aktif ? '#0d6efd' : 'transparent'; ?>;
+                "
+            >
+                <?= htmlspecialchars($namaMenu, ENT_QUOTES, 'UTF-8'); ?>
+            </a>
 
         <?php endforeach; ?>
 
-        <!-- GARIS PEMISAH -->
-        <hr class="text-secondary"
-            style="margin:20px 16px 20px 0;">
+    </nav>
 
-        <!-- LOGOUT -->
-        <li class="nav-item">
+    <hr class="border-secondary my-4">
 
-            <a href="logout.php"
-               class="nav-link text-danger"
-               style="
-                   display:block;
-                   width:calc(100% - 8px);
-                   padding:10px 15px;
-                   margin-right:8px;
-                   border-radius:6px;
-                   box-sizing:border-box;
-               ">
+    <a
+        href="logout.php"
+        class="d-block text-danger text-decoration-none px-2 py-2"
+    >
+        Logout
+    </a>
 
-                Logout
-
-            </a>
-
-        </li>
-
-    </ul>
-
-</div>
+</aside>

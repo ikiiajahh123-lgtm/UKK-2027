@@ -30,13 +30,8 @@ if (!$hasil) {
 
     <title>Kelola Wali Kelas</title>
 
-    <!-- Bootstrap sama dengan Kelola Siswa -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- DataTables sama dengan Kelola Siswa -->
     <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-
-    <!-- CSS utama -->
     <link rel="stylesheet" href="layout/style.css">
 </head>
 
@@ -49,7 +44,7 @@ if (!$hasil) {
         <?php include 'layout/sidebar.php'; ?>
 
         <!-- KONTEN UTAMA -->
-        <main class="col-md-9 col-lg-10 p-4">
+        <main class="p-4 flex-grow-1" style="min-width: 0; flex-basis: 0;">
 
             <!-- JUDUL HALAMAN -->
             <div class="d-flex justify-content-between align-items-center mb-4">

@@ -1,12 +1,34 @@
 
 <?php
-session_start();
+// ==========================================
+// LOGIN
+// ==========================================
 
-if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Jika sudah login sebagai guru, langsung ke dashboard
+if (
+    isset($_SESSION['login']) &&
+    $_SESSION['login'] === true &&
+    strtolower(trim((string)($_SESSION['role'] ?? ''))) === 'guru'
+) {
     header("Location: dashboard.php");
     exit;
 }
+
+// Jika session tidak sesuai, bersihkan agar tidak redirect berulang
+if (
+    isset($_SESSION['login']) &&
+    $_SESSION['login'] === true &&
+    strtolower(trim((string)($_SESSION['role'] ?? ''))) !== 'guru'
+) {
+    $_SESSION = [];
+    session_regenerate_id(true);
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -16,10 +38,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true) {
     <title>Login - Sistem Informasi Pelanggaran Siswa</title>
 
     <!-- Bootstrap 5 -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
