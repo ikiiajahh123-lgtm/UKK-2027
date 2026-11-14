@@ -24,80 +24,129 @@ function e($value) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Tahun Ajaran - SIPES</title>
 
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Kelola Tindakan - SIPES</title>
 
-    <!-- DataTables Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f4f6f9;
+            margin: 0;
+            background: #f4f6fc;
             color: #212529;
+            font-family: Arial, sans-serif;
         }
 
-        /* HEADER PUTIH */
-        .header-halaman {
-            background-color: #ffffff;
-            color: #212529;
-            padding: 20px 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-
-        .header-halaman h2 {
-            color: #212529;
-        }
-
-        /* KONTEN */
-        main {
-            background-color: #f4f6f9;
+        .main-content {
+            flex: 1;
+            min-width: 0;
             min-height: 100vh;
+            background: #f4f6fc;
         }
 
-        /* CARD TABEL */
+        .judul-halaman {
+            font-size: 36px;
+            font-weight: 400;
+            color: #152238;
+            margin-bottom: 20px;
+        }
+
         .card {
-            background-color: #ffffff;
-            color: #212529;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+        }
+
+        .card-body {
+            padding: 20px;
         }
 
         .table {
-            color: #212529;
+            margin-bottom: 0;
+            font-size: 14px;
         }
 
-        .table thead th {
-            background-color: #212529;
-            color: #ffffff;
+        .table th {
+            background: #212529 !important;
+            color: white !important;
+            text-align: center;
+            vertical-align: middle;
             white-space: nowrap;
         }
 
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) > * {
+            background-color: #f1f1f1;
+        }
+
+        .table-hover tbody tr:hover > * {
+            background-color: #e8f0ff;
+        }
+
+        .form-tindakan {
+            min-width: 230px;
+        }
+
+        .form-tindakan textarea {
+            min-width: 210px;
+            resize: vertical;
+        }
+
+        .form-status {
+            min-width: 160px;
+        }
+
+        .jumlah-data {
+            font-size: 28px;
+            font-weight: 700;
+            color: #212529;
+        }
+
         .dataTables_wrapper {
-            color: #212529;
+            width: 100%;
         }
 
-        .dataTables_wrapper input,
-        .dataTables_wrapper select {
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            padding: 5px 8px;
-            background-color: #ffffff;
-            color: #212529;
+        .dataTables_filter input,
+        .dataTables_length select {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            padding: 5px 10px !important;
         }
 
-        .dataTables_wrapper .pagination .page-link {
-            color: #0d6efd;
+        .dataTables_paginate .pagination {
+            margin-top: 12px;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+        }
+
+        @media(max-width: 768px) {
+            .judul-halaman {
+                font-size: 28px;
+            }
+
+            .card-body {
+                padding: 12px;
+            }
         }
     </style>
 </head>
-
 <body>
 
 <div class="d-flex min-vh-100">
@@ -117,7 +166,7 @@ function e($value) {
 
             <a href="tambah_tahun_ajaran.php" class="btn btn-primary">
                 <i class="fas fa-plus me-1"></i>
-                Tambah Tahun Ajaran
+                 Tambah Tahun Ajaran
             </a>
 
         </div>
