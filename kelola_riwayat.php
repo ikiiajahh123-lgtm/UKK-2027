@@ -26,8 +26,14 @@ function tanggalIndonesia($tanggal) {
         return '-';
     }
 
+    $nomorBulan = (int)$pecah[1];
+
+    if ($nomorBulan < 1 || $nomorBulan > 12) {
+        return '-';
+    }
+
     return (int)$pecah[2] . ' ' .
-           $bulan[(int)$pecah[1]] . ' ' .
+           $bulan[$nomorBulan] . ' ' .
            $pecah[0];
 }
 
@@ -59,6 +65,12 @@ if (!$result) {
 }
 
 $totalRiwayat = $result ? mysqli_num_rows($result) : 0;
+
+// Dashboard sesuai role
+$dashboardLink = (
+    isset($_SESSION['role']) && $_SESSION['role'] === 'guru'
+) ? 'dashboard_guru.php' : 'dashboard.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -72,26 +84,112 @@ $totalRiwayat = $result ? mysqli_num_rows($result) : 0;
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background-color: #f4f6fc !important;
+            color: #212529;
+            font-family: Arial, sans-serif;
+        }
+
+        .main-content {
+            min-width: 0;
+            min-height: 100vh;
+            background-color: #f4f6fc !important;
+            color: #212529 !important;
+        }
+
+        .judul-halaman {
+            color: #152238 !important;
+            font-size: 36px;
+            font-weight: 400;
+        }
+
+        .card {
+            background: #ffffff !important;
+            color: #212529;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .card-body {
+            background-color: #ffffff;
+            color: #212529;
+        }
+
+        .table {
+            color: #212529;
+            font-size: 14px;
+        }
+
+        .table th,
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #212529 !important;
+            color: #ffffff !important;
+            white-space: nowrap;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) > * {
+            background-color: #f1f1f1;
+        }
+
+        .table-hover tbody tr:hover > * {
+            background-color: #e8f0ff;
+        }
+
+        .table-responsive {
+            width: 100%;
+        }
+
+        .alert-light {
+            background-color: #ffffff !important;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .judul-halaman {
+                font-size: 28px;
+            }
+
+            main.main-content {
+                padding: 15px !important;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-dark">
+<body>
 
 <div class="container-fluid p-0">
-    <div class="row g-0">
+
+    <div class="d-flex min-vh-100">
 
         <!-- SIDEBAR -->
-        <div class="col-2">
-            <?php include __DIR__ . '/layout/sidebar.php'; ?>
-        </div>
+        <?php include __DIR__ . '/layout/sidebar.php'; ?>
 
         <!-- KONTEN UTAMA -->
-        <main class="col-10 min-vh-100 bg-dark text-white p-4">
+        <main class="flex-grow-1 main-content p-3 p-lg-4">
 
-            <h2 class="fw-bold mb-3">
+            <!-- JUDUL HALAMAN -->
+            <h2 class="judul-halaman mb-3">
                 Riwayat Pelanggaran Siswa
             </h2>
 
-            <a href="dashboard.php" class="btn btn-secondary mb-3">
+            <!-- TOMBOL KEMBALI -->
+            <a href="<?= aman($dashboardLink); ?>" class="btn btn-secondary mb-3">
                 ← Kembali ke Dashboard
             </a>
 
@@ -103,9 +201,10 @@ $totalRiwayat = $result ? mysqli_num_rows($result) : 0;
 
             <?php else: ?>
 
-                <div class="card border-0 shadow-sm rounded-3">
+                <!-- CARD RIWAYAT -->
+                <div class="card shadow-sm">
 
-                    <div class="card-body p-4">
+                    <div class="card-body p-3 p-lg-4">
 
                         <!-- INFORMASI TOTAL -->
                         <div class="alert alert-light border mb-4">
@@ -178,8 +277,10 @@ $totalRiwayat = $result ? mysqli_num_rows($result) : 0;
                         <!-- TABEL RIWAYAT -->
                         <div class="table-responsive">
 
-                            <table class="table table-bordered table-striped table-hover align-middle mb-0"
-                                   id="tabelRiwayat">
+                            <table
+                                class="table table-bordered table-striped table-hover align-middle mb-0"
+                                id="tabelRiwayat"
+                            >
 
                                 <thead class="table-dark">
 
@@ -305,6 +406,7 @@ $totalRiwayat = $result ? mysqli_num_rows($result) : 0;
         </main>
 
     </div>
+
 </div>
 
 <!-- JAVASCRIPT BOOTSTRAP -->
@@ -353,9 +455,7 @@ function filterRiwayat() {
     });
 
     if (hasilKosong) {
-
         hasilKosong.classList.toggle('d-none', jumlahTampil !== 0);
-
     }
 
 }
