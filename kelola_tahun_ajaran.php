@@ -55,39 +55,28 @@ function e($value) {
 
 </head>
 
-<body class="bg-dark text-white">
-
-<!-- ====================================== -->
-<!-- PEMBUNGKUS HALAMAN -->
-<!-- ====================================== -->
+<body style="background-color: #0f172a; color: white;">
 
 <div class="d-flex min-vh-100">
 
-    <!-- ====================================== -->
     <!-- SIDEBAR -->
-    <!-- ====================================== -->
-
     <aside
         class="bg-dark flex-shrink-0 min-vh-100"
-        style="width:230px; min-width:230px;">
+        style="width:230px; min-width:230px;"
+    >
 
         <?php include __DIR__ . '/layout/sidebar.php'; ?>
 
     </aside>
 
 
-    <!-- ====================================== -->
     <!-- KONTEN UTAMA -->
-    <!-- ====================================== -->
-
-    <main
-        class="flex-grow-1 p-3 p-md-4"
-        style="min-width:0;">
+    <main class="flex-grow-1 p-3 p-md-4" style="min-width:0;">
 
         <!-- JUDUL HALAMAN -->
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-            <h2 class="fw-bold text-white mb-0">
+            <h2 class="text-white mb-0 fw-normal">
                 Kelola Tahun Ajaran
             </h2>
 
@@ -102,7 +91,7 @@ function e($value) {
 
 
         <!-- TOMBOL KEMBALI -->
-        <div class="mb-4">
+        <div class="mb-3">
 
             <a href="dashboard.php" class="btn btn-secondary">
 
@@ -114,11 +103,8 @@ function e($value) {
         </div>
 
 
-        <!-- ====================================== -->
         <!-- CARD DATA TAHUN AJARAN -->
-        <!-- ====================================== -->
-
-        <div class="card border-0 shadow-sm rounded-3">
+        <div class="card border rounded-2 shadow-sm">
 
             <div class="card-body p-3 p-md-4">
 
@@ -130,33 +116,21 @@ function e($value) {
                         class="table table-bordered table-striped table-hover align-middle w-100 mb-0"
                     >
 
-                        <!-- HEADER TABEL -->
-                        <thead class="table-dark">
+                        <thead class="table-light">
 
                             <tr>
-
                                 <th>No.</th>
-
                                 <th>Nama Tahun Ajaran</th>
-
                                 <th>Tanggal Mulai</th>
-
                                 <th>Tanggal Selesai</th>
-
                                 <th>Status Aktif</th>
-
                                 <th>Dibuat</th>
-
                                 <th>Diubah</th>
-
                                 <th>Aksi</th>
-
                             </tr>
 
                         </thead>
 
-
-                        <!-- ISI TABEL -->
                         <tbody>
 
                             <?php
@@ -169,33 +143,24 @@ function e($value) {
 
                                 <tr>
 
-                                    <!-- NOMOR -->
                                     <td>
                                         <?= $no++; ?>
                                     </td>
 
-
-                                    <!-- NAMA TAHUN AJARAN -->
                                     <td>
                                         <strong>
                                             <?= e($row['nama']); ?>
                                         </strong>
                                     </td>
 
-
-                                    <!-- TANGGAL MULAI -->
                                     <td class="text-nowrap">
                                         <?= e($row['tanggal_mulai']); ?>
                                     </td>
 
-
-                                    <!-- TANGGAL SELESAI -->
                                     <td class="text-nowrap">
                                         <?= e($row['tanggal_selesai']); ?>
                                     </td>
 
-
-                                    <!-- STATUS AKTIF -->
                                     <td>
 
                                         <?php if ((int)$row['status_aktif'] === 1): ?>
@@ -214,42 +179,31 @@ function e($value) {
 
                                     </td>
 
-
-                                    <!-- TANGGAL DIBUAT -->
                                     <td class="text-nowrap">
                                         <?= e($row['created_at'] ?? '-'); ?>
                                     </td>
 
-
-                                    <!-- TANGGAL DIUBAH -->
                                     <td class="text-nowrap">
                                         <?= e($row['updated_at'] ?? '-'); ?>
                                     </td>
 
-
-                                    <!-- AKSI -->
                                     <td class="text-nowrap">
 
                                         <a
                                             href="edit_tahun_ajaran.php?id=<?= urlencode((string)$row['id']); ?>"
                                             class="btn btn-warning btn-sm"
                                         >
-
                                             <i class="fas fa-edit me-1"></i>
                                             Edit
-
                                         </a>
-
 
                                         <a
                                             href="hapus_tahun_ajaran.php?id=<?= urlencode((string)$row['id']); ?>"
                                             class="btn btn-danger btn-sm"
                                             onclick="return confirm('Yakin ingin menghapus data tahun ajaran ini?');"
                                         >
-
                                             <i class="fas fa-trash me-1"></i>
                                             Hapus
-
                                         </a>
 
                                     </td>
@@ -263,13 +217,9 @@ function e($value) {
                             ?>
 
                                 <tr>
-
                                     <td colspan="8" class="text-center py-4 text-muted">
-
                                         Belum ada data tahun ajaran.
-
                                     </td>
-
                                 </tr>
 
                             <?php endif; ?>
@@ -289,9 +239,7 @@ function e($value) {
 </div>
 
 
-<!-- ====================================== -->
 <!-- JAVASCRIPT -->
-<!-- ====================================== -->
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -302,9 +250,7 @@ function e($value) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!-- ====================================== -->
 <!-- DATATABLES -->
-<!-- ====================================== -->
 
 <script>
 

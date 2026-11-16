@@ -8,13 +8,18 @@ include 'includes/cek_session.php';
 <html lang="id">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Kelas</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Tambah Kategori Pelanggaran</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -74,7 +79,7 @@ include 'includes/cek_session.php';
         /* KONTEN UTAMA */
         .main-content {
             margin-left: 211px;
-            padding: 16px 24px;
+            padding: 16px 18px;
             min-height: 100vh;
         }
 
@@ -86,32 +91,31 @@ include 'includes/cek_session.php';
         }
 
         .page-header h1 {
-            font-size: 40px;
+            font-size: 32px;
             font-weight: normal;
             color: #102b50;
             margin: 0;
         }
 
-        /* TOMBOL KEMBALI */
+        /* FORM */
         .btn-back {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        /* FORM CARD */
         .form-card {
             background: white;
             border: 1px solid #ddd;
             border-radius: 7px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.12);
             overflow: hidden;
-            max-width: 850px;
+            max-width: 640px;
             margin: 0 auto;
         }
 
         .form-card-header {
             background: #198754;
             color: white;
-            padding: 12px 16px;
+            padding: 10px 15px;
         }
 
         .form-card-header h3 {
@@ -121,7 +125,7 @@ include 'includes/cek_session.php';
         }
 
         .form-card-body {
-            padding: 20px;
+            padding: 20px 16px;
         }
 
         .form-label {
@@ -130,8 +134,17 @@ include 'includes/cek_session.php';
 
         .form-control,
         .form-select {
-            height: 40px;
             font-size: 15px;
+        }
+
+        .form-control:not(textarea),
+        .form-select {
+            height: 38px;
+        }
+
+        textarea.form-control {
+            min-height: 110px;
+            resize: vertical;
         }
 
         .btn {
@@ -140,6 +153,7 @@ include 'includes/cek_session.php';
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
+
             .sidebar {
                 width: 170px;
             }
@@ -150,15 +164,13 @@ include 'includes/cek_session.php';
             }
 
             .page-header h1 {
-                font-size: 28px;
+                font-size: 26px;
             }
 
-            .form-card-header h3 {
-                font-size: 23px;
-            }
         }
 
         @media (max-width: 500px) {
+
             .sidebar {
                 width: 125px;
             }
@@ -176,8 +188,11 @@ include 'includes/cek_session.php';
                 margin-left: 125px;
                 padding: 12px;
             }
+
         }
+
     </style>
+
 </head>
 
 <body>

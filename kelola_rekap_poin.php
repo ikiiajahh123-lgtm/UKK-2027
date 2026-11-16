@@ -64,28 +64,20 @@ if ($result) {
 
     while ($row = mysqli_fetch_assoc($result)) {
 
-        $row['jumlah_pelanggaran'] =
-            (int)$row['jumlah_pelanggaran'];
-
-        $row['total_poin'] =
-            (int)$row['total_poin'];
+        $row['jumlah_pelanggaran'] = (int)$row['jumlah_pelanggaran'];
+        $row['total_poin'] = (int)$row['total_poin'];
 
         $dataRekap[] = $row;
 
         $totalSiswa++;
-
-        $totalPelanggaran +=
-            $row['jumlah_pelanggaran'];
-
-        $totalSeluruhPoin +=
-            $row['total_poin'];
+        $totalPelanggaran += $row['jumlah_pelanggaran'];
+        $totalSeluruhPoin += $row['total_poin'];
     }
 
     mysqli_free_result($result);
 
 } else {
 
-    // Simpan error untuk ditampilkan secara aman
     error_log(mysqli_error($koneksi));
 
     $error = 'Data rekap poin gagal dimuat. Periksa struktur tabel database.';
@@ -106,7 +98,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Rekap Poin Siswa | SIPES</title>
@@ -123,25 +114,106 @@ $emailGuru = aman($_SESSION['email'] ?? '');
         rel="stylesheet"
     >
 
+    <!-- CSS CETAK -->
+    <style>
+        @media print {
+
+            @page {
+                size: landscape;
+                margin: 15mm;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            .no-print,
+            nav,
+            aside,
+            .sidebar {
+                display: none !important;
+            }
+
+            body,
+            .d-flex,
+            .flex-grow-1,
+            main {
+                display: block !important;
+                width: 100% !important;
+                min-height: auto !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            main {
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+
+            .table-responsive {
+                overflow: visible !important;
+            }
+
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                font-size: 11px !important;
+            }
+
+            table th,
+            table td {
+                border: 1px solid #777777 !important;
+                padding: 7px !important;
+                color: #000000 !important;
+            }
+
+            table thead th {
+                background: #dddddd !important;
+                color: #000000 !important;
+            }
+
+            table tbody tr {
+                break-inside: avoid;
+            }
+
+            .badge {
+                border: 1px solid #777777 !important;
+            }
+
+            .text-secondary {
+                color: #333333 !important;
+            }
+        }
+    </style>
+
 </head>
 
-<body class="bg-dark text-white">
+<body class="bg-light text-dark">
 
 <div class="d-flex min-vh-100">
 
     <!-- SIDEBAR -->
-    <?php include __DIR__ . '/layout/sidebar.php'; ?>
-
+    <div
+        class="no-print sticky-top vh-100 flex-shrink-0 bg-dark"
+        style="align-self: flex-start;"
+    >
+        <?php include __DIR__ . '/layout/sidebar.php'; ?>
+    </div>
 
     <!-- KONTEN UTAMA -->
     <div class="flex-grow-1 min-vh-100">
 
         <!-- TOPBAR -->
-        <nav class="navbar navbar-dark bg-dark border-bottom border-secondary px-4 py-3">
+        <nav class="navbar navbar-light bg-white border-bottom px-4 py-3 no-print">
 
             <div class="d-flex align-items-center gap-3">
 
-                <div class="bg-primary bg-opacity-25 rounded-3 p-2">
+                <div class="bg-primary bg-opacity-10 rounded-3 p-2">
                     <i class="bi bi-buildings text-primary fs-4"></i>
                 </div>
 
@@ -159,8 +231,8 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
             <div class="d-flex align-items-center gap-2">
 
-                <div class="bg-secondary bg-opacity-25 rounded-circle p-2">
-                    <i class="bi bi-person-fill text-white fs-5"></i>
+                <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                    <i class="bi bi-person-fill text-primary fs-5"></i>
                 </div>
 
                 <div>
@@ -176,7 +248,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
             </div>
 
         </nav>
-
 
         <!-- ISI HALAMAN -->
         <main class="container-fluid p-4">
@@ -194,24 +265,36 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                     </p>
                 </div>
 
-                <a href="dashboard.php" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i>
-                    Kembali ke Dashboard
-                </a>
+                <!-- TOMBOL CETAK DAN KEMBALI -->
+                <div class="d-flex gap-2 flex-wrap no-print">
+
+                    <button
+                        type="button"
+                        onclick="window.print()"
+                        class="btn btn-primary"
+                    >
+                        <i class="bi bi-printer-fill"></i>
+                        Cetak Rekap Poin
+                    </button>
+
+                    <a href="dashboard.php" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        Kembali ke Dashboard
+                    </a>
+
+                </div>
 
             </div>
-
 
             <!-- PESAN ERROR -->
             <?php if ($error !== ''): ?>
 
-                <div class="alert alert-danger">
+                <div class="alert alert-danger no-print">
                     <i class="bi bi-exclamation-triangle"></i>
                     <?= aman($error); ?>
                 </div>
 
             <?php endif; ?>
-
 
             <!-- STATISTIK -->
             <div class="row g-3 mb-4">
@@ -219,7 +302,7 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                 <!-- TOTAL SISWA -->
                 <div class="col-md-4">
 
-                    <div class="card bg-light text-dark shadow-sm h-100">
+                    <div class="card bg-white text-dark shadow-sm h-100">
 
                         <div class="card-body d-flex justify-content-between align-items-center">
 
@@ -243,11 +326,10 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                 </div>
 
-
                 <!-- TOTAL PELANGGARAN -->
                 <div class="col-md-4">
 
-                    <div class="card bg-light text-dark shadow-sm h-100">
+                    <div class="card bg-white text-dark shadow-sm h-100">
 
                         <div class="card-body d-flex justify-content-between align-items-center">
 
@@ -261,7 +343,7 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                                 </h2>
                             </div>
 
-                            <div class="bg-purple bg-opacity-10 text-primary rounded-3 p-3">
+                            <div class="bg-success bg-opacity-10 text-success rounded-3 p-3">
                                 <i class="bi bi-clipboard-check fs-3"></i>
                             </div>
 
@@ -271,11 +353,10 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                 </div>
 
-
                 <!-- TOTAL POIN -->
                 <div class="col-md-4">
 
-                    <div class="card bg-light text-dark shadow-sm h-100">
+                    <div class="card bg-white text-dark shadow-sm h-100">
 
                         <div class="card-body d-flex justify-content-between align-items-center">
 
@@ -301,9 +382,8 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
             </div>
 
-
             <!-- TABEL REKAP -->
-            <div class="card bg-light text-dark shadow-sm">
+            <div class="card bg-white text-dark shadow-sm">
 
                 <div class="card-body p-3 p-md-4">
 
@@ -311,23 +391,20 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
                         <h5 class="fw-bold mb-0">
-
                             <i class="bi bi-list-ol"></i>
                             Daftar Rekap Poin Siswa
-
                         </h5>
 
                         <input
                             type="text"
                             id="cariSiswa"
-                            class="form-control"
+                            class="form-control no-print"
                             style="max-width: 300px;"
                             placeholder="Cari nama siswa atau kelas..."
                             autocomplete="off"
                         >
 
                     </div>
-
 
                     <!-- TABEL -->
                     <div class="table-responsive">
@@ -338,23 +415,15 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                             <thead class="table-dark">
 
                                 <tr>
-
                                     <th style="width:65px;">No</th>
-
                                     <th>Nama Siswa</th>
-
                                     <th>Kelas</th>
-
                                     <th>Jumlah Pelanggaran</th>
-
                                     <th>Total Poin</th>
-
                                     <th>Pelanggaran Terakhir</th>
-
                                 </tr>
 
                             </thead>
-
 
                             <tbody>
 
@@ -386,18 +455,15 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                                                 </span>
                                             </td>
 
-
                                             <td>
                                                 <strong>
                                                     <?= aman($row['nama_siswa']); ?>
                                                 </strong>
                                             </td>
 
-
                                             <td>
                                                 <?= aman($row['nama_kelas']); ?>
                                             </td>
-
 
                                             <td>
                                                 <span class="badge bg-success-subtle text-success p-2">
@@ -405,14 +471,12 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                                                 </span>
                                             </td>
 
-
                                             <td>
                                                 <span class="badge bg-primary-subtle text-primary p-2">
                                                     <?= number_format($row['total_poin'], 0, ',', '.'); ?>
                                                     Poin
                                                 </span>
                                             </td>
-
 
                                             <td>
                                                 <?php
@@ -440,7 +504,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                     </div>
 
-
                     <!-- INFORMASI -->
                     <div class="mt-3">
 
@@ -465,10 +528,8 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
 </div>
 
-
 <!-- BOOTSTRAP JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 
 <!-- PENCARIAN DATA -->
 <script>
@@ -476,7 +537,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 document.addEventListener('DOMContentLoaded', function () {
 
     const input = document.getElementById('cariSiswa');
-
     const tabel = document.getElementById('tabelRekap');
 
     if (!input || !tabel) {
@@ -486,7 +546,6 @@ document.addEventListener('DOMContentLoaded', function () {
     input.addEventListener('input', function () {
 
         const keyword = this.value.toLowerCase();
-
         const baris = tabel.querySelectorAll('tbody tr');
 
         baris.forEach(function (row) {

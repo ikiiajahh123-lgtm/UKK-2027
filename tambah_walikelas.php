@@ -1,26 +1,56 @@
 
 <?php
 // tambah_walikelas.php
+
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-// Ambil data tahun ajaran
+// ======================================
+// AMBIL DATA TAHUN AJARAN
+// ======================================
+
 $tahun = mysqli_query(
     $koneksi,
     "SELECT id, nama FROM t_tahun_ajaran ORDER BY id DESC"
 );
 
-// Ambil data kelas
+if (!$tahun) {
+    die("Query tahun ajaran gagal: " . mysqli_error($koneksi));
+}
+
+// ======================================
+// AMBIL DATA KELAS
+// ======================================
+
 $kelas = mysqli_query(
     $koneksi,
     "SELECT id, nama FROM t_kelas ORDER BY nama ASC"
 );
 
-// Ambil data guru
+if (!$kelas) {
+    die("Query kelas gagal: " . mysqli_error($koneksi));
+}
+
+// ======================================
+// AMBIL DATA GURU
+// ======================================
+
 $guru = mysqli_query(
     $koneksi,
     "SELECT id, nama FROM t_guru ORDER BY nama ASC"
 );
+
+if (!$guru) {
+    die("Query guru gagal: " . mysqli_error($koneksi));
+}
+
+// ======================================
+// KEAMANAN OUTPUT
+// ======================================
+
+function e($value) {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,9 +63,17 @@ $guru = mysqli_query(
 
     <title>Tambah Wali Kelas</title>
 
+    <!-- BOOTSTRAP 5 -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
     <style>
 
@@ -45,63 +83,19 @@ $guru = mysqli_query(
 
         body {
             margin: 0;
-            background: #f4f6fb;
+            background: #0f172a !important;
             font-family: Arial, sans-serif;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 211px;
-            height: 100vh;
-            background: #212529;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 10px 2px;
-            overflow-y: auto;
-        }
-
-        .sidebar h4 {
-            font-size: 23px;
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 11px 16px;
-            margin-bottom: 5px;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background: #343a40;
-        }
-
-        .sidebar a.active {
-            background: #0d6efd;
-        }
-
-        .sidebar hr {
-            border-color: #495057;
-            margin: 20px 0;
-        }
-
-        .sidebar .logout {
-            color: #dc3545;
+            min-height: 100vh;
         }
 
         /* KONTEN UTAMA */
         .main-content {
-            margin-left: 211px;
-            padding: 16px 18px;
+            min-width: 0;
             min-height: 100vh;
+            background: #0f172a;
         }
 
+        /* JUDUL HALAMAN */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -110,27 +104,30 @@ $guru = mysqli_query(
         }
 
         .page-header h1 {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: normal;
-            color: #102b50;
+            color: white;
             margin: 0;
         }
 
-        /* FORM */
+        /* TOMBOL KEMBALI */
         .btn-back {
-            margin-bottom: 12px;
+            margin-bottom: 29px;
         }
 
+        /* CARD FORM */
         .form-card {
             background: white;
             border: 1px solid #ddd;
             border-radius: 7px;
             box-shadow: 0 5px 12px rgba(0,0,0,0.12);
             overflow: hidden;
-            max-width: 640px;
+            width: 100%;
+            max-width: 805px;
             margin: 0 auto;
         }
 
+        /* HEADER FORM */
         .form-card-header {
             background: #198754;
             color: white;
@@ -143,8 +140,9 @@ $guru = mysqli_query(
             font-weight: bold;
         }
 
+        /* BODY FORM */
         .form-card-body {
-            padding: 20px 16px;
+            padding: 20px 19px;
         }
 
         .form-label {
@@ -164,39 +162,16 @@ $guru = mysqli_query(
         /* RESPONSIVE */
         @media (max-width: 768px) {
 
-            .sidebar {
-                width: 170px;
-            }
-
             .main-content {
-                margin-left: 170px;
-                padding: 15px;
+                padding: 15px !important;
             }
 
             .page-header h1 {
-                font-size: 26px;
+                font-size: 27px;
             }
 
-        }
-
-        @media (max-width: 500px) {
-
-            .sidebar {
-                width: 125px;
-            }
-
-            .sidebar h4 {
-                font-size: 17px;
-            }
-
-            .sidebar a {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-
-            .main-content {
-                margin-left: 125px;
-                padding: 12px;
+            .form-card-header h3 {
+                font-size: 23px;
             }
 
         }
@@ -207,58 +182,21 @@ $guru = mysqli_query(
 
 <body>
 
+<div class="d-flex min-vh-100">
+
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <aside
+        class="bg-dark flex-shrink-0 min-vh-100"
+        style="width:215px; min-width:215px;"
+    >
 
-        <h4>Pelanggaran<br>Siswa</h4>
+        <?php include __DIR__ . '/layout/sidebar.php'; ?>
 
-        <a href="dashboard.php">
-            Dashboard
-        </a>
-
-        <a href="data_siswa.php">
-            Data Siswa
-        </a>
-
-        <a href="data_guru.php">
-            Data Guru
-        </a>
-
-        <a href="kelola_kelas.php">
-            Data Kelas
-        </a>
-
-        <a href="kelola_tahun_ajaran.php">
-            Data Tahun Ajaran
-        </a>
-
-        <a href="kelola_walikelas.php" class="active">
-            Data Wali Kelas
-        </a>
-
-        <a href="penempatan_siswa.php">
-            Penempatan Siswa
-        </a>
-
-        <a href="kategori_pelanggaran.php">
-            Kategori Pelanggaran
-        </a>
-
-        <a href="about.php">
-            About Me
-        </a>
-
-        <hr>
-
-        <a href="logout.php" class="logout">
-            Logout
-        </a>
-
-    </div>
+    </aside>
 
 
     <!-- KONTEN UTAMA -->
-    <div class="main-content">
+    <main class="main-content flex-grow-1 p-3 p-md-4">
 
         <!-- HEADER -->
         <div class="page-header">
@@ -271,55 +209,57 @@ $guru = mysqli_query(
         <!-- TOMBOL KEMBALI -->
         <a
             href="kelola_walikelas.php"
-            class="btn btn-secondary btn-back">
+            class="btn btn-secondary btn-back"
+        >
 
             Kembali ke Kelola Wali Kelas
 
         </a>
 
 
-        <!-- FORM CARD -->
+        <!-- CARD FORM -->
         <div class="form-card">
 
+            <!-- HEADER CARD -->
             <div class="form-card-header">
 
                 <h3>Tambah Wali Kelas</h3>
 
             </div>
 
+
+            <!-- BODY CARD -->
             <div class="form-card-body">
 
                 <form
                     action="proses_tambah_walikelas.php"
-                    method="POST">
-
+                    method="POST"
+                >
 
                     <!-- TAHUN AJARAN -->
                     <div class="mb-3">
 
-                        <label for="tahun_ajaran_id" class="form-label">
+                        <label class="form-label">
                             Tahun Ajaran
                         </label>
 
                         <select
                             name="tahun_ajaran_id"
-                            id="tahun_ajaran_id"
                             class="form-select"
-                            required>
+                            required
+                        >
 
                             <option value="">
                                 -- Pilih Tahun Ajaran --
                             </option>
 
-                            <?php while ($row = mysqli_fetch_assoc($tahun)) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($tahun)): ?>
 
-                                <option value="<?php echo $row['id']; ?>">
-
-                                    <?php echo htmlspecialchars($row['nama']); ?>
-
+                                <option value="<?= e($row['id']); ?>">
+                                    <?= e($row['nama']); ?>
                                 </option>
 
-                            <?php } ?>
+                            <?php endwhile; ?>
 
                         </select>
 
@@ -329,29 +269,27 @@ $guru = mysqli_query(
                     <!-- KELAS -->
                     <div class="mb-3">
 
-                        <label for="kelas_id" class="form-label">
+                        <label class="form-label">
                             Kelas
                         </label>
 
                         <select
                             name="kelas_id"
-                            id="kelas_id"
                             class="form-select"
-                            required>
+                            required
+                        >
 
                             <option value="">
                                 -- Pilih Kelas --
                             </option>
 
-                            <?php while ($row = mysqli_fetch_assoc($kelas)) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($kelas)): ?>
 
-                                <option value="<?php echo $row['id']; ?>">
-
-                                    <?php echo htmlspecialchars($row['nama']); ?>
-
+                                <option value="<?= e($row['id']); ?>">
+                                    <?= e($row['nama']); ?>
                                 </option>
 
-                            <?php } ?>
+                            <?php endwhile; ?>
 
                         </select>
 
@@ -361,29 +299,27 @@ $guru = mysqli_query(
                     <!-- GURU -->
                     <div class="mb-3">
 
-                        <label for="guru_id" class="form-label">
+                        <label class="form-label">
                             Guru
                         </label>
 
                         <select
                             name="guru_id"
-                            id="guru_id"
                             class="form-select"
-                            required>
+                            required
+                        >
 
                             <option value="">
                                 -- Pilih Guru --
                             </option>
 
-                            <?php while ($row = mysqli_fetch_assoc($guru)) { ?>
+                            <?php while ($row = mysqli_fetch_assoc($guru)): ?>
 
-                                <option value="<?php echo $row['id']; ?>">
-
-                                    <?php echo htmlspecialchars($row['nama']); ?>
-
+                                <option value="<?= e($row['id']); ?>">
+                                    <?= e($row['nama']); ?>
                                 </option>
 
-                            <?php } ?>
+                            <?php endwhile; ?>
 
                         </select>
 
@@ -393,16 +329,16 @@ $guru = mysqli_query(
                     <!-- TANGGAL MULAI -->
                     <div class="mb-3">
 
-                        <label for="tanggal_mulai" class="form-label">
+                        <label class="form-label">
                             Tanggal Mulai
                         </label>
 
                         <input
                             type="date"
                             name="tanggal_mulai"
-                            id="tanggal_mulai"
                             class="form-control"
-                            required>
+                            required
+                        >
 
                     </div>
 
@@ -410,16 +346,16 @@ $guru = mysqli_query(
                     <!-- TANGGAL SELESAI -->
                     <div class="mb-3">
 
-                        <label for="tanggal_selesai" class="form-label">
+                        <label class="form-label">
                             Tanggal Selesai
                         </label>
 
                         <input
                             type="date"
                             name="tanggal_selesai"
-                            id="tanggal_selesai"
                             class="form-control"
-                            required>
+                            required
+                        >
 
                     </div>
 
@@ -427,15 +363,15 @@ $guru = mysqli_query(
                     <!-- STATUS -->
                     <div class="mb-4">
 
-                        <label for="status_aktif" class="form-label">
+                        <label class="form-label">
                             Status
                         </label>
 
                         <select
                             name="status_aktif"
-                            id="status_aktif"
                             class="form-select"
-                            required>
+                            required
+                        >
 
                             <option value="1">
                                 Aktif
@@ -455,7 +391,8 @@ $guru = mysqli_query(
 
                         <button
                             type="submit"
-                            class="btn btn-success">
+                            class="btn btn-success"
+                        >
 
                             Simpan
 
@@ -463,7 +400,8 @@ $guru = mysqli_query(
 
                         <a
                             href="kelola_walikelas.php"
-                            class="btn btn-secondary">
+                            class="btn btn-secondary"
+                        >
 
                             Kembali
 
@@ -477,11 +415,13 @@ $guru = mysqli_query(
 
         </div>
 
-    </div>
+    </main>
+
+</div>
 
 
-    <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- JAVASCRIPT BOOTSTRAP -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

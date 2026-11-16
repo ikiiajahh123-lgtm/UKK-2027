@@ -1,6 +1,7 @@
 
 <?php
 // tambah_tahun_ajaran.php
+
 include 'includes/cek_session.php';
 ?>
 
@@ -8,77 +9,39 @@ include 'includes/cek_session.php';
 <html lang="id">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Tambah Tahun Ajaran</title>
 
+    <!-- BOOTSTRAP 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- FONT AWESOME -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            background: #f4f6fb;
+            background: #0f172a !important;
             font-family: Arial, sans-serif;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 211px;
-            height: 100vh;
-            background: #212529;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 10px 2px;
-            overflow-y: auto;
-        }
-
-        .sidebar h4 {
-            font-size: 23px;
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 11px 16px;
-            margin-bottom: 5px;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background: #343a40;
-        }
-
-        .sidebar a.active {
-            background: #0d6efd;
-        }
-
-        .sidebar hr {
-            border-color: #495057;
-            margin: 20px 0;
-        }
-
-        .sidebar .logout {
-            color: #dc3545;
+            min-height: 100vh;
         }
 
         /* KONTEN UTAMA */
         .main-content {
-            margin-left: 211px;
-            padding: 16px 18px;
+            min-width: 0;
+            background: #0f172a;
             min-height: 100vh;
         }
 
+        /* JUDUL HALAMAN */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -87,27 +50,30 @@ include 'includes/cek_session.php';
         }
 
         .page-header h1 {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: normal;
-            color: #102b50;
+            color: white;
             margin: 0;
         }
 
-        /* FORM */
+        /* TOMBOL KEMBALI */
         .btn-back {
-            margin-bottom: 12px;
+            margin-bottom: 29px;
         }
 
+        /* CARD FORM */
         .form-card {
             background: white;
             border: 1px solid #ddd;
             border-radius: 7px;
             box-shadow: 0 5px 12px rgba(0,0,0,0.12);
             overflow: hidden;
-            max-width: 640px;
+            width: 100%;
+            max-width: 805px;
             margin: 0 auto;
         }
 
+        /* HEADER CARD */
         .form-card-header {
             background: #198754;
             color: white;
@@ -120,8 +86,9 @@ include 'includes/cek_session.php';
             font-weight: bold;
         }
 
+        /* BODY CARD */
         .form-card-body {
-            padding: 20px 16px;
+            padding: 20px 19px;
         }
 
         .form-label {
@@ -140,78 +107,41 @@ include 'includes/cek_session.php';
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 170px;
-            }
 
             .main-content {
-                margin-left: 170px;
-                padding: 15px;
+                padding: 15px !important;
             }
 
             .page-header h1 {
-                font-size: 26px;
+                font-size: 27px;
             }
+
+            .form-card-header h3 {
+                font-size: 23px;
+            }
+
         }
 
-        @media (max-width: 500px) {
-            .sidebar {
-                width: 125px;
-            }
-
-            .sidebar h4 {
-                font-size: 17px;
-            }
-
-            .sidebar a {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-
-            .main-content {
-                margin-left: 125px;
-                padding: 12px;
-            }
-        }
     </style>
+
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+<div class="d-flex min-vh-100">
 
-        <h4>Pelanggaran<br>Siswa</h4>
+    <!-- SIDEBAR UTAMA -->
+    <aside
+        class="bg-dark flex-shrink-0 min-vh-100"
+        style="width:215px; min-width:215px;">
 
-        <a href="dashboard.php">Dashboard</a>
+        <?php include __DIR__ . '/layout/sidebar.php'; ?>
 
-        <a href="data_siswa.php">Data Siswa</a>
-
-        <a href="data_guru.php">Data Guru</a>
-
-        <a href="kelola_kelas.php">Data Kelas</a>
-
-        <a href="kelola_tahun_ajaran.php" class="active">
-            Data Tahun Ajaran
-        </a>
-
-        <a href="data_wali_kelas.php">Data Wali Kelas</a>
-
-        <a href="penempatan_siswa.php">Penempatan Siswa</a>
-
-        <a href="kategori_pelanggaran.php">Kategori Pelanggaran</a>
-
-        <a href="about.php">About Me</a>
-
-        <hr>
-
-        <a href="logout.php" class="logout">Logout</a>
-
-    </div>
+    </aside>
 
 
     <!-- KONTEN UTAMA -->
-    <div class="main-content">
+    <main class="main-content flex-grow-1 p-3 p-md-4">
 
         <!-- HEADER -->
         <div class="page-header">
@@ -222,8 +152,9 @@ include 'includes/cek_session.php';
 
 
         <!-- TOMBOL KEMBALI -->
-        <a href="kelola_tahun_ajaran.php"
-           class="btn btn-secondary btn-back">
+        <a
+            href="kelola_tahun_ajaran.php"
+            class="btn btn-secondary btn-back">
 
             Kembali ke Kelola Tahun Ajaran
 
@@ -233,18 +164,22 @@ include 'includes/cek_session.php';
         <!-- FORM CARD -->
         <div class="form-card">
 
+            <!-- HEADER FORM -->
             <div class="form-card-header">
 
                 <h3>Tambah Tahun Ajaran</h3>
 
             </div>
 
+
+            <!-- BODY FORM -->
             <div class="form-card-body">
 
-                <form action="proses_tambah_tahun_ajaran.php"
-                      method="POST">
+                <form
+                    action="proses_tambah_tahun_ajaran.php"
+                    method="POST">
 
-                    <!-- Nama Tahun Ajaran -->
+                    <!-- NAMA TAHUN AJARAN -->
                     <div class="mb-3">
 
                         <label class="form-label">
@@ -261,7 +196,7 @@ include 'includes/cek_session.php';
                     </div>
 
 
-                    <!-- Tanggal Mulai -->
+                    <!-- TANGGAL MULAI -->
                     <div class="mb-3">
 
                         <label class="form-label">
@@ -277,7 +212,7 @@ include 'includes/cek_session.php';
                     </div>
 
 
-                    <!-- Tanggal Selesai -->
+                    <!-- TANGGAL SELESAI -->
                     <div class="mb-3">
 
                         <label class="form-label">
@@ -293,7 +228,7 @@ include 'includes/cek_session.php';
                     </div>
 
 
-                    <!-- Status Aktif -->
+                    <!-- STATUS AKTIF -->
                     <div class="mb-4">
 
                         <label class="form-label">
@@ -341,9 +276,13 @@ include 'includes/cek_session.php';
 
         </div>
 
-    </div>
+    </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

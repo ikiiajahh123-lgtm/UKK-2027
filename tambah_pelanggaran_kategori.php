@@ -1,6 +1,7 @@
 
 <?php
 // tambah_pelanggaran_kategori.php
+
 include 'includes/cek_session.php';
 ?>
 
@@ -14,9 +15,17 @@ include 'includes/cek_session.php';
 
     <title>Tambah Kategori Pelanggaran</title>
 
+    <!-- BOOTSTRAP 5 -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
+
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
     <style>
 
@@ -26,63 +35,19 @@ include 'includes/cek_session.php';
 
         body {
             margin: 0;
-            background: #f4f6fb;
+            background: #0f172a !important;
             font-family: Arial, sans-serif;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 211px;
-            height: 100vh;
-            background: #212529;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 10px 2px;
-            overflow-y: auto;
-        }
-
-        .sidebar h4 {
-            font-size: 23px;
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 11px 16px;
-            margin-bottom: 5px;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background: #343a40;
-        }
-
-        .sidebar a.active {
-            background: #0d6efd;
-        }
-
-        .sidebar hr {
-            border-color: #495057;
-            margin: 20px 0;
-        }
-
-        .sidebar .logout {
-            color: #dc3545;
+            min-height: 100vh;
         }
 
         /* KONTEN UTAMA */
         .main-content {
-            margin-left: 211px;
-            padding: 16px 18px;
+            min-width: 0;
             min-height: 100vh;
+            background: #0f172a;
         }
 
+        /* JUDUL HALAMAN */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -91,27 +56,30 @@ include 'includes/cek_session.php';
         }
 
         .page-header h1 {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: normal;
-            color: #102b50;
+            color: white;
             margin: 0;
         }
 
-        /* FORM */
+        /* TOMBOL KEMBALI */
         .btn-back {
-            margin-bottom: 12px;
+            margin-bottom: 29px;
         }
 
+        /* CARD FORM */
         .form-card {
             background: white;
             border: 1px solid #ddd;
             border-radius: 7px;
             box-shadow: 0 5px 12px rgba(0,0,0,0.12);
             overflow: hidden;
-            max-width: 640px;
+            width: 100%;
+            max-width: 805px;
             margin: 0 auto;
         }
 
+        /* HEADER FORM */
         .form-card-header {
             background: #198754;
             color: white;
@@ -124,8 +92,9 @@ include 'includes/cek_session.php';
             font-weight: bold;
         }
 
+        /* BODY FORM */
         .form-card-body {
-            padding: 20px 16px;
+            padding: 20px 19px;
         }
 
         .form-label {
@@ -154,39 +123,16 @@ include 'includes/cek_session.php';
         /* RESPONSIVE */
         @media (max-width: 768px) {
 
-            .sidebar {
-                width: 170px;
-            }
-
             .main-content {
-                margin-left: 170px;
-                padding: 15px;
+                padding: 15px !important;
             }
 
             .page-header h1 {
-                font-size: 26px;
+                font-size: 27px;
             }
 
-        }
-
-        @media (max-width: 500px) {
-
-            .sidebar {
-                width: 125px;
-            }
-
-            .sidebar h4 {
-                font-size: 17px;
-            }
-
-            .sidebar a {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-
-            .main-content {
-                margin-left: 125px;
-                padding: 12px;
+            .form-card-header h3 {
+                font-size: 23px;
             }
 
         }
@@ -197,60 +143,23 @@ include 'includes/cek_session.php';
 
 <body>
 
+<div class="d-flex min-vh-100">
+
     <!-- SIDEBAR -->
-    <div class="sidebar">
+    <aside
+        class="bg-dark flex-shrink-0 min-vh-100"
+        style="width:215px; min-width:215px;"
+    >
 
-        <h4>Pelanggaran<br>Siswa</h4>
+        <?php include __DIR__ . '/layout/sidebar.php'; ?>
 
-        <a href="dashboard.php">
-            Dashboard
-        </a>
-
-        <a href="data_siswa.php">
-            Data Siswa
-        </a>
-
-        <a href="data_guru.php">
-            Data Guru
-        </a>
-
-        <a href="kelola_kelas.php">
-            Data Kelas
-        </a>
-
-        <a href="kelola_tahun_ajaran.php">
-            Data Tahun Ajaran
-        </a>
-
-        <a href="kelola_walikelas.php">
-            Data Wali Kelas
-        </a>
-
-        <a href="penempatan_siswa.php">
-            Penempatan Siswa
-        </a>
-
-        <a href="kelola_pelanggaran_kategori.php" class="active">
-            Kategori Pelanggaran
-        </a>
-
-        <a href="about.php">
-            About Me
-        </a>
-
-        <hr>
-
-        <a href="logout.php" class="logout">
-            Logout
-        </a>
-
-    </div>
+    </aside>
 
 
     <!-- KONTEN UTAMA -->
-    <div class="main-content">
+    <main class="main-content flex-grow-1 p-3 p-md-4">
 
-        <!-- HEADER -->
+        <!-- JUDUL HALAMAN -->
         <div class="page-header">
 
             <h1>Tambah Kategori Pelanggaran</h1>
@@ -261,28 +170,32 @@ include 'includes/cek_session.php';
         <!-- TOMBOL KEMBALI -->
         <a
             href="kelola_pelanggaran_kategori.php"
-            class="btn btn-secondary btn-back">
+            class="btn btn-secondary btn-back"
+        >
 
             Kembali ke Kelola Kategori
 
         </a>
 
 
-        <!-- FORM CARD -->
+        <!-- CARD FORM -->
         <div class="form-card">
 
+            <!-- HEADER CARD -->
             <div class="form-card-header">
 
                 <h3>Tambah Kategori Pelanggaran</h3>
 
             </div>
 
+
+            <!-- BODY FORM -->
             <div class="form-card-body">
 
                 <form
                     action="proses_tambah_pelanggaran_kategori.php"
-                    method="POST">
-
+                    method="POST"
+                >
 
                     <!-- NAMA KATEGORI -->
                     <div class="mb-3">
@@ -298,7 +211,8 @@ include 'includes/cek_session.php';
                             class="form-control"
                             placeholder="Contoh: Pelanggaran Ringan"
                             maxlength="100"
-                            required>
+                            required
+                        >
 
                     </div>
 
@@ -315,13 +229,14 @@ include 'includes/cek_session.php';
                             id="deskripsi"
                             class="form-control"
                             rows="4"
-                            placeholder="Masukkan deskripsi kategori pelanggaran"></textarea>
+                            placeholder="Masukkan deskripsi kategori pelanggaran"
+                        ></textarea>
 
                     </div>
 
 
                     <!-- STATUS AKTIF -->
-                    <div class="mb-3">
+                    <div class="mb-4">
 
                         <label for="status_aktif" class="form-label">
                             Status Aktif
@@ -331,7 +246,8 @@ include 'includes/cek_session.php';
                             name="status_aktif"
                             id="status_aktif"
                             class="form-select"
-                            required>
+                            required
+                        >
 
                             <option value="1">
                                 Aktif
@@ -351,7 +267,8 @@ include 'includes/cek_session.php';
 
                         <button
                             type="submit"
-                            class="btn btn-success">
+                            class="btn btn-success"
+                        >
 
                             Simpan
 
@@ -359,7 +276,8 @@ include 'includes/cek_session.php';
 
                         <a
                             href="kelola_pelanggaran_kategori.php"
-                            class="btn btn-secondary">
+                            class="btn btn-secondary"
+                        >
 
                             Kembali
 
@@ -373,11 +291,13 @@ include 'includes/cek_session.php';
 
         </div>
 
-    </div>
+    </main>
+
+</div>
 
 
-    <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

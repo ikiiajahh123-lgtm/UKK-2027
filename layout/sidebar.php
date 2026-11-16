@@ -1,11 +1,53 @@
 
 <?php
+
 $current_page = basename($_SERVER['PHP_SELF']);
 $role = $_SESSION['role'] ?? '';
 
 $menu = [];
+$isWaliKelas = false;
 
+// ==========================================
+// CEK GURU WALI KELAS
+// ==========================================
+
+if (
+    $role === 'guru' &&
+    !empty($_SESSION['email']) &&
+    isset($koneksi) &&
+    $koneksi instanceof mysqli
+) {
+    $emailLogin = trim($_SESSION['email']);
+
+    $sqlWali = "
+        SELECT wk.id
+        FROM t_users u
+        INNER JOIN t_guru g
+            ON g.user_id = u.id
+        INNER JOIN t_wali_kelas wk
+            ON wk.guru_id = g.id
+        WHERE LOWER(TRIM(u.email)) = LOWER(TRIM(?))
+          AND wk.status_aktif = 1
+        LIMIT 1
+    ";
+
+    $stmtWali = $koneksi->prepare($sqlWali);
+
+    if ($stmtWali) {
+        $stmtWali->bind_param("s", $emailLogin);
+        $stmtWali->execute();
+        $stmtWali->store_result();
+
+        $isWaliKelas = ($stmtWali->num_rows > 0);
+
+        $stmtWali->close();
+    }
+}
+
+// ==========================================
 // MENU ADMIN
+// ==========================================
+
 if ($role === 'admin') {
 
     $menu = [
@@ -20,7 +62,10 @@ if ($role === 'admin') {
         'about_me.php' => 'About Me'
     ];
 
+// ==========================================
 // MENU GURU
+// ==========================================
+
 } elseif ($role === 'guru') {
 
     $menu = [
@@ -28,9 +73,13 @@ if ($role === 'admin') {
         'catat_pelanggaran.php' => 'Catat Pelanggaran',
         'kelola_tindakan.php' => 'Tindakan',
         'kelola_riwayat.php' => 'Riwayat',
-        'kelola_rekap_poin.php' => 'Rekap Poin',
-        'kelola_laporan.php' => 'laporan'
+        'kelola_rekap_poin.php' => 'Rekap Poin'
     ];
+
+    // Hanya Wali Kelas yang mendapatkan menu Laporan
+    if ($isWaliKelas) {
+        $menu['kelola_laporan.php'] = 'Laporan';
+    }
 }
 ?>
 
@@ -54,10 +103,8 @@ if ($role === 'admin') {
         <?php foreach ($menu as $link => $nama): ?>
 
             <?php
-            // Menentukan menu aktif
             $aktif = ($current_page === $link);
 
-            // Menu Dashboard Guru
             if (
                 $role === 'guru' &&
                 $link === 'dashboard_guru.php' &&
@@ -66,7 +113,6 @@ if ($role === 'admin') {
                 $aktif = true;
             }
 
-            // Menu Tindakan Guru
             if (
                 $role === 'guru' &&
                 $link === 'kelola_tindakan.php' &&
@@ -97,7 +143,6 @@ if ($role === 'admin') {
 
         <?php endforeach; ?>
 
-        <!-- GARIS PEMISAH -->
         <hr class="text-secondary"
             style="margin:20px 16px 20px 0;">
 

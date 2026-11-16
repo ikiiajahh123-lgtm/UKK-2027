@@ -1,10 +1,175 @@
 
 <?php
-// penempatan_siswa.php
+// ==========================================
+// PENEMPATAN SISWA
+// ==========================================
+
 include 'includes/cek_session.php';
 include 'config/koneksi.php';
 
-// Ambil daftar siswa aktif
+// ==========================================
+// PROSES EDIT, PINDAH KELAS, DAN HAPUS
+// ==========================================
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // PROSES EDIT
+    if (isset($_POST['aksi']) && $_POST['aksi'] === 'edit') {
+
+        $id = (int)($_POST['id'] ?? 0);
+        $siswa_id = (int)($_POST['siswa_id'] ?? 0);
+        $tahun_ajaran_id = (int)($_POST['tahun_ajaran_id'] ?? 0);
+        $kelas_id = (int)($_POST['kelas_id'] ?? 0);
+        $tanggal_mulai = $_POST['tanggal_mulai'] ?? '';
+        $tanggal_selesai = $_POST['tanggal_selesai'] ?? '';
+        $status_aktif = (int)($_POST['status_aktif'] ?? 0);
+
+        $stmt = mysqli_prepare(
+            $koneksi,
+            "UPDATE t_kelas_siswa
+             SET siswa_id = ?,
+                 tahun_ajaran_id = ?,
+                 kelas_id = ?,
+                 tanggal_mulai = ?,
+                 tanggal_selesai = ?,
+                 status_aktif = ?
+             WHERE id = ?"
+        );
+
+        if ($stmt) {
+            mysqli_stmt_bind_param(
+                $stmt,
+                "iiissii",
+                $siswa_id,
+                $tahun_ajaran_id,
+                $kelas_id,
+                $tanggal_mulai,
+                $tanggal_selesai,
+                $status_aktif,
+                $id
+            );
+
+            if (mysqli_stmt_execute($stmt)) {
+                $_SESSION['pesan_sukses'] = 'Data penempatan siswa berhasil diperbarui.';
+            } else {
+                $_SESSION['pesan_error'] = 'Gagal memperbarui data: ' . mysqli_stmt_error($stmt);
+            }
+
+            mysqli_stmt_close($stmt);
+        } else {
+            $_SESSION['pesan_error'] = 'Query edit gagal: ' . mysqli_error($koneksi);
+        }
+
+        header('Location: penempatan_siswa.php');
+        exit;
+    }
+
+    // PROSES PINDAH KELAS
+    if (isset($_POST['aksi']) && $_POST['aksi'] === 'pindah_kelas') {
+
+        $id = (int)($_POST['id'] ?? 0);
+        $kelas_id = (int)($_POST['kelas_id'] ?? 0);
+
+        if ($id <= 0 || $kelas_id <= 0) {
+            $_SESSION['pesan_error'] = 'Silakan pilih kelas tujuan terlebih dahulu.';
+        } else {
+
+            $stmt = mysqli_prepare(
+                $koneksi,
+                "UPDATE t_kelas_siswa
+                 SET kelas_id = ?
+                 WHERE id = ?"
+            );
+
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "ii", $kelas_id, $id);
+
+                if (mysqli_stmt_execute($stmt)) {
+                    $_SESSION['pesan_sukses'] = 'Siswa berhasil dipindahkan ke kelas baru.';
+                } else {
+                    $_SESSION['pesan_error'] = 'Gagal memindahkan kelas: ' . mysqli_stmt_error($stmt);
+                }
+
+                mysqli_stmt_close($stmt);
+            } else {
+                $_SESSION['pesan_error'] = 'Query pindah kelas gagal: ' . mysqli_error($koneksi);
+            }
+        }
+
+        header('Location: penempatan_siswa.php');
+        exit;
+    }
+
+    // PROSES HAPUS
+    if (isset($_POST['aksi']) && $_POST['aksi'] === 'hapus') {
+
+        $id = (int)($_POST['id'] ?? 0);
+
+        $stmt = mysqli_prepare(
+            $koneksi,
+            "DELETE FROM t_kelas_siswa WHERE id = ?"
+        );
+
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "i", $id);
+
+            if (mysqli_stmt_execute($stmt)) {
+                $_SESSION['pesan_sukses'] = 'Data penempatan siswa berhasil dihapus.';
+            } else {
+                $_SESSION['pesan_error'] = 'Gagal menghapus data: ' . mysqli_stmt_error($stmt);
+            }
+
+            mysqli_stmt_close($stmt);
+        } else {
+            $_SESSION['pesan_error'] = 'Query hapus gagal: ' . mysqli_error($koneksi);
+        }
+
+        header('Location: penempatan_siswa.php');
+        exit;
+    }
+}
+
+// ==========================================
+// MODE EDIT ATAU PINDAH KELAS
+// ==========================================
+
+$data_edit = null;
+
+$mode_pindah = (
+    isset($_GET['pindah']) &&
+    $_GET['pindah'] === '1'
+);
+
+if (isset($_GET['edit'])) {
+
+    $id_edit = (int)$_GET['edit'];
+
+    $stmt = mysqli_prepare(
+        $koneksi,
+        "SELECT * FROM t_kelas_siswa WHERE id = ?"
+    );
+
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "i", $id_edit);
+        mysqli_stmt_execute($stmt);
+
+        $result_edit = mysqli_stmt_get_result($stmt);
+        $data_edit = mysqli_fetch_assoc($result_edit);
+
+        mysqli_stmt_close($stmt);
+    }
+
+    if (!$data_edit) {
+        $_SESSION['pesan_error'] = 'Data penempatan tidak ditemukan.';
+        header('Location: penempatan_siswa.php');
+        exit;
+    }
+}
+
+// ==========================================
+// AMBIL DATA SISWA, TAHUN, DAN KELAS
+// ==========================================
+
 $siswa = mysqli_query(
     $koneksi,
     "SELECT id, nis, nama
@@ -13,7 +178,6 @@ $siswa = mysqli_query(
      ORDER BY nama ASC"
 );
 
-// Ambil daftar tahun ajaran aktif
 $tahun = mysqli_query(
     $koneksi,
     "SELECT id, nama
@@ -22,7 +186,6 @@ $tahun = mysqli_query(
      ORDER BY id DESC"
 );
 
-// Ambil daftar kelas aktif
 $kelas = mysqli_query(
     $koneksi,
     "SELECT id, nama, tingkat, jurusan
@@ -31,7 +194,10 @@ $kelas = mysqli_query(
      ORDER BY nama ASC"
 );
 
-// Ambil data penempatan siswa
+// ==========================================
+// AMBIL DATA PENEMPATAN SISWA
+// ==========================================
+
 $sql = "SELECT
             ks.id,
             s.nis,
@@ -55,6 +221,12 @@ $hasil = mysqli_query($koneksi, $sql);
 if (!$siswa || !$tahun || !$kelas || !$hasil) {
     die("Query gagal: " . mysqli_error($koneksi));
 }
+
+// Fungsi keamanan output
+function e($value) {
+    return htmlspecialchars((string)($value ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -65,13 +237,10 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
 
     <title>Penempatan Siswa</title>
 
-    <!-- Bootstrap sama dengan Kelola Siswa -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- DataTables sama dengan Kelola Siswa -->
     <link href="https://cdn.datatables.net/2.3.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-    <!-- CSS utama -->
     <link rel="stylesheet" href="layout/style.css">
 </head>
 
@@ -86,20 +255,18 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
         <!-- KONTEN UTAMA -->
         <main class="col-md-9 col-lg-10 p-4">
 
-            <!-- JUDUL HALAMAN -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Penempatan Siswa</h1>
             </div>
 
-            <!-- TOMBOL KEMBALI -->
             <a href="dashboard.php" class="btn btn-secondary mb-3">
                 Kembali ke Dashboard
             </a>
 
             <!-- PESAN SUKSES -->
             <?php if (isset($_SESSION['pesan_sukses'])) { ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?= htmlspecialchars($_SESSION['pesan_sukses']) ?>
+                <div class="alert alert-success alert-dismissible fade show">
+                    <?= e($_SESSION['pesan_sukses']) ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php unset($_SESSION['pesan_sukses']); ?>
@@ -107,124 +274,230 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
 
             <!-- PESAN ERROR -->
             <?php if (isset($_SESSION['pesan_error'])) { ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= htmlspecialchars($_SESSION['pesan_error']) ?>
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <?= e($_SESSION['pesan_error']) ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php unset($_SESSION['pesan_error']); ?>
             <?php } ?>
 
             <!-- FORM PENEMPATAN SISWA -->
-            <div class="card shadow-sm mb-4">
+            <div class="card shadow-sm mb-4" id="formPenempatan">
                 <div class="card-body">
 
-                    <h4 class="mb-4">Form Penempatan Siswa</h4>
+                    <h4 class="mb-4">
+                        <?php
+                        if ($mode_pindah && $data_edit) {
+                            echo 'Pindah Kelas Siswa';
+                        } elseif ($data_edit) {
+                            echo 'Edit Penempatan Siswa';
+                        } else {
+                            echo 'Form Penempatan Siswa';
+                        }
+                        ?>
+                    </h4>
 
-                    <form action="proses_simpan_penempatan.php" method="POST">
+                    <form
+                        action="<?= $data_edit ? 'penempatan_siswa.php' : 'proses_simpan_penempatan.php' ?>"
+                        method="POST"
+                    >
+
+                        <?php if ($data_edit) { ?>
+                            <input
+                                type="hidden"
+                                name="aksi"
+                                value="<?= $mode_pindah ? 'pindah_kelas' : 'edit' ?>"
+                            >
+
+                            <input
+                                type="hidden"
+                                name="id"
+                                value="<?= (int)$data_edit['id'] ?>"
+                            >
+                        <?php } ?>
 
                         <div class="row g-3">
 
-                            <!-- SISWA -->
-                            <div class="col-md-6">
-                                <label for="siswa_id" class="form-label">
-                                    Siswa
-                                </label>
+                            <?php if ($mode_pindah && $data_edit) { ?>
 
-                                <select name="siswa_id" id="siswa_id" class="form-select" required>
-                                    <option value="">-- Pilih Siswa --</option>
+                                <!-- DATA SISWA SAAT PINDAH KELAS -->
+                                <div class="col-md-6">
+                                    <label class="form-label">Siswa</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?= e($data_edit['siswa_id']) ?>"
+                                        readonly
+                                    >
+                                    <small class="text-muted">
+                                        Data siswa tidak akan diubah.
+                                    </small>
+                                </div>
 
-                                    <?php while ($s = mysqli_fetch_assoc($siswa)) { ?>
-                                        <option value="<?= htmlspecialchars((string)$s['id']) ?>">
-                                            <?= htmlspecialchars($s['nis'] . ' - ' . $s['nama']) ?>
+                                <div class="col-md-6">
+                                    <label class="form-label">Tahun Ajaran</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        value="<?= e($data_edit['tahun_ajaran_id']) ?>"
+                                        readonly
+                                    >
+                                </div>
+
+                                <!-- PILIH KELAS TUJUAN -->
+                                <div class="col-md-6">
+                                    <label for="kelas_id" class="form-label">
+                                        Kelas Tujuan
+                                    </label>
+
+                                    <select
+                                        name="kelas_id"
+                                        id="kelas_id"
+                                        class="form-select"
+                                        required
+                                    >
+                                        <option value="">-- Pilih Kelas Tujuan --</option>
+
+                                        <?php while ($k = mysqli_fetch_assoc($kelas)) { ?>
+                                            <option value="<?= (int)$k['id'] ?>">
+                                                <?= e($k['nama'] . ' - Tingkat ' . $k['tingkat'] . ' - ' . $k['jurusan']) ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                            <?php } else { ?>
+
+                                <!-- SISWA -->
+                                <div class="col-md-6">
+                                    <label for="siswa_id" class="form-label">Siswa</label>
+
+                                    <select name="siswa_id" id="siswa_id" class="form-select" required>
+                                        <option value="">-- Pilih Siswa --</option>
+
+                                        <?php while ($s = mysqli_fetch_assoc($siswa)) { ?>
+                                            <option
+                                                value="<?= (int)$s['id'] ?>"
+                                                <?= ($data_edit && (int)$data_edit['siswa_id'] === (int)$s['id']) ? 'selected' : '' ?>
+                                            >
+                                                <?= e($s['nis'] . ' - ' . $s['nama']) ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                                <!-- TAHUN AJARAN -->
+                                <div class="col-md-6">
+                                    <label for="tahun_ajaran_id" class="form-label">Tahun Ajaran</label>
+
+                                    <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-select" required>
+                                        <option value="">-- Pilih Tahun Ajaran --</option>
+
+                                        <?php while ($ta = mysqli_fetch_assoc($tahun)) { ?>
+                                            <option
+                                                value="<?= (int)$ta['id'] ?>"
+                                                <?= ($data_edit && (int)$data_edit['tahun_ajaran_id'] === (int)$ta['id']) ? 'selected' : '' ?>
+                                            >
+                                                <?= e($ta['nama']) ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                                <!-- KELAS -->
+                                <div class="col-md-6">
+                                    <label for="kelas_id" class="form-label">Kelas</label>
+
+                                    <select name="kelas_id" id="kelas_id" class="form-select" required>
+                                        <option value="">-- Pilih Kelas --</option>
+
+                                        <?php while ($k = mysqli_fetch_assoc($kelas)) { ?>
+                                            <option
+                                                value="<?= (int)$k['id'] ?>"
+                                                <?= ($data_edit && (int)$data_edit['kelas_id'] === (int)$k['id']) ? 'selected' : '' ?>
+                                            >
+                                                <?= e($k['nama'] . ' - Tingkat ' . $k['tingkat'] . ' - ' . $k['jurusan']) ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                                <!-- STATUS -->
+                                <div class="col-md-6">
+                                    <label for="status_aktif" class="form-label">Status</label>
+
+                                    <select name="status_aktif" id="status_aktif" class="form-select" required>
+                                        <option value="1" <?= ($data_edit && (int)$data_edit['status_aktif'] === 1) ? 'selected' : '' ?>>
+                                            Aktif
                                         </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
 
-                            <!-- TAHUN AJARAN -->
-                            <div class="col-md-6">
-                                <label for="tahun_ajaran_id" class="form-label">
-                                    Tahun Ajaran
-                                </label>
-
-                                <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-select" required>
-                                    <option value="">-- Pilih Tahun Ajaran --</option>
-
-                                    <?php while ($ta = mysqli_fetch_assoc($tahun)) { ?>
-                                        <option value="<?= htmlspecialchars((string)$ta['id']) ?>">
-                                            <?= htmlspecialchars($ta['nama']) ?>
+                                        <option value="0" <?= ($data_edit && (int)$data_edit['status_aktif'] === 0) ? 'selected' : '' ?>>
+                                            Tidak Aktif
                                         </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+                                    </select>
+                                </div>
 
-                            <!-- KELAS -->
-                            <div class="col-md-6">
-                                <label for="kelas_id" class="form-label">
-                                    Kelas
-                                </label>
+                                <!-- TANGGAL MULAI -->
+                                <div class="col-md-6">
+                                    <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
 
-                                <select name="kelas_id" id="kelas_id" class="form-select" required>
-                                    <option value="">-- Pilih Kelas --</option>
+                                    <input
+                                        type="date"
+                                        name="tanggal_mulai"
+                                        id="tanggal_mulai"
+                                        class="form-control"
+                                        value="<?= $data_edit ? e($data_edit['tanggal_mulai']) : '' ?>"
+                                        required
+                                    >
+                                </div>
 
-                                    <?php while ($k = mysqli_fetch_assoc($kelas)) { ?>
-                                        <option value="<?= htmlspecialchars((string)$k['id']) ?>">
-                                            <?= htmlspecialchars(
-                                                $k['nama'] . ' - Tingkat ' .
-                                                $k['tingkat'] . ' - ' . $k['jurusan']
-                                            ) ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
-                            </div>
+                                <!-- TANGGAL SELESAI -->
+                                <div class="col-md-6">
+                                    <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
 
-                            <!-- STATUS -->
-                            <div class="col-md-6">
-                                <label for="status_aktif" class="form-label">
-                                    Status
-                                </label>
+                                    <input
+                                        type="date"
+                                        name="tanggal_selesai"
+                                        id="tanggal_selesai"
+                                        class="form-control"
+                                        value="<?= $data_edit ? e($data_edit['tanggal_selesai']) : '' ?>"
+                                        required
+                                    >
+                                </div>
 
-                                <select name="status_aktif" id="status_aktif" class="form-select" required>
-                                    <option value="1">Aktif</option>
-                                    <option value="0">Tidak Aktif</option>
-                                </select>
-                            </div>
+                            <?php } ?>
 
-                            <!-- TANGGAL MULAI -->
-                            <div class="col-md-6">
-                                <label for="tanggal_mulai" class="form-label">
-                                    Tanggal Mulai
-                                </label>
-
-                                <input
-                                    type="date"
-                                    name="tanggal_mulai"
-                                    id="tanggal_mulai"
-                                    class="form-control"
-                                    required
-                                >
-                            </div>
-
-                            <!-- TANGGAL SELESAI -->
-                            <div class="col-md-6">
-                                <label for="tanggal_selesai" class="form-label">
-                                    Tanggal Selesai
-                                </label>
-
-                                <input
-                                    type="date"
-                                    name="tanggal_selesai"
-                                    id="tanggal_selesai"
-                                    class="form-control"
-                                    required
-                                >
-                            </div>
-
-                            <!-- TOMBOL SIMPAN -->
+                            <!-- TOMBOL -->
                             <div class="col-12 mt-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Simpan Penempatan
-                                </button>
+
+                                <?php if ($mode_pindah && $data_edit) { ?>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        Simpan Pindah Kelas
+                                    </button>
+
+                                    <a href="penempatan_siswa.php" class="btn btn-secondary">
+                                        Batal
+                                    </a>
+
+                                <?php } elseif ($data_edit) { ?>
+
+                                    <button type="submit" class="btn btn-success">
+                                        Simpan Perubahan
+                                    </button>
+
+                                    <a href="penempatan_siswa.php" class="btn btn-secondary">
+                                        Batal
+                                    </a>
+
+                                <?php } else { ?>
+
+                                    <button type="submit" class="btn btn-primary">
+                                        Simpan Penempatan
+                                    </button>
+
+                                <?php } ?>
+
                             </div>
 
                         </div>
@@ -255,6 +528,7 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
                                     <th>Tanggal Mulai</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
 
@@ -266,38 +540,14 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
                                 ?>
                                     <tr>
                                         <td><?= $no++ ?></td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['nis'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['nama_siswa'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['tahun_ajaran'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['nama_kelas'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['tingkat'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['jurusan'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['tanggal_mulai'] ?? '-')) ?>
-                                        </td>
-
-                                        <td>
-                                            <?= htmlspecialchars((string)($row['tanggal_selesai'] ?? '-')) ?>
-                                        </td>
+                                        <td><?= e($row['nis'] ?? '-') ?></td>
+                                        <td><?= e($row['nama_siswa'] ?? '-') ?></td>
+                                        <td><?= e($row['tahun_ajaran'] ?? '-') ?></td>
+                                        <td><?= e($row['nama_kelas'] ?? '-') ?></td>
+                                        <td><?= e($row['tingkat'] ?? '-') ?></td>
+                                        <td><?= e($row['jurusan'] ?? '-') ?></td>
+                                        <td><?= e($row['tanggal_mulai'] ?? '-') ?></td>
+                                        <td><?= e($row['tanggal_selesai'] ?? '-') ?></td>
 
                                         <td>
                                             <?php if ((int)$row['status_aktif'] === 1) { ?>
@@ -306,6 +556,44 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
                                                 <span class="badge bg-danger">Tidak Aktif</span>
                                             <?php } ?>
                                         </td>
+
+                                        
+                                        <!-- TOMBOL EDIT, HAPUS, DAN PINDAH KELAS -->
+                                        <td class="text-nowrap">
+
+                                            <!-- EDIT -->
+                                            <a
+                                                href="penempatan_siswa.php?edit=<?= (int)$row['id'] ?>#formPenempatan"
+                                                class="btn btn-warning btn-sm"
+                                            >
+                                                Edit
+                                            </a>
+
+                                            <!-- HAPUS -->
+                                            <form
+                                                action="penempatan_siswa.php"
+                                                method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Yakin ingin menghapus data penempatan siswa ini?')"
+                                            >
+                                                <input type="hidden" name="aksi" value="hapus">
+                                                <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
+
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    Hapus
+                                                </button>
+                                            </form>
+
+                                            <!-- PINDAH KELAS (PALING UJUNG) -->
+                                            <a
+                                                href="penempatan_siswa.php?edit=<?= (int)$row['id'] ?>&pindah=1#formPenempatan"
+                                                class="btn btn-primary btn-sm"
+                                            >
+                                                Pindah Kelas
+                                            </a>
+
+                                        </td>
+
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -320,13 +608,11 @@ if (!$siswa || !$tahun || !$kelas || !$hasil) {
     </div>
 </div>
 
-<!-- jQuery -->
+<!-- JAVASCRIPT -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- DataTables -->
 <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/2.3.4/js/dataTables.bootstrap5.min.js"></script>
 
