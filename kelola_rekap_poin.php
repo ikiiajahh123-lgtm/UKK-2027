@@ -114,247 +114,19 @@ $emailGuru = aman($_SESSION['email'] ?? '');
         rel="stylesheet"
     >
 
-<<<<<<< HEAD
-    <!-- CSS CETAK -->
-    <style>
-        @media print {
-
-            @page {
-                size: landscape;
-                margin: 15mm;
-            }
-
-            body {
-                background: #ffffff !important;
-                color: #000000 !important;
-            }
-
-            .no-print,
-            nav,
-            aside,
-            .sidebar {
-                display: none !important;
-            }
-
-            body,
-            .d-flex,
-            .flex-grow-1,
-            main {
-                display: block !important;
-                width: 100% !important;
-                min-height: auto !important;
-                background: #ffffff !important;
-                color: #000000 !important;
-            }
-
-            main {
-                padding: 0 !important;
-            }
-
-            .card {
-                box-shadow: none !important;
-                break-inside: avoid;
-            }
-
-            .table-responsive {
-                overflow: visible !important;
-            }
-
-            table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                font-size: 11px !important;
-            }
-
-            table th,
-            table td {
-                border: 1px solid #777777 !important;
-                padding: 7px !important;
-                color: #000000 !important;
-            }
-
-            table thead th {
-                background: #dddddd !important;
-                color: #000000 !important;
-            }
-
-            table tbody tr {
-                break-inside: avoid;
-            }
-
-            .badge {
-                border: 1px solid #777777 !important;
-            }
-
-            .text-secondary {
-                color: #333333 !important;
-            }
-        }
-=======
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background-color: #f4f6fc !important;
-            color: #212529;
-            font-family: Arial, sans-serif;
-        }
-
-        .main-content {
-            flex: 1;
-            min-width: 0;
-            min-height: 100vh;
-            background-color: #f4f6fc !important;
-            color: #212529 !important;
-        }
-
-        /* HEADER ATAS */
-        .topbar {
-            background-color: #ffffff !important;
-            color: #212529 !important;
-            border-bottom: 1px solid #dee2e6 !important;
-        }
-
-        .topbar .fw-bold {
-            color: #212529 !important;
-        }
-
-        .topbar small {
-            color: #6c757d !important;
-        }
-
-        /* JUDUL HALAMAN */
-        .judul-halaman {
-            color: #152238 !important;
-            font-size: 36px;
-            font-weight: 400;
-        }
-
-        .deskripsi {
-            color: #6c757d !important;
-        }
-
-        /* CARD */
-        .card {
-            background-color: #ffffff !important;
-            color: #212529 !important;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-        }
-
-        .card-body {
-            background-color: #ffffff;
-            color: #212529;
-        }
-
-        /* TABEL */
-        .table {
-            color: #212529;
-            font-size: 14px;
-        }
-
-        .table thead th {
-            background-color: #212529 !important;
-            color: #ffffff !important;
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        .table td {
-            vertical-align: middle;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) > * {
-            background-color: #f1f1f1;
-        }
-
-        .table-hover tbody tr:hover > * {
-            background-color: #e8f0ff;
-        }
-
-        /* STATISTIK */
-        .statistik-card {
-            min-height: 125px;
-        }
-
-        .ikon-statistik {
-            width: 55px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-        }
-
-        /* PENCARIAN */
-        #cariSiswa {
-            max-width: 300px;
-        }
-
-        @media (max-width: 768px) {
-
-            .judul-halaman {
-                font-size: 28px;
-            }
-
-            .topbar {
-                padding: 12px !important;
-            }
-
-            .topbar .email-guru {
-                display: none;
-            }
-
-            .main-content main {
-                padding: 15px !important;
-            }
-
-            #cariSiswa {
-                max-width: 100%;
-                width: 100%;
-            }
-
-        }
-
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
     </style>
 
 </head>
 
-<<<<<<< HEAD
 <body class="bg-light text-dark">
-=======
-<body>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 
 <div class="d-flex min-vh-100">
 
     <!-- SIDEBAR -->
-<<<<<<< HEAD
-    <div
-        class="no-print sticky-top vh-100 flex-shrink-0 bg-dark"
-        style="align-self: flex-start;"
-    >
         <?php include __DIR__ . '/layout/sidebar.php'; ?>
-    </div>
-=======
-    <?php include __DIR__ . '/layout/sidebar.php'; ?>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 
     <!-- KONTEN UTAMA -->
     <div class="main-content">
-
-<<<<<<< HEAD
-        <!-- TOPBAR -->
-        <nav class="navbar navbar-light bg-white border-bottom px-4 py-3 no-print">
-=======
-        <!-- HEADER ATAS -->
-        <nav class="navbar topbar px-4 py-3">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 
             <div class="d-flex align-items-center gap-3">
 
@@ -412,32 +184,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                 </div>
 
-<<<<<<< HEAD
-                <!-- TOMBOL CETAK DAN KEMBALI -->
-                <div class="d-flex gap-2 flex-wrap no-print">
-
-                    <button
-                        type="button"
-                        onclick="window.print()"
-                        class="btn btn-primary"
-                    >
-                        <i class="bi bi-printer-fill"></i>
-                        Cetak Rekap Poin
-                    </button>
-
-                    <a href="dashboard.php" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i>
-                        Kembali ke Dashboard
-                    </a>
-
-                </div>
-=======
-                <a href="dashboard_guru.php" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i>
-                    Kembali ke Dashboard
-                </a>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
-
             </div>
 
             <!-- PESAN ERROR -->
@@ -455,12 +201,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                 <!-- TOTAL SISWA -->
                 <div class="col-md-4">
-
-<<<<<<< HEAD
-                    <div class="card bg-white text-dark shadow-sm h-100">
-=======
-                    <div class="card shadow-sm statistik-card h-100">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 
                         <div class="card-body d-flex justify-content-between align-items-center">
 
@@ -489,12 +229,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                 <!-- TOTAL PELANGGARAN -->
                 <div class="col-md-4">
 
-<<<<<<< HEAD
-                    <div class="card bg-white text-dark shadow-sm h-100">
-=======
-                    <div class="card shadow-sm statistik-card h-100">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
-
                         <div class="card-body d-flex justify-content-between align-items-center">
 
                             <div>
@@ -508,12 +242,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                                 </h2>
 
                             </div>
-
-<<<<<<< HEAD
-                            <div class="bg-success bg-opacity-10 text-success rounded-3 p-3">
-=======
-                            <div class="ikon-statistik bg-success bg-opacity-10 text-success">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
                                 <i class="bi bi-clipboard-check fs-3"></i>
                             </div>
 
@@ -525,13 +253,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
 
                 <!-- TOTAL POIN -->
                 <div class="col-md-4">
-
-<<<<<<< HEAD
-                    <div class="card bg-white text-dark shadow-sm h-100">
-=======
-                    <div class="card shadow-sm statistik-card h-100">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
-
                         <div class="card-body d-flex justify-content-between align-items-center">
 
                             <div>
@@ -559,37 +280,17 @@ $emailGuru = aman($_SESSION['email'] ?? '');
             </div>
 
             <!-- TABEL REKAP -->
-<<<<<<< HEAD
-            <div class="card bg-white text-dark shadow-sm">
-=======
-            <div class="card shadow-sm">
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 
                 <div class="card-body p-3 p-md-4">
 
                     <!-- JUDUL TABEL -->
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-
-<<<<<<< HEAD
-                        <h5 class="fw-bold mb-0">
-                            <i class="bi bi-list-ol"></i>
-=======
-                        <h5 class="fw-bold mb-0 text-dark">
-
-                            <i class="bi bi-list-ol me-1"></i>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
                             Daftar Rekap Poin Siswa
                         </h5>
 
                         <input
                             type="text"
                             id="cariSiswa"
-<<<<<<< HEAD
-                            class="form-control no-print"
-                            style="max-width: 300px;"
-=======
-                            class="form-control"
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
                             placeholder="Cari nama siswa atau kelas..."
                             autocomplete="off"
                         >
@@ -699,12 +400,6 @@ $emailGuru = aman($_SESSION['email'] ?? '');
                         <div id="hasilKosong" class="alert alert-warning mt-3 d-none">
                             Data siswa tidak ditemukan.
                         </div>
-
-<<<<<<< HEAD
-=======
-                    </div>
-
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
                     <!-- INFORMASI -->
                     <div class="mt-3">
 
@@ -745,14 +440,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    input.addEventListener('input', function () {
-
-<<<<<<< HEAD
-        const keyword = this.value.toLowerCase();
-=======
-        const keyword = this.value.toLowerCase().trim();
-
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
+    input.addEventListener('input', function () 
         const baris = tabel.querySelectorAll('tbody tr');
 
         let jumlahTampil = 0;

@@ -1,56 +1,10 @@
 
 <?php
-
 $current_page = basename($_SERVER['PHP_SELF']);
 $role = $_SESSION['role'] ?? '';
 
 $menu = [];
 $isWaliKelas = false;
-
-<<<<<<< HEAD
-// ==========================================
-// CEK GURU WALI KELAS
-// ==========================================
-
-if (
-    $role === 'guru' &&
-    !empty($_SESSION['email']) &&
-    isset($koneksi) &&
-    $koneksi instanceof mysqli
-) {
-    $emailLogin = trim($_SESSION['email']);
-
-    $sqlWali = "
-        SELECT wk.id
-        FROM t_users u
-        INNER JOIN t_guru g
-            ON g.user_id = u.id
-        INNER JOIN t_wali_kelas wk
-            ON wk.guru_id = g.id
-        WHERE LOWER(TRIM(u.email)) = LOWER(TRIM(?))
-          AND wk.status_aktif = 1
-        LIMIT 1
-    ";
-
-    $stmtWali = $koneksi->prepare($sqlWali);
-
-    if ($stmtWali) {
-        $stmtWali->bind_param("s", $emailLogin);
-        $stmtWali->execute();
-        $stmtWali->store_result();
-
-        $isWaliKelas = ($stmtWali->num_rows > 0);
-
-        $stmtWali->close();
-    }
-}
-
-// ==========================================
-// MENU ADMIN
-// ==========================================
-
-=======
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 if ($role === 'admin') {
 
     $menu = [
@@ -65,13 +19,7 @@ if ($role === 'admin') {
         'about_me.php' => 'About Me'
     ];
 
-<<<<<<< HEAD
-// ==========================================
-// MENU GURU
-// ==========================================
 
-=======
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
 } elseif ($role === 'guru') {
 
     $menu = [
@@ -79,12 +27,7 @@ if ($role === 'admin') {
         'catat_pelanggaran.php' => 'Catat Pelanggaran',
         'kelola_tindakan.php' => 'Tindakan',
         'kelola_riwayat.php' => 'Riwayat',
-<<<<<<< HEAD
-        'kelola_rekap_poin.php' => 'Rekap Poin'
-=======
-        'kelola_rekap_poin.php' => 'Rekap Poin',
-        'kelola_laporan.php' => 'Laporan'
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
+
     ];
 
     // Hanya Wali Kelas yang mendapatkan menu Laporan
@@ -130,28 +73,7 @@ if ($role === 'admin') {
         <?php foreach ($menu as $link => $namaMenu): ?>
 
             <?php
-<<<<<<< HEAD
-            $aktif = ($current_page === $link);
 
-            if (
-                $role === 'guru' &&
-                $link === 'dashboard_guru.php' &&
-                $current_page === 'dashboard.php'
-            ) {
-                $aktif = true;
-            }
-
-            if (
-                $role === 'guru' &&
-                $link === 'kelola_tindakan.php' &&
-                $current_page === 'kelola_guru.php'
-            ) {
-                $aktif = true;
-            }
-=======
-            $url = explode('?', $link)[0];
-            $aktif = ($current_page === $url);
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
             ?>
 
             <a
@@ -169,14 +91,6 @@ if ($role === 'admin') {
             </a>
 
         <?php endforeach; ?>
-
-<<<<<<< HEAD
-        <hr class="text-secondary"
-            style="margin:20px 16px 20px 0;">
-=======
-    </nav>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
-
     <hr class="border-secondary my-4">
 
     <a

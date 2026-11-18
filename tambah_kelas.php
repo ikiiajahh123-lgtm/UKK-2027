@@ -12,115 +12,14 @@ include 'includes/cek_session.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<<<<<<< HEAD
-    <title>Tambah Kategori Pelanggaran</title>
-=======
-    <title>Tambah Wali Kelas</title>
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
-
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
 
     <style>
-<<<<<<< HEAD
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            background: #f4f6fb;
-            font-family: Arial, sans-serif;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 211px;
-            height: 100vh;
-            background: #212529;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 10px 2px;
-            overflow-y: auto;
-        }
-
-        .sidebar h4 {
-            font-size: 23px;
-            font-weight: normal;
-            margin-bottom: 25px;
-        }
-
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 11px 16px;
-            margin-bottom: 5px;
-            border-radius: 7px;
-            font-size: 15px;
-        }
-
-        .sidebar a:hover {
-            background: #343a40;
-        }
-
-        .sidebar a.active {
-            background: #0d6efd;
-        }
-
-        .sidebar hr {
-            border-color: #495057;
-            margin: 20px 0;
-        }
-
-        .sidebar .logout {
-            color: #dc3545;
-        }
-
-        /* KONTEN UTAMA */
-        .main-content {
-            margin-left: 211px;
-            padding: 16px 18px;
-            min-height: 100vh;
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .page-header h1 {
-            font-size: 32px;
-            font-weight: normal;
-            color: #102b50;
-            margin: 0;
-        }
-
-        /* FORM */
-        .btn-back {
-            margin-bottom: 12px;
-        }
-
-=======
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
         .form-card {
             border-radius: 7px;
-<<<<<<< HEAD
-            box-shadow: 0 5px 12px rgba(0,0,0,0.12);
-            overflow: hidden;
-            max-width: 640px;
-            margin: 0 auto;
-=======
-            overflow: hidden;
-            max-width: 850px;
-            margin: 15px auto;
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
+
         }
 
         .form-card .card-header {
@@ -133,15 +32,6 @@ include 'includes/cek_session.php';
             margin: 0;
             font-size: 27px;
             font-weight: bold;
-        }
-
-<<<<<<< HEAD
-        .form-card-body {
-            padding: 20px 16px;
-=======
-        .form-card .card-body {
-            padding: 20px;
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
         }
 
         .form-label {
@@ -168,45 +58,7 @@ include 'includes/cek_session.php';
         }
 
         @media (max-width: 768px) {
-<<<<<<< HEAD
 
-            .sidebar {
-                width: 170px;
-            }
-
-            .main-content {
-                margin-left: 170px;
-                padding: 15px;
-            }
-
-            .page-header h1 {
-                font-size: 26px;
-            }
-
-        }
-
-        @media (max-width: 500px) {
-
-            .sidebar {
-                width: 125px;
-            }
-
-            .sidebar h4 {
-                font-size: 17px;
-            }
-
-            .sidebar a {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-
-            .main-content {
-                margin-left: 125px;
-                padding: 12px;
-=======
-            .form-card .card-body {
-                padding: 16px;
->>>>>>> 38794a9e71b5d33a40183c56e32f1393f7685557
             }
 
         }

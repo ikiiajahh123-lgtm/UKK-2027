@@ -337,9 +337,6 @@ function aman($nilai) {
 
         <div class="guru-content">
 
-            <a href="kelola_guru.php" class="guru-back">
-                ← Kembali ke Kelola Guru
-            </a>
 
             <?php if ($error !== ''): ?>
                 <div class="alert alert-danger guru-alert">
@@ -350,7 +347,7 @@ function aman($nilai) {
             <div class="guru-form-card">
 
                 <div class="guru-form-header">
-                    <h2>Form Tambah Guru</h2>
+                    <h2>Tambah Guru</h2>
                 </div>
 
                 <div class="guru-form-body">
